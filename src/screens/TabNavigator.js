@@ -4,12 +4,11 @@ import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import HomeTab from './Tab/HomeTab';
-import Tab1 from './Tab/Tab1';
-import NutritionTab from './Tab/NutritionTab';
-import ProfileTab from './Tab/ProfileTab';
+import {HomeTab, NutritionTab, ProfileTab, Tab1} from './Tabs';
+import CustomButton from '../components/CustomButton';
+import CustomTabBar from '../components/CustomTabbar';
 
-const MainScreen = createBottomTabNavigator({
+const BottomTabNavigator = createBottomTabNavigator({
     HomeTab: {
         screen: HomeTab,
         navigationOptions: {
@@ -17,6 +16,9 @@ const MainScreen = createBottomTabNavigator({
             tabBarIcon: ({ tintColor }) => {
                 return <MaterialIcons name='home' 
                 size={28} style={{color: tintColor}}></MaterialIcons>
+            },
+            tabBarButton: (props) => {
+                <CustomButton {...props}></CustomButton>
             }
         }
     },
@@ -27,7 +29,7 @@ const MainScreen = createBottomTabNavigator({
             tabBarIcon: ({ tintColor }) => {
                 return <AntDesign name='profile' 
                 size={28} style={{color: tintColor}}></AntDesign>
-            }
+            },
         }
     },
     NutritionTab: {
@@ -37,6 +39,9 @@ const MainScreen = createBottomTabNavigator({
             tabBarIcon: ({ tintColor }) => {
                 return <MaterialIcons name='food-bank' 
                 size={28} style={{color: tintColor}}></MaterialIcons>
+            },
+            tabBarButton: (props) => {
+                <CustomButton {...props}></CustomButton>
             }
         }
     },
@@ -47,17 +52,20 @@ const MainScreen = createBottomTabNavigator({
             tabBarIcon: ({ tintColor }) => {
                 return <AntDesign name='profile' 
                 size={28} style={{color: tintColor}}></AntDesign>
-            }
-        }
+            },
+            tabBarButtonComponent: props => <CustomButton {...props} ></CustomButton>
+        },
     }
 },{
     tabBarOptions: {
         inactiveTintColor: '#fff',
         activeTintColor: 'red',
         style: {
-            backgroundColor: '#4CD964'
+            backgroundColor: 'transparent',
+            borderTopWidth: 0
         }
+        
     }
 });
   
-  export default createAppContainer(MainScreen);
+  export default createAppContainer(BottomTabNavigator);

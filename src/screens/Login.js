@@ -1,10 +1,10 @@
 import React from 'react';
-import {Text, View, Image, TouchableOpacity, KeyboardAvoidingView, KeyboardAvoidingViewBase, Dimensions} from 'react-native';
+import {Text, View, Image, TouchableOpacity, KeyboardAvoidingView, KeyboardAvoidingViewBase, Dimensions, Button} from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
 import FontLoader from '../components/Font';
 import TextInputDesign from '../components/TextInputDesign';
 import Register from '../screens/Register';
-import MainScreen from '../screens/MainScreen';
+import {BottomTabNavigator} from '../screens';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -68,7 +68,7 @@ function Login({navigation}) {
                     />
                 </KeyboardAvoidingView>
                 
-                <TouchableOpacity onPress={() => navigation.navigate('MainScreen')} 
+                <TouchableOpacity onPress={() => navigation.navigate('BottomTabNavigator')} 
                     style={{
                     backgroundColor: '#fff',
                     elevation: 8,

@@ -1,13 +1,6 @@
-import React, {Component} from 'react';
-import { View, Text } from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import Welcome from './src/screens/Welcome';
-import Login from './src/screens/Login';
-import Register from './src/screens/Register';
-import * as Font from 'expo-font'
-import AppLoading from 'expo-app-loading';
-import MainScreen from './src/screens/MainScreen';
+import {Welcome, Login, Register, BottomTabNavigator} from './src/screens'
 
 const stackNavigatorOptions = {
   headerShown:false
@@ -23,9 +16,14 @@ const AppNavigator = createStackNavigator({
   Register: {
     screen: Register,
   },
-  MainScreen: {
-    screen: MainScreen,
+  BottomTabNavigator: {
+    screen: BottomTabNavigator,
+  },
+  /*
+  OneMoreTab: {
+    screen: OneMoreTab,
   }
+  */
 },
 {
   defaultNavigationOptions : stackNavigatorOptions
