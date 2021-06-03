@@ -9,6 +9,7 @@ import backImage2 from '../images/background2.png';
 import Axios from 'axios';
 import { color, set } from 'react-native-reanimated';
 import { NavigationEvents } from 'react-navigation';
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -20,22 +21,79 @@ function Register({navigation}){
         password: '',
         check_textInputChange: true,
         secureTextEntry: true,
-        isValidUser: true,
         isValidPassword: true,
     });
 const setValue = (fieldName, value) => setData({...data, [fieldName]: value});
 const [username,setUsername]=useState()
 const [password,setPassword]=useState()
 const [email,setEmail]= useState()
+const [RePassword,setRePassword]=useState()
 
+
+function ValidateEmail(mail) 
+{
+ if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
+}
+
+function ValidUser(username) {
+    /* 
+      Usernames can only have: 
+      - Lowercase Letters (a-z) 
+      - Numbers (0-9)
+      - Dots (.)
+      - Underscores (_)
+
+    */
+   if (!username) return 0
+   if (username.length >=6 && username.length <= 30)  {
+    const res = /^[a-z0-9_\.]+$/.exec(username);
+    const valid = !!res;
+    return valid;
+   }
+   return 0
+  }
 
 const handleRegister =() => {
-    console.log(username,password,email)
+
+    console.log(username,email,password,RePassword)
+    if (!ValidUser(username)) {
+
+        Alert.alert(
+            "Oops!",
+            "Username không hợp lệ!",
+          )
+        return 0
+    }
+    if (!ValidateEmail(email)) {
+        Alert.alert(
+            "Oops!",
+            "Email không hợp lệ",
+          )
+        return 0
+    }
+    if ((password == "" || password == undefined)) {
+        Alert.alert(
+            "Oops!",
+            "Vui lòng nhập mật khẩu",
+          )
+        return 0}
+    if ((password != RePassword)) {
+        Alert.alert(
+        "Oops!",
+        "Bạn đã nhập sai RePassword",
+      )
+        return 0
+    }
+    
     Axios.post("https://runapp1108.herokuapp.com/api/users/register",{username,password,email})
     .then((res)=>{
         console.log(res)
         Alert.alert(
-            "Đăng ký thành công! Username: ",
+            "Success ✓ Username: ",
             username,
             
             [
@@ -53,8 +111,8 @@ const handleRegister =() => {
     })
     .catch((err)=>{
         Alert.alert(
-            "Đăng ký không thành công! :(",
-            "Username đã tồn tại hoặc bạn nhập thông tin chưa chính xác",
+            "Oops! :(",
+            "Username đã tồn tại!!",
     
           );
     })
@@ -65,16 +123,16 @@ const handleRegister =() => {
 }
 
 
-    // useEffect(() => {
-    //     Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
-    //     Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
+    useEffect(() => {
+        Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
+        Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
     
-    //     //  Don't forget to cleanup with remove listeners
-    //     return () => {
-    //       Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
-    //       Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
-    //     };
-    // }, []);
+        //  Don't forget to cleanup with remove listeners
+        return () => {
+          Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
+          Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
+        };
+    }, []);
     
     const _keyboardDidShow = () => {
         setKeyboardShow(true) 
@@ -83,45 +141,6 @@ const handleRegister =() => {
     const _keyboardDidHide = () => {
         setKeyboardShow(false)
     }
-
-    const handleValidUser = (val) => {
-        if( val.length >= 4 ) {
-            setData({
-                ...data,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                isValidUser: false
-            });
-        }
-    }
-
-    const textInputChange = (val) => {
-        if( val.length !== 0 ) {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: true
-            });
-        } else {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: false
-            });
-        }
-    }
-
-    const createAlert = () =>
-        Alert.alert(
-        "Alert Title",
-        "My Alert Msg",
-        [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
-    );
 
     return(
         <KeyboardAvoidingView behavior='height'>
@@ -182,9 +201,11 @@ const handleRegister =() => {
                             iconName='user'
                             isSecured={false}>
                         </TextInputDesign>
-                        {!data.isValidUser ?
-                           <Text>Not valid username</Text> : null
+                        {  
+                           <Text style = {{color: '#dfede8' ,fontSize: 10,marginLeft : 30 , fontWeight: 'bold'}}> Note:Your username must be 6-30 characters and must contain only letters, numbers, periods, and underscores</Text> 
+                        
                         }
+                        
                         <TextInputDesign 
                             onEndEditing={(text) => {setValue("email",text)}}
                             onChangeText={(text) => setEmail(text)}
@@ -194,12 +215,13 @@ const handleRegister =() => {
                         </TextInputDesign>
                         <TextInputDesign 
                             onEndEditing={(text) => {setValue("password",text)}}
-                            onChangeText={(text) => setPassword(text)}
+                            onChangeText={(text) => setPassword(text) }
                             placeholder='Password'
                             iconName='lock'
                             isSecured={true}>
                         </TextInputDesign>
                         <TextInputDesign 
+                            onChangeText={(text) => setRePassword(text)}
                             placeholder='Re-Password'
                             iconName='lock'
                             isSecured={true}>

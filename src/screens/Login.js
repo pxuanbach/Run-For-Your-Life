@@ -13,16 +13,6 @@ const windowHeight = Dimensions.get('window').height;
 function Login({navigation}) {
 
 
-    //SetData Bach
-    // const [data, setData] = React.useState({
-    //     username: '',
-    //     password: '',
-    //     check_textInputChange: false,
-    //     secureTextEntry: true,
-    //     isValidUser: true,
-    //     isValidPassword: true,
-    // });
-
 //SetData Thinh
     const [username,setUsername]=useState()
     const [password,setPassword]=useState()
