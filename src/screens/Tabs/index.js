@@ -1,5 +1,5 @@
 import HomeTab from './HomeTab';
-import NutritionTab from './NutritionTab';
+import NutritionTab from './NutritionTab/NutritionTab';
 import ProfileTab from './ProfileTab';
 import Tab1 from './Tab1';
 

@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, setData } from 'react';
 import { View, TouchableOpacity, Text, Image, Keyboard, 
     Dimensions, KeyboardAvoidingView, ScrollView, Alert } from 'react-native';
-import logo from '../images/background2.png';
 import TextInputDesign from '../components/TextInputDesign'
-import FontLoader from '../components/Font'
-import backImage1 from '../images/regisImage.jpg';
-import backImage2 from '../images/background2.png';
+import FontLoader from '../utilities/Font'
+import backImage from '../images/background2.png';
+import Axios from 'axios';
+import Constants from '../utilities/Constants';
 
 const windowHeight = Dimensions.get("window").height;
 
 function Register({navigation}){
-    const [ didKeyboardShow, setKeyboardShow ] = useState(false);
+    const setValue = (fieldName, value) => setData({...data, [fieldName]: value});
     const [data, setData] = React.useState({
+        email: '',
         username: '',
         password: '',
         check_textInputChange: true,
@@ -19,132 +20,88 @@ function Register({navigation}){
         isValidUser: true,
         isValidPassword: true,
     });
+    const [username,setUsername] = useState()
+    const [password,setPassword] = useState()
+    const [email,setEmail] = useState()
 
-    useEffect(() => {
-        Keyboard.addListener("keyboardDidShow", _keyboardDidShow);
-        Keyboard.addListener("keyboardDidHide", _keyboardDidHide);
-    
-        //  Don't forget to cleanup with remove listeners
-        return () => {
-          Keyboard.removeListener("keyboardDidShow", _keyboardDidShow);
-          Keyboard.removeListener("keyboardDidHide", _keyboardDidHide);
-        };
-    }, []);
-    
-    const _keyboardDidShow = () => {
-        setKeyboardShow(true) 
+    const handleRegister =() => {
+        console.log(username,password,email)
+        Axios.post("https://runapp1108.herokuapp.com/api/users/register",{username,password,email})
+        .then((res)=>{
+            console.log(res)
+            Alert.alert(
+                "Đăng ký thành công! Username: ",
+                username,
+                [
+                  {
+                      text: "OK", onPress: () =>  
+                        Alert.alert("Don't forgot your password",password,
+                            [                        
+                                { text: "OK", onPress: () =>navigation.navigate('Login')}
+                            ]
+                        )
+                    }
+                ]
+            );
+        })
+        .catch((err)=>{
+            Alert.alert(
+                "Đăng ký không thành công! :(",
+                "Username đã tồn tại hoặc bạn nhập thông tin chưa chính xác",
+              );
+        })
     }
 
-    const _keyboardDidHide = () => {
-        setKeyboardShow(false)
-    }
-
-    const handleValidUser = (val) => {
-        if( val.length >= 4 ) {
-            setData({
-                ...data,
-                isValidUser: true
-            });
-        } else {
-            setData({
-                ...data,
-                isValidUser: false
-            });
-        }
-    }
-
-    const textInputChange = (val) => {
-        if( val.length !== 0 ) {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: true
-            });
-        } else {
-            setData({
-                ...data,
-                username: val,
-                check_textInputChange: false
-            });
-        }
-    }
-
-    const createAlert = () =>
-        Alert.alert(
-        "Alert Title",
-        "My Alert Msg",
-        [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-        ]
-    );
 
     return(
         <KeyboardAvoidingView behavior='height'>
-            <ScrollView style={{backgroundColor: '#D3D2D2'}}>
+            <ScrollView>
                 <View style={{
                     height: windowHeight/3,
                     
                 }}>
-                    {didKeyboardShow &&
-                        <Image source={backImage1}
-                        style={{
-                            height: '100%',
-                            width: '100%',
-                            resizeMode: 'stretch',
-                        }}>
-                        </Image>
-                    }
-                    {!didKeyboardShow &&
-                    <Image source={backImage2}
+                    <Image source={backImage}
                         style={{
                             height: '100%',
                             width: '100%',
                     }}>
-                    </Image> }
+                    </Image>
                     <KeyboardAvoidingView
                         style={{position: 'absolute'}}
                     >
-                        {didKeyboardShow &&
                         <Text style={{
                             fontFamily: 'SemiBold', 
                             fontSize: 60,
-                            color: '#4CD964',
-                            alignSelf: 'center',
-                            marginLeft: 12,
-                            marginTop: 98,
-                        }}>SIGN UP</Text>}
-                        {!didKeyboardShow &&
-                        <Text style={{
-                            fontFamily: 'SemiBold', 
-                            fontSize: 60,
-                            color: '#fff',
+                            color: Constants.COLOR.white,
                             alignSelf: 'center',
                             marginLeft: 12,
                             marginTop: 90,
-                        }}>SIGN UP</Text>}
+                        }}>SIGN UP</Text>
                     </KeyboardAvoidingView>
                 </View>
                 <View style={{
-                    backgroundColor: '#4CD964',
+                    backgroundColor: Constants.COLOR.green,
                     height: 2*windowHeight/3, width: '100%',
                     alignSelf: 'center',
                 }}>
                     <KeyboardAvoidingView>
                         <TextInputDesign
-                            onChangeText={(text) => textInputChange(text)}
+                            onEndEditing={(text) => setValue("username",text)}
+                            onChangeText={(text) => setUsername(text)}
                             placeholder='Username'
                             iconName='user'
                             isSecured={false}>
                         </TextInputDesign>
-                        {!data.isValidUser ?
-                           <Text>Not valid username</Text> : null
-                        }
                         <TextInputDesign 
+                            onEndEditing={(text) => {setValue("email",text)}}
+                            onChangeText={(text) => setEmail(text)}
                             placeholder='Your mail'
                             iconName='mail'
                             isSecured={false}>
                         </TextInputDesign>
                         <TextInputDesign 
+                            onEndEditing={(text) => {setValue("password",text)}}
+                            onChangeText={(text) => setPassword(text)}
                             placeholder='Password'
                             iconName='lock'
                             isSecured={true}>
@@ -158,7 +115,7 @@ function Register({navigation}){
                     
                     <TouchableOpacity //Log In: onPress={() => navigate()} 
                         style={{
-                        backgroundColor: '#fff',
+                        backgroundColor: Constants.COLOR.white,
                         elevation: 8,
                         alignItems: 'center',
                         borderRadius: 25,
@@ -169,7 +126,7 @@ function Register({navigation}){
                         }}>
                         <FontLoader>
                             <Text style={{
-                                color: '#4CD964',
+                                color: Constants.COLOR.green,
                                 fontSize: 35,
                                 fontFamily: 'SemiRegular',
                                 alignSelf: 'center',}}

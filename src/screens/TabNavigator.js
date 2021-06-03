@@ -5,8 +5,8 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import {HomeTab, NutritionTab, ProfileTab, Tab1} from './Tabs';
-import CustomButton from '../components/CustomButton';
-import CustomTabBar from '../components/CustomTabbar';
+import NutritionTabNavigator from '../screens/Tabs/NutritionTab/Navigator'
+import Constants from '../utilities/Constants';
 
 const BottomTabNavigator = createBottomTabNavigator({
     HomeTab: {
@@ -17,9 +17,6 @@ const BottomTabNavigator = createBottomTabNavigator({
                 return <MaterialIcons name='home' 
                 size={28} style={{color: tintColor}}></MaterialIcons>
             },
-            tabBarButton: (props) => {
-                <CustomButton {...props}></CustomButton>
-            }
         }
     },
     Tab1: {
@@ -32,17 +29,14 @@ const BottomTabNavigator = createBottomTabNavigator({
             },
         }
     },
-    NutritionTab: {
-        screen: NutritionTab,
+    NutritionTabNavigator: {
+        screen: NutritionTabNavigator,
         navigationOptions: {
             tabBarLabel: 'Nutrition',
             tabBarIcon: ({ tintColor }) => {
                 return <MaterialIcons name='food-bank' 
                 size={28} style={{color: tintColor}}></MaterialIcons>
             },
-            tabBarButton: (props) => {
-                <CustomButton {...props}></CustomButton>
-            }
         }
     },
     ProfileTab: {
@@ -53,15 +47,14 @@ const BottomTabNavigator = createBottomTabNavigator({
                 return <AntDesign name='profile' 
                 size={28} style={{color: tintColor}}></AntDesign>
             },
-            tabBarButtonComponent: props => <CustomButton {...props} ></CustomButton>
         },
     }
 },{
     tabBarOptions: {
-        inactiveTintColor: '#fff',
-        activeTintColor: 'red',
+        inactiveTintColor: Constants.COLOR.white,
+        activeTintColor: Constants.COLOR.red,
         style: {
-            backgroundColor: 'transparent',
+            backgroundColor: Constants.COLOR.green,
             borderTopWidth: 0
         }
         

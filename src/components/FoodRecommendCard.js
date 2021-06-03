@@ -1,25 +1,28 @@
 import React from 'react';
 import {Text,View,Image, TouchableOpacity,} from 'react-native';
-import FontLoader from '../components/Font';
+import Constants from '../utilities/Constants';
+import FontLoader from '../utilities/Font';
 
-const TouchableOpacityDesign = ({image, text}) => {
+const FoodRecommendCard = ({image, text, onPress, h = 90}) => {
     return (
-        <TouchableOpacity style={{
+        <TouchableOpacity onPress={onPress}
+        style={{
             width: '100%',
             alignItems: 'center',
             borderRadius: 20,
             justifyContent: 'center',
+            marginTop: 10
         }}>
             <Image
-                source={require('../images/foodImage.jpg')}
-                style={{height: 90, width: '100%', borderRadius: 15}}>
+                source={image}
+                style={{height: h/7, width: '100%', borderRadius: 15}}>
             </Image>
             <FontLoader>
                 <Text style={{
                     position: 'absolute',
-                    fontSize: 24,
+                    fontSize: h/22,
                     fontFamily: 'RobotoBold',
-                    color: '#fff'
+                    color: Constants.COLOR.black
                 }}>
                     {text}
                 </Text>
@@ -29,4 +32,4 @@ const TouchableOpacityDesign = ({image, text}) => {
     )
 }
 
-export default TouchableOpacityDesign;
+export default FoodRecommendCard;

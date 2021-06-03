@@ -1,6 +1,6 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, ScrollView, ImageBackground, Image} from 'react-native';
-import FontLoader from '../../components/Font';
+import FontLoader from '../../utilities/Font';
 import Icon from '@expo/vector-icons/AntDesign';
 
 function ProfileTab() {

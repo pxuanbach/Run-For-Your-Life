@@ -1,8 +1,7 @@
 import React from 'react';
 import {Text, View, TouchableOpacity , ImageBackground} from 'react-native';
-import Icon from '@expo/vector-icons/AntDesign';
-import FontLoader from '../components/Font';
-import Feather from 'react-native-vector-icons/Feather';
+import FontLoader from '../utilities/Font';
+import Constants from '../utilities/Constants';
 
 function Welcome({navigation}) {
     return (
@@ -10,7 +9,7 @@ function Welcome({navigation}) {
             style={{width:"100%",height:"100%"}}>
             <FontLoader>
                 <Text 
-                    style={{color: '#FFFFFF',
+                    style={{color: Constants.COLOR.white,
                     fontSize: 55, 
                     alignSelf: 'center',
                     fontFamily: 'SemiBold',
@@ -20,7 +19,7 @@ function Welcome({navigation}) {
                 </Text>
             </FontLoader>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}
-                style={{backgroundColor: '#4CD964',
+                style={{backgroundColor: Constants.COLOR.green,
                 elevation: 8,
                 height: '10%',
                 alignItems: 'center',
@@ -31,7 +30,7 @@ function Welcome({navigation}) {
                 }}>
                 <FontLoader>
                     <Text
-                        style={{color: '#fff',
+                        style={{color: Constants.COLOR.white,
                         fontSize: 35,
                         fontFamily: 'SemiRegular',
                         alignSelf: 'center',}}

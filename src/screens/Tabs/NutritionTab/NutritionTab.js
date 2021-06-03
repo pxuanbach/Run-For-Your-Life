@@ -1,19 +1,24 @@
 import React from 'react';
-import FontLoader from '../../components/Font';
-import {Text, View, Image, ImageBackground, ScrollView} from 'react-native';
-import TouchableOpacityDesign from '../../components/TouchableOpacityDesign';
+import {Text, View, Image, ImageBackground, ScrollView, Dimensions} from 'react-native';
+import FoodRecommendCard from '../../../components/FoodRecommendCard';
+import Constants from '../../../utilities/Constants';
+import FontLoader from '../../../utilities/Font';
+import FoodScreen from './FoodScreen';
 
-function NutritionTab() {
+const windowHeight = Dimensions.get('window').height;
+
+function NutritionTab({navigation}) {
+    let Calories = 400;
     return (
         <ScrollView style={{
             flexDirection: 'column'
         }}>
             <ImageBackground 
-            source={require('../../images/foodImage.jpg')}
+            source={require('../../../images/foodImage.jpg')}
             style={{width: '100%', flex: 1}}>
                 <FontLoader>
                     <View style={{
-                        backgroundColor: '#fff',
+                        backgroundColor: Constants.COLOR.white,
                         justifyContent: 'center',
                         alignSelf: 'flex-start',
                         alignItems: 'center',
@@ -27,7 +32,7 @@ function NutritionTab() {
                             fontFamily: 'SemiBold',
                             fontSize: 24,
                         }}>
-                            Calories consumed:
+                            Calories đã tiêu thụ:
                         </Text>
                     </View>
                     <View style={{
@@ -41,7 +46,7 @@ function NutritionTab() {
                             marginRight: 10,
                             
                         }}>
-                            400
+                            {Calories}
                         </Text>
                         <Text style={{
                             fontFamily: 'SemiBold',
@@ -57,23 +62,46 @@ function NutritionTab() {
                 </FontLoader>
             </ImageBackground>
             <View style={{
-                flex: 2,
-                margin: 8
+                flex: 7,
+                padding: 10,
             }}>
                 <FontLoader>
                     <Text style={{
                         fontFamily: "SemiRegular",
-                        fontSize: 24,
+                        fontSize: 22,
                     }}>
-                        You should
+                        Bạn đã tiêu thụ {Calories} Calo.
+                    </Text>
+                    <Text style={{
+                        fontFamily: "SemiRegular",
+                        fontSize: 22,
+                    }}>
+                        Vì vậy, bạn nên chọn loại thức ăn giàu dinh dưỡng.
                     </Text>
                 </FontLoader>
-                <TouchableOpacityDesign 
-                    text='Giảm cân'
-                    image={require('../../images/foodImage.jpg')}
+                <FoodRecommendCard 
+                    text="Ăn sáng"
+                    image={require('../../../images/foodImage.jpg')}
+                    h = {windowHeight}
+                    onPress={() => navigation.navigate("FoodScreen", {time: 'sáng'})}
                 >
+                </FoodRecommendCard>
 
-                </TouchableOpacityDesign>
+                <FoodRecommendCard 
+                    text="Ăn trưa"
+                    image={require('../../../images/foodImage.jpg')}
+                    h = {windowHeight}
+                    onPress={() => navigation.navigate('FoodScreen', {time: 'trưa'})}
+                >
+                </FoodRecommendCard>
+
+                <FoodRecommendCard 
+                    text="Ăn tối"
+                    image={require('../../../images/foodImage.jpg')}
+                    h = {windowHeight}
+                    onPress={() => navigation.navigate('FoodScreen', {time: 'tối'})}
+                >
+                </FoodRecommendCard>
             </View>
         </ScrollView>
     )

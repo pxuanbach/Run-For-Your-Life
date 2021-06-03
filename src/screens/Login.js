@@ -1,22 +1,30 @@
-import React from 'react';
-import {Text, View, Image, TouchableOpacity, KeyboardAvoidingView, KeyboardAvoidingViewBase, Dimensions, Button} from 'react-native';
+import React, { useState } from 'react';
+import {Text, View, Image, TouchableOpacity, KeyboardAvoidingView, Dimensions} from 'react-native';
 import Icon from '@expo/vector-icons/AntDesign';
-import FontLoader from '../components/Font';
+import FontLoader from '../utilities/Font';
 import TextInputDesign from '../components/TextInputDesign';
-import Register from '../screens/Register';
-import {BottomTabNavigator} from '../screens';
+import Constants from '../utilities/Constants';
+import Axios from "axios";
 
 const windowHeight = Dimensions.get('window').height;
 
 function Login({navigation}) {
-    const [data, setData] = React.useState({
-        username: '',
-        password: '',
-        check_textInputChange: false,
-        secureTextEntry: true,
-        isValidUser: true,
-        isValidPassword: true,
-    });
+    const [username,setUsername] = useState()
+    const [password,setPassword] = useState()
+    const handleLogin =() => {
+    console.log(username,password);    
+    Axios.post("https://runapp1108.herokuapp.com/api/users/login",{username,password})
+        .then((res)=>{
+            navigation.navigate('BottomTabNavigator')
+        })
+        .catch((err)=>{
+            Alert.alert(
+                "Oops!",
+                "Tài khoản hoặc mật khẩu sai rồi!!!",
+            );
+                    
+        })
+    }
 
     const isValidMail = (text) => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -43,14 +51,14 @@ function Login({navigation}) {
                 <Text style={{
                     fontFamily: 'SemiBold', 
                     fontSize: 70,
-                    color: '#fff',
+                    color: Constants.COLOR.white,
                     marginLeft: 12,
                     marginTop: 92,}}
                 >SIGN IN</Text>
             </KeyboardAvoidingView>
         
             <View style={{
-                backgroundColor: '#4CD964',
+                backgroundColor: Constants.COLOR.green,
                 height: 2*windowHeight/3, width: '100%',
                 alignSelf: 'center',
             }}>
@@ -59,18 +67,20 @@ function Login({navigation}) {
                         placeholder='Username'
                         iconName='user'
                         isSecured={false}
+                        onChangeText={(text) => setUsername(text)}
                     />
                     
                     <TextInputDesign
                         placeholder='Password'
                         iconName='lock'
                         isSecured={true}
+                        onChangeText={(text)=>setPassword(text)}
                     />
                 </KeyboardAvoidingView>
                 
                 <TouchableOpacity onPress={() => navigation.navigate('BottomTabNavigator')} 
                     style={{
-                    backgroundColor: '#fff',
+                    backgroundColor: Constants.COLOR.white,
                     elevation: 8,
                     alignItems: 'center',
                     borderRadius: 25,
@@ -81,7 +91,7 @@ function Login({navigation}) {
                     }}>
                     <FontLoader>
                         <Text style={{
-                            color: '#4CD964',
+                            color: Constants.COLOR.green,
                             fontSize: 35,
                             fontFamily: 'SemiRegular',
                             alignSelf: 'center',}}
@@ -105,7 +115,7 @@ function Login({navigation}) {
                         <Text style={{
                             fontSize: 20,
                             fontFamily: 'SemiRegular',
-                            color: 'red',
+                            color: Constants.COLOR.red,
                         }}>Sign up now! </Text>
                     </TouchableOpacity>
                 </View>
