@@ -3,31 +3,48 @@ import {Text,View,Image, TouchableOpacity,} from 'react-native';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 
-const FoodRecommendCard = ({image, text, onPress, h = 90}) => {
+const FoodRecommendCard = ({image, text, onPress, h = 90, w = 400}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
             width: '100%',
-            alignItems: 'center',
-            borderRadius: 20,
-            justifyContent: 'center',
-            marginTop: 10
+            marginTop: 12,
+            elevation: 7
         }}>
-            <Image
-                source={image}
-                style={{height: h/7, width: '100%', borderRadius: 15}}>
-            </Image>
-            <FontLoader>
-                <Text style={{
+            <View style={{
+                elevation: 8
+            }}>
+                <Image
+                    source={image}
+                    style={{height: h/7, width: '100%', borderRadius: 15,}}>
+                </Image>
+                <View
+                style={{
                     position: 'absolute',
-                    fontSize: h/22,
-                    fontFamily: 'RobotoBold',
-                    color: Constants.COLOR.black
+                    bottom: 0,
+                    right: 0,
+                    height: h/17,
+                    width: w/3,
+                    backgroundColor: Constants.COLOR.white,
+                    borderTopLeftRadius: 15,
+                    borderBottomRightRadius: 15,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    elevation: 7
                 }}>
-                    {text}
-                </Text>
-            </FontLoader>
-            
+                    <FontLoader>
+                        <Text style={{
+                            position: 'absolute',
+                            fontSize: h/24,
+                            fontFamily: 'SemiBold',
+                            color: Constants.COLOR.second_green
+                        }}>
+                            {text}
+                        </Text>
+                    </FontLoader>
+                </View>
+                
+            </View>
         </TouchableOpacity>
     )
 }

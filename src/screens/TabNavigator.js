@@ -44,16 +44,17 @@ const BottomTabNavigator = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: 'Profile',
             tabBarIcon: ({ tintColor }) => {
-                return <AntDesign name='profile' 
+                return <AntDesign name='user' 
                 size={28} style={{color: tintColor}}></AntDesign>
             },
         },
     }
 },{
     tabBarOptions: {
-        inactiveTintColor: Constants.COLOR.white,
-        activeTintColor: Constants.COLOR.red,
+        inactiveTintColor: Constants.COLOR.second_green,
+        activeTintColor: Constants.COLOR.white,
         style: {
+            height: 54,
             backgroundColor: Constants.COLOR.green,
             borderTopWidth: 0
         }

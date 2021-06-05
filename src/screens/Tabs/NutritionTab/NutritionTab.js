@@ -6,6 +6,7 @@ import FontLoader from '../../../utilities/Font';
 import FoodScreen from './FoodScreen';
 
 const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
 
 function NutritionTab({navigation}) {
     let Calories = 400;
@@ -25,10 +26,10 @@ function NutritionTab({navigation}) {
                         borderRadius: 18,
                         marginTop: 20,
                         marginLeft: 8,
-                        padding: 3
+                        padding: 5
                     }}>
                         <Text style={{
-                            color: 'black',
+                            color: Constants.COLOR.dark_green,
                             fontFamily: 'SemiBold',
                             fontSize: 24,
                         }}>
@@ -38,12 +39,13 @@ function NutritionTab({navigation}) {
                     <View style={{
                         flexDirection: 'row', 
                         justifyContent: 'flex-end', 
+                        elevation: 7
                     }}>
                         <Text style={{
                             fontFamily: 'SemiBold',
                             fontSize: 55,
-                            color: '#145A00',
-                            marginRight: 10,
+                            color: Constants.COLOR.dark_green,
+                            marginRight: 10,  
                             
                         }}>
                             {Calories}
@@ -52,7 +54,7 @@ function NutritionTab({navigation}) {
                             fontFamily: 'SemiBold',
                             fontSize: 24,
                             top: 33,
-                            color: '#fff',
+                            color: Constants.COLOR.white,
                             marginRight: 5,
                         }}>
                             calories.

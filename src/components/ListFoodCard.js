@@ -17,6 +17,7 @@ const FoodCard = ({windowHeight, windowWidth, image, foodName, calories, onPress
             flexDirection: "column",
             alignContent: "center",
             alignItems: "center",
+            elevation: 5
         }}>
             <Image source={image}
             style={{
@@ -31,6 +32,7 @@ const FoodCard = ({windowHeight, windowWidth, image, foodName, calories, onPress
                     fontFamily: "SemiRegular",
                     fontSize: 18,
                     paddingHorizontal: 5,
+                    color: Constants.COLOR.dark_green
                 }}>
                     {foodName}   
                 </Text>
@@ -38,7 +40,8 @@ const FoodCard = ({windowHeight, windowWidth, image, foodName, calories, onPress
                     fontFamily: "SemiRegular",
                     fontSize: 17,
                     paddingHorizontal: 5,
-                    alignSelf: "center"
+                    alignSelf: "center",
+                    color: Constants.COLOR.second_green
                 }}>
                     {calories} calo   
                 </Text>
