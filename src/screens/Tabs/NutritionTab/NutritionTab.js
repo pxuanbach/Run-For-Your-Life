@@ -85,6 +85,7 @@ function NutritionTab({navigation}) {
                     text="Ăn sáng"
                     image={require('../../../images/foodImage.jpg')}
                     h = {windowHeight}
+                    w = {windowWidth}
                     onPress={() => navigation.navigate("FoodScreen", {time: 'sáng'})}
                 >
                 </FoodRecommendCard>
@@ -93,6 +94,7 @@ function NutritionTab({navigation}) {
                     text="Ăn trưa"
                     image={require('../../../images/foodImage.jpg')}
                     h = {windowHeight}
+                    w = {windowWidth}
                     onPress={() => navigation.navigate('FoodScreen', {time: 'trưa'})}
                 >
                 </FoodRecommendCard>
@@ -101,6 +103,7 @@ function NutritionTab({navigation}) {
                     text="Ăn tối"
                     image={require('../../../images/foodImage.jpg')}
                     h = {windowHeight}
+                    w = {windowWidth}
                     onPress={() => navigation.navigate('FoodScreen', {time: 'tối'})}
                 >
                 </FoodRecommendCard>

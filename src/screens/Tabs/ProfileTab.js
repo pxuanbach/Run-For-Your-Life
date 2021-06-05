@@ -1,29 +1,40 @@
 import React from 'react';
-import {Text, View, TouchableOpacity, ScrollView, ImageBackground, Image} from 'react-native';
+import {Text, View, TouchableOpacity, ScrollView, SafeAreaView, Image, Dimensions} from 'react-native';
 import FontLoader from '../../utilities/Font';
 import Icon from '@expo/vector-icons/AntDesign';
 import Constants from '../../utilities/Constants';
-import { SafeAreaView } from 'react-native';
+import CustomButton from '../../components/CustomButton';
 
-function ProfileTab() {
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
+function ProfileTab({navigation}) {
     return (
         <SafeAreaView>
-            <View>
+            <View
+            style={{
+                backgroundColor: Constants.COLOR.white,
+                flexDirection: 'row-reverse',
+                alignItems: "center",
+                paddingHorizontal: 8,
+                paddingVertical: 8,               
+                paddingTop: 24
+            }}>
+                <CustomButton 
+                    iconSize={30}
+                    onPress={() => navigation.navigate('Login')}
+                    iconName="exit-outline">
+                </CustomButton>
                 
             </View>
             <ScrollView>
-                <View style={{
-                    height: '25%',
-                    width: '100%',
-                }}>
-                    <View style={{ alignSelf: 'center', borderRadius: 100}}>
+                <View style={{ alignSelf: 'center', borderRadius: 100}}>
                         
                         <Image
                         source={require('../../images/back.png')}
                         style={{
-                            marginTop: 50,
-                            width: 200,
-                            height: 200,
+                            width: 120,
+                            height: 120,
                             borderRadius: 100,
                             overflow: 'hidden',
                         }}></Image>
@@ -70,13 +81,11 @@ function ProfileTab() {
                         }}>
                                 <Icon name="edit" size={28} color={Constants.COLOR.second_green}/>
                         </TouchableOpacity>
-                    </View>
-                    
                 </View>
+                    
                 <View style={{
                     height: '75%',
                 }}>
-
                 </View>
             </ScrollView>
         </SafeAreaView>

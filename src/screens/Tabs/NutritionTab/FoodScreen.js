@@ -22,13 +22,14 @@ function FoodScreen({navigation}) {
                 alignItems: "center",
                 paddingHorizontal: 8,
                 paddingVertical: 8,               
-                paddingTop: 16
+                paddingTop: 26
             }}>
                 <CustomButton 
                     onPress={
                         () => navigation.push("NutritionTab")
                     }
-                    iconName="arrowleft">
+                    iconName="ios-chevron-back-outline"
+                    iconSize={30}>
                 </CustomButton>
                 <FontLoader>
                     <Text style={{

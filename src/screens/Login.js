@@ -43,7 +43,7 @@ function Login({navigation}) {
         <View>
             <Image
                 source={require('../images/background2.png')}
-                style={{height: windowHeight/3, width: '100%'}}>
+                style={{height: '35%', width: '100%'}}>
             </Image>
             <KeyboardAvoidingView style={{
                 position: 'absolute', 
@@ -59,7 +59,7 @@ function Login({navigation}) {
         
             <View style={{
                 backgroundColor: Constants.COLOR.green,
-                height: 2*windowHeight/3, width: '100%',
+                height: '65%', width: '100%',
                 alignSelf: 'center',
             }}>
                 <KeyboardAvoidingView>
@@ -107,13 +107,13 @@ function Login({navigation}) {
                 }}>
                     <FontLoader>
                         <Text style={{
-                            fontSize: 20,
+                            fontSize: 21,
                             fontFamily: 'SemiRegular',
                         }}>Don't have account? </Text>
                     </FontLoader> 
                     <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                         <Text style={{
-                            fontSize: 20,
+                            fontSize: 22,
                             fontFamily: 'SemiRegular',
                             color: Constants.COLOR.red,
                         }}>Sign up now! </Text>

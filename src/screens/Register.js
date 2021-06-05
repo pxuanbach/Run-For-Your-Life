@@ -1,13 +1,15 @@
 import React, { useState, useEffect, setData } from 'react';
-import { View, TouchableOpacity, Text, Image, Keyboard, 
-    Dimensions, KeyboardAvoidingView, ScrollView, Alert } from 'react-native';
+import { View, TouchableOpacity, Text, 
+    Dimensions, KeyboardAvoidingView, Alert } from 'react-native';
 import TextInputDesign from '../components/TextInputDesign'
 import FontLoader from '../utilities/Font'
-import backImage from '../images/background2.png';
 import Axios from 'axios';
 import Constants from '../utilities/Constants';
+import { ScrollView } from 'react-native';
+import { FontAwesome5 } from '@expo/vector-icons';
+import CustomButton from '../components/CustomButton';
 
-const windowHeight = Dimensions.get("window").height;
+const windowHeight = Dimensions.get('window').height;
 
 function Register({navigation}){
     const setValue = (fieldName, value) => setData({...data, [fieldName]: value});
@@ -52,37 +54,47 @@ function Register({navigation}){
         })
     }
 
-
     return(
-        <KeyboardAvoidingView behavior='height'>
-            <ScrollView>
+            <View style={{
+                height: '100%', 
+                width: '100%',
+                backgroundColor: Constants.COLOR.green,
+                overflow: 'scroll'
+            }}>
                 <View style={{
-                    height: windowHeight/3,
+                    paddingVertical: windowHeight/24,
+                    padding: 12,
+                    flexDirection: 'column',
                     
                 }}>
-                    <Image source={backImage}
-                        style={{
-                            height: '100%',
-                            width: '100%',
+                    <CustomButton
+                        onPress={() => navigation.push("Login")}
+                        iconName='ios-chevron-back-outline'
+                        iconSize={windowHeight/18}>
+                    </CustomButton>
+                    <Text style={{
+                        fontFamily: 'SemiBold', 
+                        fontSize: windowHeight/12,
+                        color: Constants.COLOR.white,
                     }}>
-                    </Image>
-                    <KeyboardAvoidingView
-                        style={{position: 'absolute'}}
+                        Create new Account
+                    </Text>
+                    <View style={{
+                        position: 'absolute',
+                        bottom: 10,
+                        right: 10,
+                    }}
                     >
-                        <Text style={{
-                            fontFamily: 'SemiBold', 
-                            fontSize: 60,
-                            color: Constants.COLOR.white,
-                            alignSelf: 'center',
-                            marginLeft: 12,
-                            marginTop: 90,
-                        }}>SIGN UP</Text>
-                    </KeyboardAvoidingView>
+                        <FontAwesome5 
+                            name="running" 
+                            size={windowHeight/8} 
+                            color={Constants.COLOR.white} 
+                        />
+                    </View>
+                    
                 </View>
-                <View style={{
-                    backgroundColor: Constants.COLOR.green,
-                    height: 2*windowHeight/3, width: '100%',
-                    alignSelf: 'center',
+                <ScrollView style={{
+                    paddingVertical: 12
                 }}>
                     <KeyboardAvoidingView>
                         <TextInputDesign
@@ -96,19 +108,19 @@ function Register({navigation}){
                             onEndEditing={(text) => {setValue("email",text)}}
                             onChangeText={(text) => setEmail(text)}
                             placeholder='Your mail'
-                            iconName='mail'
+                            iconName='mail-bulk'
                             isSecured={false}>
                         </TextInputDesign>
                         <TextInputDesign 
                             onEndEditing={(text) => {setValue("password",text)}}
                             onChangeText={(text) => setPassword(text)}
                             placeholder='Password'
-                            iconName='lock'
+                            iconName='key'
                             isSecured={true}>
                         </TextInputDesign>
                         <TextInputDesign 
                             placeholder='Re-Password'
-                            iconName='lock'
+                            iconName='key'
                             isSecured={true}>
                         </TextInputDesign>
                     </KeyboardAvoidingView>
@@ -133,9 +145,9 @@ function Register({navigation}){
                             >Sign Up</Text>
                         </FontLoader>  
                     </TouchableOpacity>
-                </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+                </ScrollView>
+            </View>
+            
     )
 }
 

@@ -1,7 +1,10 @@
 import React from 'react';
-import {Text, View, TouchableOpacity , ImageBackground} from 'react-native';
+import {Text, Dimensions, TouchableOpacity , ImageBackground} from 'react-native';
 import FontLoader from '../utilities/Font';
 import Constants from '../utilities/Constants';
+
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
 
 function Welcome({navigation}) {
     return (
@@ -10,10 +13,10 @@ function Welcome({navigation}) {
             <FontLoader>
                 <Text 
                     style={{color: Constants.COLOR.white,
-                    fontSize: 55, 
+                    fontSize: windowHeight/10, 
                     alignSelf: 'center',
                     fontFamily: 'SemiBold',
-                    marginTop: 100,
+                    marginTop: 80
                     }}>
                     Welcome!
                 </Text>
@@ -21,17 +24,17 @@ function Welcome({navigation}) {
             <TouchableOpacity onPress={() => navigation.navigate('Login')}
                 style={{backgroundColor: Constants.COLOR.green,
                 elevation: 8,
-                height: '10%',
-                alignItems: 'center',
+                height: windowHeight/10,
+                justifyContent: 'center',
                 borderRadius: 20,
-                marginTop: 350,
                 marginHorizontal: 30,
                 paddingVertical: 10,
+                marginTop: windowHeight/2
                 }}>
                 <FontLoader>
                     <Text
                         style={{color: Constants.COLOR.white,
-                        fontSize: 35,
+                        fontSize: windowHeight/18,
                         fontFamily: 'SemiRegular',
                         alignSelf: 'center',}}
                     >Get Started</Text>

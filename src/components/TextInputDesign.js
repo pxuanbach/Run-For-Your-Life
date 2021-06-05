@@ -1,6 +1,6 @@
 import React from 'react';
 import {KeyboardAvoidingView, TextInput} from 'react-native';
-import Icon from '@expo/vector-icons/AntDesign';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 const heightOfView = 48;
 const fontSizeOfText = 22;
@@ -20,7 +20,7 @@ const TextInputDesign = ({placeholder, iconName, isSecured, onChangeText, onEndE
             paddingVertical:2,
             height: heightOfView
         }}>
-            <Icon name={iconName} color="#4CD964" size={sizeOfIcon}/>
+            <FontAwesome5 name={iconName} color="#4CD964" size={sizeOfIcon}/>
             <TextInput 
                 placeholder = {placeholder}
                 secureTextEntry={true}
@@ -42,7 +42,7 @@ const TextInputDesign = ({placeholder, iconName, isSecured, onChangeText, onEndE
             paddingVertical:2,
             height: heightOfView
         }}>
-            <Icon name={iconName} color="#4CD964" size={sizeOfIcon}/>
+            <FontAwesome5 name={iconName} color="#4CD964" size={sizeOfIcon}/>
             <TextInput 
                 onEndEditing = {onEndEditing}
                 onChangeText = {onChangeText}
