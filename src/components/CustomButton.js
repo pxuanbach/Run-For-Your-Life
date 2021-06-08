@@ -1,17 +1,58 @@
 import React from 'react';
-import {Text,View,Image, TouchableOpacity,} from 'react-native';
+import {Text ,TouchableOpacity,} from 'react-native';
 import Constants from '../utilities/Constants';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
+import FontLoader from '../utilities/Font';
 
-const CustomButton = ({onPress, iconName, iconSize=28}) => {
+const CustomButton = ({onPress, iconName, iconSize=28, 
+    backgroundColor="transperant", color=Constants.COLOR.dark_green}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
-            backgroundColor: "transperant",
+            backgroundColor: backgroundColor,
+            height: "100%",
         }}>
-            <Ionicons name={iconName} size={iconSize} color={Constants.COLOR.dark_green} />
+            <MaterialIcons name={iconName} size={iconSize} color={color} 
+                style={{alignSelf: 'center', }}/>
         </TouchableOpacity>
     )
 }
 
-export default CustomButton
+const IconButtonDesign = ({onPress, width, height, text, fontSize=30,
+        iconName, iconSize=30, color=Constants.COLOR.white}) => {
+    return (
+        <TouchableOpacity
+        onPress={onPress}
+        style={{
+            flexDirection: 'row',
+            marginHorizontal: 10,
+            height: height,
+            width: width,
+            borderRadius: 10,
+            backgroundColor: Constants.COLOR.green,
+            alignSelf: 'center'
+        }}>
+            <MaterialIcons 
+            name={iconName} size={iconSize} color={color} 
+            style={{
+                alignSelf: 'center',
+                padding: 4
+            }}/>
+            <FontLoader>
+                <Text style={{
+                    color: color,
+                    fontSize: fontSize,
+                    fontFamily: 'SemiRegular',
+                    alignSelf: 'center',
+                    paddingHorizontal: 4,
+                    paddingBottom: 4}}
+                >{text}</Text>
+            </FontLoader>  
+        </TouchableOpacity>
+    )
+}
+
+export {
+    CustomButton,
+    IconButtonDesign
+} 

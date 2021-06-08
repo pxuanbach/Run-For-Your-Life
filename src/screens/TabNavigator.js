@@ -1,12 +1,14 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Dimensions} from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import {HomeTab, NutritionTab, ProfileTab, Tab1} from './Tabs';
+import {HomeTab, ProfileTab, Tab1} from './Tabs';
 import NutritionTabNavigator from '../screens/Tabs/NutritionTab/Navigator'
 import Constants from '../utilities/Constants';
+
+const windowHeight = Dimensions.get('window').height;
 
 const BottomTabNavigator = createBottomTabNavigator({
     HomeTab: {
@@ -54,7 +56,7 @@ const BottomTabNavigator = createBottomTabNavigator({
         inactiveTintColor: Constants.COLOR.second_green,
         activeTintColor: Constants.COLOR.white,
         style: {
-            height: 54,
+            height: 58,
             backgroundColor: Constants.COLOR.green,
             borderTopWidth: 0
         }

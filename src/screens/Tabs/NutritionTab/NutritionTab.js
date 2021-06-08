@@ -33,7 +33,7 @@ function NutritionTab({navigation}) {
                             fontFamily: 'SemiBold',
                             fontSize: 24,
                         }}>
-                            Calories đã tiêu thụ:
+                            Calories consumed:
                         </Text>
                     </View>
                     <View style={{
@@ -59,7 +59,6 @@ function NutritionTab({navigation}) {
                         }}>
                             calories.
                         </Text>
-                        
                     </View>
                 </FontLoader>
             </ImageBackground>
@@ -72,7 +71,7 @@ function NutritionTab({navigation}) {
                         fontFamily: "SemiRegular",
                         fontSize: 22,
                     }}>
-                        Bạn đã tiêu thụ {Calories} Calo.
+                        You have consumed {Calories} calories.
                     </Text>
                     <Text style={{
                         fontFamily: "SemiRegular",
@@ -82,29 +81,32 @@ function NutritionTab({navigation}) {
                     </Text>
                 </FontLoader>
                 <FoodRecommendCard 
-                    text="Ăn sáng"
+                    text="Vegestables"
                     image={require('../../../images/foodImage.jpg')}
                     h = {windowHeight}
                     w = {windowWidth}
-                    onPress={() => navigation.navigate("FoodScreen", {time: 'sáng'})}
+                    onPress={() => navigation.navigate("FoodScreen", 
+                        {type: 'vegetables', name: 'Vegetables'})}
                 >
                 </FoodRecommendCard>
 
                 <FoodRecommendCard 
-                    text="Ăn trưa"
+                    text="Fruits"
                     image={require('../../../images/foodImage.jpg')}
                     h = {windowHeight}
                     w = {windowWidth}
-                    onPress={() => navigation.navigate('FoodScreen', {time: 'trưa'})}
+                    onPress={() => navigation.navigate('FoodScreen', 
+                        {type: 'fruits', name: 'Fruits'})}
                 >
                 </FoodRecommendCard>
 
                 <FoodRecommendCard 
-                    text="Ăn tối"
+                    text="Animal Origin"
                     image={require('../../../images/foodImage.jpg')}
                     h = {windowHeight}
                     w = {windowWidth}
-                    onPress={() => navigation.navigate('FoodScreen', {time: 'tối'})}
+                    onPress={() => navigation.navigate('FoodScreen', 
+                        {type: 'animalOrigin', name: 'Animal Origin'})}
                 >
                 </FoodRecommendCard>
             </View>

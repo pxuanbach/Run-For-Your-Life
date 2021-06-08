@@ -1,34 +1,160 @@
 var listFood = [
     {
-        "id": "1",
-        "foodName": "Bánh mì",
-        "calo": "40"
-    },
-    {
-        "id": "2",
-        "foodName": "Phở",
-        "calo": "50"
-    },
-    {
-        "id": "3",
-        "foodName": "Cơm",
-        "calo": "30"
-    },
-    {
-        "id": "4",
-        "foodName": "Kẹo đồng",
-        "calo": "100"
-    },
-    {
-        "id": "5",
-        "foodName": "Bánh bao",
-        "calo": "25"
-    },
-    {
-        "id": "6",
-        "foodName": "Táo",
-        "calo": "15"
-    },
+        "urlImage": "https://i.postimg.cc/sxrJFJFK/watermelon-foods-photo-u4.jpg",
+        "_id": "60bb9b038f03a60022deac67",
+        "name": "Watermelons",
+        "type": "fruits",
+        "calories": "30.2",
+        "totalWeight": 100,
+        "fat": 0.2,
+        "protein": 0.6,
+        "carbohydrates": 7.5,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/9MDw0w2T/strawberry-foods-photo-u3.jpg",
+        "_id": "60bb9b3b8f03a60022deac68",
+        "name": "Strawberries",
+        "type": "fruits",
+        "calories": "31.3",
+        "totalWeight": 100,
+        "fat": 0.3,
+        "protein": 0.7,
+        "carbohydrates": 7.6,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/59CyYMhh/mango-foods-photo-u8.jpg",
+        "_id": "60bb9b618f03a60022deac69",
+        "name": "Mangos",
+        "type": "fruits",
+        "calories": "59.9",
+        "totalWeight": 100,
+        "fat": 0.4,
+        "protein": 0.8,
+        "carbohydrates": 14.7,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/0QJkwpBY/pineapple-foods-photo-u5.jpg",
+        "_id": "60bb9b838f03a60022deac6a",
+        "name": "pineapples",
+        "type": "fruits",
+        "calories": "51.3",
+        "totalWeight": 100,
+        "fat": 0.1,
+        "protein": 0.5,
+        "carbohydrates": 13.1,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/5Nz7jpS4/green-grapes-foods-photo-u1.jpg",
+        "_id": "60bb9c0f8f03a60022deac6b",
+        "name": "Green grapes",
+        "type": "fruits",
+        "calories": "67.4",
+        "totalWeight": 100,
+        "fat": 0.2,
+        "protein": 0.7,
+        "carbohydrates": 17.8,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/rsMmWfRB/peach-foods-photo-u4.jpg",
+        "_id": "60bb9c528f03a60022deac6c",
+        "name": "Peaches",
+        "type": "fruits",
+        "calories": "39.5",
+        "totalWeight": 100,
+        "fat": 0.2,
+        "protein": 0.9,
+        "carbohydrates": 9.7,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/NFc4Xv4Q/raspberry-foods-photo-u2.jpg",
+        "_id": "60bb9c8a8f03a60022deac6d",
+        "name": "Raspberries",
+        "type": "fruits",
+        "calories": "51.8",
+        "totalWeight": 100,
+        "fat": 0.5,
+        "protein": 1,
+        "carbohydrates": 12,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/CMGJgdh5/cherry-foods-photo-u2.jpg",
+        "_id": "60bb9ca48f03a60022deac6e",
+        "name": "Cherries",
+        "type": "fruits",
+        "calories": "63.8",
+        "totalWeight": 100,
+        "fat": 0.2,
+        "protein": 1.1,
+        "carbohydrates": 16.1,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/yNJ4Q0zk/apple-foods-photo-2.jpg",
+        "_id": "60bb9d468f03a60022deac6f",
+        "name": "Apple",
+        "type": "fruits",
+        "calories": "53",
+        "totalWeight": 100,
+        "fat": 0.2,
+        "protein": 0.3,
+        "carbohydrates": 14.1,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/gJqMN0rx/orange-foods-photo-u2.jpg",
+        "_id": "60bb9d6c8f03a60022deac70",
+        "name": "Orange",
+        "type": "fruits",
+        "calories": "50.4",
+        "totalWeight": 100,
+        "fat": 0.1,
+        "protein": 0.9,
+        "carbohydrates": 12.4,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/rwDMbB1V/kiwi-foods-photo-u1.jpg",
+        "_id": "60bb9dbd8f03a60022deac71",
+        "name": "Kiwi",
+        "type": "fruits",
+        "calories": "59.5",
+        "totalWeight": 100,
+        "fat": 0.5,
+        "protein": 1.1,
+        "carbohydrates": 14.9,
+        "cholesterol": 0,
+        "__v": 0
+      },
+      {
+        "urlImage": "https://i.postimg.cc/52dsdvvX/pear-foods-photo-1.jpg",
+        "_id": "60bb9de28f03a60022deac72",
+        "name": "Pear",
+        "type": "fruits",
+        "calories": "56.7",
+        "totalWeight": 100,
+        "fat": 0.1,
+        "protein": 0.4,
+        "carbohydrates": 14.9,
+        "cholesterol": 0,
+        "__v": 0
+      },
 ];
 
 export default listFood

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {Text, View, Image, TouchableOpacity, KeyboardAvoidingView, Dimensions} from 'react-native';
-import Icon from '@expo/vector-icons/AntDesign';
 import FontLoader from '../utilities/Font';
 import TextInputDesign from '../components/TextInputDesign';
 import Constants from '../utilities/Constants';

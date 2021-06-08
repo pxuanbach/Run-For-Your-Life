@@ -24,13 +24,13 @@ const FoodRecommendCard = ({image, text, onPress, h = 90, w = 400}) => {
                     bottom: 0,
                     right: 0,
                     height: h/17,
-                    width: w/3,
+                    width: w/2 - 16,
                     backgroundColor: Constants.COLOR.white,
                     borderTopLeftRadius: 15,
                     borderBottomRightRadius: 15,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    elevation: 7
+                    elevation: 7,
                 }}>
                     <FontLoader>
                         <Text style={{

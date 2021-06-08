@@ -7,7 +7,7 @@ import Axios from 'axios';
 import Constants from '../utilities/Constants';
 import { ScrollView } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
-import CustomButton from '../components/CustomButton';
+import {CustomButton} from '../components/CustomButton';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -69,8 +69,8 @@ function Register({navigation}){
                 }}>
                     <CustomButton
                         onPress={() => navigation.push("Login")}
-                        iconName='ios-chevron-back-outline'
-                        iconSize={windowHeight/18}>
+                        iconName='arrow-back-ios'
+                        iconSize={windowHeight/20}>
                     </CustomButton>
                     <Text style={{
                         fontFamily: 'SemiBold', 
