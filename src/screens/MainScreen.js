@@ -6,6 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import HomeTab from './Tab/HomeTab';
 import Tab1 from './Tab/Tab1';
+import GeofenceView from './Tab/GeofenceView'
 import NutritionTab from './Tab/NutritionTab';
 import ProfileTab from './Tab/ProfileTab';
 
@@ -21,7 +22,7 @@ const MainScreen = createBottomTabNavigator({
         }
     },
     Tab1: {
-        screen: Tab1,
+        screen: GeofenceView,
         navigationOptions: {
             tabBarLabel: 'Profile',
             tabBarIcon: ({ tintColor }) => {
