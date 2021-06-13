@@ -1,15 +1,17 @@
 import React, {useState} from 'react';
 import {Text, Image, 
     TouchableOpacity, FlatList, 
-    View, Modal, SafeAreaView,
+    View, Modal, SafeAreaView, Dimensions
 } from 'react-native';
-import { paddingBottom } from 'styled-system';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 import {IconButtonDesign} from './CustomButton';
-import { MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native';
 
-const FoodCard = ({windowHeight, windowWidth, urlImage, name, calories, onPress}) => {
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
+const FoodCard = ({urlImage, name, calories, onPress}) => {
     const w = windowWidth;
     const h = windowHeight;
     return (
@@ -62,7 +64,7 @@ const FoodCard = ({windowHeight, windowWidth, urlImage, name, calories, onPress}
     )
 }
 
-const ListFoodCard = ({windowHeight, windowWidth, data, type}) => {
+const ListFoodCard = ({data, type}) => {
     const [modalVisible, setModalVisible] = useState(false);
     var [curItem, setCurItem] = useState("urlImage", 
         "_id", "name", "type", "calories", "totalWeight", 
@@ -74,78 +76,53 @@ const ListFoodCard = ({windowHeight, windowWidth, data, type}) => {
             transparent={true}
             animationType='fade'
             visible={modalVisible}
-            
             onRequestClose={() => {setModalVisible(!modalVisible)}}>
                 <View style={{
                     backgroundColor: Constants.COLOR.white,
                     flex: 1,
                     margin: 20,
-                    marginVertical: 100,
+                    marginVertical: 80,
                     borderRadius: 20,
                     borderColor: Constants.COLOR.second_green,
                     borderWidth: 2
                 }}>
-                    <Image source={{
-                        uri: curItem.urlImage
-                    }}
-                    style={{
-                        height: windowHeight/3,
-                        justifyContent: 'flex-start',
-                        borderTopLeftRadius: 16,
-                        borderTopRightRadius: 16,
-                        margin: 4,
+                    <View style={{
+                        height: '40%',
+                        width: windowWidth - 48
                     }}>
-                    </Image>
+                        <Image source={{
+                            uri: curItem.urlImage
+                        }}
+                        style={{
+                            height: '100%',
+                            width: '100%',
+                            justifyContent: 'flex-start',
+                            borderTopLeftRadius: 16,
+                            borderTopRightRadius: 16,
+                            margin: 2,
+                        }}>
+                        </Image>
+                    </View>
+                    
                     <FontLoader>
-                        <Text style={{
-                            fontSize: 28,
-                            padding: 2,
-                            paddingLeft: 8,
-                            color: Constants.COLOR.dark_green,
-                            fontFamily: 'RobotoRegular'
-                        }}>Name: {curItem.name}</Text>
-                        <Text style={{
-                            fontSize: 20,
-                            padding: 2,
-                            paddingLeft: 8,
-                            color: Constants.COLOR.dark_green,
-                            fontFamily: 'RobotoRegular'
-                        }}>Type: {curItem.type}</Text>
-                        <Text style={{
-                            fontSize: 20,
-                            padding: 2,
-                            paddingLeft: 8,
-                            color: Constants.COLOR.dark_green,
-                            fontFamily: 'RobotoRegular'
-                        }}>Calories: {curItem.calories}</Text>
-                        <Text style={{
-                            fontSize: 20,
-                            padding: 2,
-                            paddingLeft: 8,
-                            color: Constants.COLOR.dark_green,
-                            fontFamily: 'RobotoRegular'
-                        }}>Total weight: {curItem.totalWeight}</Text>
-                        <Text style={{
-                            fontSize: 20,
-                            padding: 2,
-                            paddingLeft: 8,
-                            color: Constants.COLOR.dark_green,
-                            fontFamily: 'RobotoRegular'
-                        }}>Fat: {curItem.fat}</Text>
-                        <Text style={{
-                            fontSize: 20,
-                            padding: 2,
-                            paddingLeft: 8,
-                            color: Constants.COLOR.dark_green,
-                            fontFamily: 'RobotoRegular'
-                        }}>Protein: {curItem.protein}</Text>
-                        <Text style={{
-                            fontSize: 20,
-                            padding: 2,
-                            paddingLeft: 8,
-                            color: Constants.COLOR.dark_green,
-                            fontFamily: 'RobotoRegular'
-                        }}>Carbohydrates: {curItem.carbohydrates}</Text>
+                        <Text style={styles.heading}>
+                            Name: {curItem.name}</Text>
+                        {curItem.type == "animalOrigin" 
+                        ? <Text style={styles.normal}>Type: animal origin.</Text>
+                        : <Text style={styles.normal}>
+                            Type: {curItem.type}.</Text>}
+                        <Text style={styles.normal}>
+                            Calories: {curItem.calories}</Text>
+                        <Text style={styles.normal}>
+                            Total weight: {curItem.totalWeight} g.</Text>
+                        <Text style={styles.normal}>
+                            Fat: {curItem.fat} g.</Text>
+                        <Text style={styles.normal}>
+                            Protein: {curItem.protein} g.</Text>
+                        <Text style={styles.normal}>
+                            Carbohydrates: {curItem.carbohydrates} g.</Text>
+                        <Text style={styles.normal}>
+                            Cholesterol: {curItem.cholesterol} mg.</Text>
                     </FontLoader>
                     <View style={{
                         position: 'absolute',
@@ -160,6 +137,9 @@ const ListFoodCard = ({windowHeight, windowWidth, data, type}) => {
                         height={46}
                         iconName="share">
                         </IconButtonDesign>
+                        <View style={{
+                            width: windowWidth/10
+                        }}></View>
                         <IconButtonDesign
                         onPress={() => setModalVisible(!modalVisible)}
                         text="Close"
@@ -205,5 +185,19 @@ const ListFoodCard = ({windowHeight, windowWidth, data, type}) => {
     )
 }
 
+const styles = StyleSheet.create({
+    heading: {
+        fontSize: windowHeight/28,
+        paddingLeft: 12,
+        color: Constants.COLOR.dark_green,
+        fontFamily: 'RobotoRegular'
+    },
+    normal: {
+        fontSize: windowHeight/36,
+        paddingLeft: 20,
+        color: Constants.COLOR.dark_green,
+        fontFamily: 'RobotoRegular'
+    }
+})
 
 export default ListFoodCard

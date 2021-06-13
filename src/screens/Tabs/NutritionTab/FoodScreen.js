@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Image, Text, SafeAreaView } from 'react-native';
+import { View, Dimensions, Text, SafeAreaView } from 'react-native';
 import {CustomButton} from '../../../components/CustomButton';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
@@ -31,14 +31,15 @@ function FoodScreen({navigation}) {
 
     return (
         <View>
+            {/* header: back button + tittle */}
             <View
             style={{
                 height: isLoading ? windowHeight/10 : '10%',
                 backgroundColor: Constants.COLOR.white,
                 flexDirection: "row",
                 alignItems: "center",
-                paddingHorizontal: 8,
-                paddingVertical: 8,               
+                paddingHorizontal: 2,
+                paddingVertical: 4,               
                 paddingTop: windowHeight/26
             }}>
                 <CustomButton 
@@ -48,13 +49,14 @@ function FoodScreen({navigation}) {
                             navigation.push("NutritionTab")
                         }
                     }
+                    color={Constants.COLOR.dark_green}
                     iconName="arrow-back-ios"
                     iconSize={32}>
                 </CustomButton>
                 <FontLoader>
                     <Text style={{
                         fontFamily: "SemiBold",
-                        fontSize: 26,
+                        fontSize: 28,
                         paddingHorizontal: 32,
                         color: Constants.COLOR.dark_green,
                     }}>
@@ -63,23 +65,26 @@ function FoodScreen({navigation}) {
                 </FontLoader>
             </View>
             {isLoading 
-            ? <View style={{
+            // Loading screen
+            ? <View style={{   
                 position: 'absolute',
                 top: windowHeight/2 + 8,
                 width: '100%',
-                alignItems: 'center'
+                alignItems: 'center',
             }}>
                 <FontLoader>
                     <Text style={{
-                        color: Constants.COLOR.dark_green,
+                        color: Constants.COLOR.second_green,
                         fontSize: 30,
                         fontFamily: 'SemiRegular',
                         alignSelf: 'center',}}
                     >Loading...</Text>
                 </FontLoader>  
             </View>
+            //Show list food screen
             : <SafeAreaView style={{
-                height: "90%"
+                height: "90%",
+                backgroundColor: Constants.COLOR.light_gray
             }}>
                     <View style={{
                         paddingHorizontal: 12,
@@ -102,8 +107,6 @@ function FoodScreen({navigation}) {
                     }}>
                         <ListFoodCard
                         data={foodDatas}
-                        windowHeight={windowHeight}
-                        windowWidth={windowWidth}
                         type={navigation.getParam('type')}
                         >
                         </ListFoodCard>

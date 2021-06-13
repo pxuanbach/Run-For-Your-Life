@@ -1,6 +1,6 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import {Welcome, Login, Register, BottomTabNavigator, FoodScreen, NutritionTab} from './src/screens'
+import {Welcome, Login, Register, BottomTabNavigator} from './src/screens'
 
 const stackNavigatorOptions = {
   headerShown:false
@@ -18,12 +18,6 @@ const AppNavigator = createStackNavigator({
   },
   BottomTabNavigator: {
     screen: BottomTabNavigator,
-  },
-  NutritionTab: {
-    screen: NutritionTab,
-  },
-  FoodScreen: {
-    screen: FoodScreen,
   },
 },
 {

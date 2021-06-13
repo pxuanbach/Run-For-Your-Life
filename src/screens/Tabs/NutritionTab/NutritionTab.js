@@ -3,7 +3,6 @@ import {Text, View, Image, ImageBackground, ScrollView, Dimensions} from 'react-
 import FoodRecommendCard from '../../../components/FoodRecommendCard';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
-import FoodScreen from './FoodScreen';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -65,19 +64,22 @@ function NutritionTab({navigation}) {
             <View style={{
                 flex: 7,
                 padding: 10,
+                backgroundColor: Constants.COLOR.light_gray
             }}>
                 <FontLoader>
                     <Text style={{
                         fontFamily: "SemiRegular",
                         fontSize: 22,
+                        color: Constants.COLOR.dark_green
                     }}>
                         You have consumed {Calories} calories.
                     </Text>
                     <Text style={{
-                        fontFamily: "SemiRegular",
-                        fontSize: 22,
+                        fontFamily: "SemiBold",
+                        fontSize: 24,
+                        color: Constants.COLOR.dark_green
                     }}>
-                        Vì vậy, bạn nên chọn loại thức ăn giàu dinh dưỡng.
+                        Food Categories
                     </Text>
                 </FontLoader>
                 <FoodRecommendCard 

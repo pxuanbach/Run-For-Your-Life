@@ -23,7 +23,7 @@ const FoodRecommendCard = ({image, text, onPress, h = 90, w = 400}) => {
                     position: 'absolute',
                     bottom: 0,
                     right: 0,
-                    height: h/17,
+                    height: h/18,
                     width: w/2 - 16,
                     backgroundColor: Constants.COLOR.white,
                     borderTopLeftRadius: 15,
@@ -35,9 +35,9 @@ const FoodRecommendCard = ({image, text, onPress, h = 90, w = 400}) => {
                     <FontLoader>
                         <Text style={{
                             position: 'absolute',
-                            fontSize: h/24,
+                            fontSize: h/28,
                             fontFamily: 'SemiBold',
-                            color: Constants.COLOR.second_green
+                            color: Constants.COLOR.dark_green
                         }}>
                             {text}
                         </Text>

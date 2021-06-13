@@ -4,9 +4,10 @@ import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import {HomeTab, ProfileTab, Tab1} from './Tabs';
-import NutritionTabNavigator from '../screens/Tabs/NutritionTab/Navigator'
+import {HomeTab, Tab1} from './Tabs';
 import Constants from '../utilities/Constants';
+import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
+import ProfileTabNavigator from './Tabs/ProfileTab/Navigator';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -24,7 +25,7 @@ const BottomTabNavigator = createBottomTabNavigator({
     Tab1: {
         screen: Tab1,
         navigationOptions: {
-            tabBarLabel: 'Profile',
+            tabBarLabel: 'More',
             tabBarIcon: ({ tintColor }) => {
                 return <AntDesign name='profile' 
                 size={28} style={{color: tintColor}}></AntDesign>
@@ -41,8 +42,8 @@ const BottomTabNavigator = createBottomTabNavigator({
             },
         }
     },
-    ProfileTab: {
-        screen: ProfileTab,
+    ProfileTabNavigator: {
+        screen: ProfileTabNavigator,
         navigationOptions: {
             tabBarLabel: 'Profile',
             tabBarIcon: ({ tintColor }) => {
