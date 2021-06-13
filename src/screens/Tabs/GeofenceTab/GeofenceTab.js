@@ -139,15 +139,11 @@ export default class GeofenceView extends React.Component {
 
   onPress_btnStart = async () => {
     this.setState({ statement: "isActive"});
-    
-    this.timerStart();
   }
 
   onPress_btnPause = () => {
     this.setState({ statement: "isPaused"});
     this.setState({ routeCoordinates: [] });
-
-    this.timerStop();
   }
 
   onPress_btnResume = async () => {
@@ -161,15 +157,10 @@ export default class GeofenceView extends React.Component {
     });
 
     this.setState({ statement: "isActive"});
-
-    this.timerResume();
   }
 
   onPress_btnFinish = () => {
     this.setState({ statement: "hasNotStarted" });
-
-    this.timerStop();
-    this.timerReset();
   }
 
   // Render
