@@ -8,6 +8,7 @@ import {HomeTab, Tab1} from './Tabs';
 import Constants from '../utilities/Constants';
 import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
 import ProfileTabNavigator from './Tabs/ProfileTab/Navigator';
+import GeofenceTab from './Tabs/GeofenceTab/GeofenceTab';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -22,8 +23,8 @@ const BottomTabNavigator = createBottomTabNavigator({
             },
         }
     },
-    Tab1: {
-        screen: Tab1,
+    GeofenceTab: {
+        screen: GeofenceTab,
         navigationOptions: {
             tabBarLabel: 'More',
             tabBarIcon: ({ tintColor }) => {
