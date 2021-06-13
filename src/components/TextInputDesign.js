@@ -22,6 +22,8 @@ const TextInputDesign = ({placeholder, iconName, isSecured, onChangeText, onEndE
         }}>
             <FontAwesome5 name={iconName} color="#4CD964" size={sizeOfIcon}/>
             <TextInput 
+                onEndEditing = {onEndEditing}
+                onChangeText = {onChangeText}
                 placeholder = {placeholder}
                 secureTextEntry={true}
                 style={{ 

@@ -25,18 +25,18 @@ function Login({navigation}) {
         })
     }
 
-    const isValidMail = (text) => {
-        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if (reg.test(text) === false) {
-            console.log("Email is Not Correct");
-            setData({ email: text })
-            return false;
-        }
-        else {
-            setData({ email: text })
-            console.log("Email is Correct");
-        }
-    }
+    // const isValidMail = (text) => {
+    //     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    //     if (reg.test(text) === false) {
+    //         console.log("Email is Not Correct");
+    //         setData({ email: text })
+    //         return false;
+    //     }
+    //     else {
+    //         setData({ email: text })
+    //         console.log("Email is Correct");
+    //     }
+    // }
 
     return(
         <View>
@@ -77,7 +77,7 @@ function Login({navigation}) {
                     />
                 </KeyboardAvoidingView>
                 
-                <TouchableOpacity onPress={() => navigation.navigate('BottomTabNavigator')} 
+                <TouchableOpacity onPress={handleLogin} 
                     style={{
                     backgroundColor: Constants.COLOR.white,
                     elevation: 8,
