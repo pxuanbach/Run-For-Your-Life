@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 function Login({navigation}) {
 
 
-//SetData Thinh
+
     const [username,setUsername]=useState()
     const [password,setPassword]=useState()
     const handleLogin =() => {
