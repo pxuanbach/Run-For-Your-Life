@@ -22,7 +22,6 @@ const listButtonChart=[
     {status:'Time',unit:'min'},
     {status:'Avg Pace',unit:'/km'},
     {status:'Calories',unit:'calo'},
-    //{status:'Activities', unit:'acts'}
 ]
 
 function HomeTab() {
@@ -158,10 +157,12 @@ function HomeTab() {
                     borderRadius:22, 
                     borderColor:"#ffcad4"
                     }}>
-                    <View style={styles.listButtonChart}>
+                    <View 
+                    style={styles.listButtonChart}>
                         {
                             listButtonChart.map(c=>(
-                                <TouchableOpacity 
+                                <TouchableOpacity
+                                key={c.status} 
                                 style={[styles.btnChart, status == c.status && styles.btnTabActive]}
                                 onPress={()=> {setStatusFilter(c.status) , setUnit(c.unit)}}
                                 >
