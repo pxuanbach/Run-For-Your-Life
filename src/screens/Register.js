@@ -166,7 +166,7 @@ function ValidUser(username) {
                                 onEndEditing={(text) => setValue("username",text)}
                                 onChangeText={(text) => setUsername(text)}
                                 placeholder='Username'
-                                iconName='user'
+                                iconName='user-alt'
                                 isSecured={false}>
                             </TextInputDesign>
                             {  
@@ -192,13 +192,13 @@ function ValidUser(username) {
                                 onEndEditing={(text) => {setValue("password",text)}}
                                 onChangeText={(text) => setPassword(text) }
                                 placeholder='Password'
-                                iconName='lock'
+                                iconName='key'
                                 isSecured={true}>
                             </TextInputDesign>
                             <TextInputDesign 
                                 onChangeText={(text) => setRePassword(text)}
                                 placeholder='Re-Password'
-                                iconName='lock'
+                                iconName='key'
                                 isSecured={true}>
                             </TextInputDesign>
                     </KeyboardAvoidingView>

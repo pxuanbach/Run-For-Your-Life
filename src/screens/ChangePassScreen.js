@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react';
 import { View, Dimensions, Text, TextInput,
     SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView
 } from 'react-native';
-import {CustomButton, IconButtonDesign} from '../../../components/CustomButton';
-import Constants from '../../../utilities/Constants';
-import FontLoader from '../../../utilities/Font';
+import {CustomButton, IconButtonDesign} from '../components/CustomButton';
+import Constants from '../utilities/Constants';
+import FontLoader from '../utilities/Font';
 import {TextFieldInput, TextFieldSecureInput} 
-    from '../../../components/InputFieldDesign';
+    from '../components/InputFieldDesign';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;

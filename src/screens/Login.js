@@ -64,14 +64,14 @@ function Login({navigation}) {
                 <KeyboardAvoidingView>
                     <TextInputDesign
                         placeholder='Username'
-                        iconName='user'
+                        iconName='user-alt'
                         isSecured={false}
                         onChangeText={(text) => setUsername(text)}
                     />
                     
                     <TextInputDesign
                         placeholder='Password'
-                        iconName='lock'
+                        iconName='key'
                         isSecured={true}
                         onChangeText={(text)=>setPassword(text)}
                     />

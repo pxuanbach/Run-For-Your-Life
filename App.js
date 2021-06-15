@@ -1,7 +1,7 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {Welcome, Login, Register, BottomTabNavigator} from './src/screens'
-import ChangePassScreen from './src/screens/Tabs/ProfileTab/ChangePassScreen';
+import ChangePassScreen from './src/screens/ChangePassScreen';
 
 const stackNavigatorOptions = {
   headerShown:false
