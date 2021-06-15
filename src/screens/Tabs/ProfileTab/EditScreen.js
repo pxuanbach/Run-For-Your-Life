@@ -38,43 +38,23 @@ function EditScreen({navigation}) {
         _menu.show();
     }
     return (
-        <SafeAreaView>
-            {/* header: back button + tittle */}
+        <SafeAreaView style={{backgroundColor: Constants.COLOR.light_gray}}>
+            {/* header: tittle + Save button */}
             <View
             style={{
-                height: windowHeight/10,
-                backgroundColor: Constants.COLOR.white,
                 flexDirection: "row",
-                alignItems: "center",
-                paddingHorizontal: 2,
-                paddingVertical: 4,               
-                paddingTop: windowHeight/24
+                paddingHorizontal: 2, 
+                paddingVertical: 4        
             }}>
                 <View style={{
-                    width: '15%',
-                    justifyContent: 'flex-start'
-                }}>
-                    <CustomButton 
-                        onPress={
-                            () => {
-                                navigation.push("ProfileTab")
-                            }
-                        }
-                        color={Constants.COLOR.dark_green}
-                        iconName="arrow-back-ios"
-                        iconSize={32}>
-                    </CustomButton>
-                </View>
-                <View style={{
-                    width: '60%',
-                    justifyContent: 'center',
-                    alignSelf: 'center'
+                    width: '50%',
+                    alignItems: 'flex-start'
                 }}>
                     <FontLoader>
                         <Text style={{
                             fontFamily: "SemiBold",
-                            fontSize: 28,
-                            paddingHorizontal: 32,
+                            fontSize: windowHeight/30,
+                            paddingHorizontal: 12,
                             color: Constants.COLOR.dark_green,
                         }}>
                             Edit Profile
@@ -82,12 +62,12 @@ function EditScreen({navigation}) {
                     </FontLoader>
                 </View>
                 <View style={{
-                    width: '25%',
-                    justifyContent: 'flex-end'
+                    width: '48%',
+                    alignItems: 'flex-end',
                 }}>
                     <IconButtonDesign
                     onPress={() => {
-                        navigation.navigate("ProfileTab", 
+                        navigation.navigate("Profile", 
                         {
                             name: name, 
                             mail: mail,
@@ -102,10 +82,12 @@ function EditScreen({navigation}) {
                             weight: weight
                         })
                     }}
-                    height={40}
+                    width={80}
+                    height={36}
                     text="Save"
-                    color={Constants.COLOR.green}
-                    backgroundColor={Constants.COLOR.white}/>
+                    fontSize={windowHeight/28}
+                    color={Constants.COLOR.white}
+                    backgroundColor={Constants.COLOR.green}/>
                 </View>
             </View>
             <KeyboardAvoidingView behavior="position" enabled={enableshift}>
@@ -177,7 +159,7 @@ function EditScreen({navigation}) {
                     numberOfLines={4}
                     title="Note"
                     text={note}/>
-                    <View style={{height: windowHeight/5}}></View>
+                    <View style={{height: windowHeight/8}}></View>
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

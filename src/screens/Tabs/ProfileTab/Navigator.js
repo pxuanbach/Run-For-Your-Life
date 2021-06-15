@@ -1,17 +1,16 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import TopTabbar from './TopTabbar';
-import ProfileTab from './ProfileTab';
 import EditScreen from './EditScreen';
 import ChangePassScreen from './ChangePassScreen';
+import Profile from '../../../components/TopTabbar/Profile';
 
 const stackNavigatorOptions = {
     headerShown:false
   }
 
 const ProfileTabNavigator = createStackNavigator({
-    ProfileTab: {
-        screen: ProfileTab,
+    Profile: {
+        screen: Profile,
     },
     EditScreen: {
         screen: EditScreen,
@@ -21,6 +20,7 @@ const ProfileTabNavigator = createStackNavigator({
     },
 },
 {
+    initialRouteName: 'Profile',
     defaultNavigationOptions: stackNavigatorOptions
 }
 );

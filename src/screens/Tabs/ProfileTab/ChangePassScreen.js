@@ -17,7 +17,7 @@ function ChangePassScreen({navigation}) {
     const [newPassword, setNewPassword] = useState();
     const [reNewPassword, setReNewPassword] = useState();
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{height: '100%'}}>
             <View
             style={{
                 height: windowHeight/10,
@@ -87,10 +87,11 @@ function ChangePassScreen({navigation}) {
                     title="Confirm Password"
                     placeholder="confirm new password"/>
                     <View style={{
-                        padding: 8,
-                        alignSelf: 'center'
+                        padding: 12,
+                        alignSelf: 'center',
                     }}>
                         <IconButtonDesign
+                        height={windowHeight/18}
                         text="Change"
                         iconName="published-with-changes"/>
                     </View>

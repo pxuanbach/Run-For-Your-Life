@@ -25,12 +25,11 @@ const IconButtonDesign = ({onPress, width, height, text, fontSize=30,
         <TouchableOpacity
         onPress={onPress}
         style={{
-            flexDirection: 'row',
             height: height,
             width: width,
+            alignItems: 'center',
             borderRadius: 10,
             backgroundColor:backgroundColor,
-            alignSelf: 'center',
             borderWidth: 0.4,
             borderColor: Constants.COLOR.second_green,
             paddingHorizontal: 4,

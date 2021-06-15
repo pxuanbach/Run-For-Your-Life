@@ -4,16 +4,18 @@ import React from 'react';
 import { View, Dimensions, Text, TextInput,
     SafeAreaView, StyleSheet, ScrollView, TouchableOpacity,
 } from 'react-native';
-import FontLoader from '../../../utilities/Font';
-import Constants from '../../../utilities/Constants';
+import FontLoader from '../../utilities/Font';
+import Constants from '../../utilities/Constants';
 import Activities from './Activities';
+import ProfileTabNavigator from '../../screens/Tabs/ProfileTab/Navigator';
+import Progress from './Progress';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const TopTabbar = createMaterialTopTabNavigator({
     Progress: {
-        screen: () => null,
+        screen: Progress,
         navigationOptions: {
             tabBarLabel: 
                 (<FontLoader>
@@ -40,8 +42,8 @@ const TopTabbar = createMaterialTopTabNavigator({
                 </FontLoader>),
         }
     },
-    Profile: {
-        screen: () => null,
+    ProfileTabNavigator: {
+        screen: ProfileTabNavigator,
         navigationOptions: {
             tabBarLabel: 
                 (<FontLoader>
@@ -56,7 +58,7 @@ const TopTabbar = createMaterialTopTabNavigator({
     },
 },
 {
-    initialRouteName: "Activities",
+    initialRouteName: "Progress",
     tabBarOptions: {
         style: {
             backgroundColor: Constants.COLOR.white

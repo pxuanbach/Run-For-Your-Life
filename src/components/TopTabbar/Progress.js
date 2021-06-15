@@ -6,12 +6,12 @@ import { View, Dimensions, Text, TextInput,
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-function Activities({navigation}) {
+function Progress({navigation}) {
     return (
-        <SafeAreaView>
-            <Text>activities</Text>
+        <SafeAreaView style={{height: '100%'}}>
+            <Text>Progress</Text>
         </SafeAreaView>
     )
 }
 
-export default Activities
+export default Progress

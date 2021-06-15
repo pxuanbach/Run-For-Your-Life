@@ -5,13 +5,9 @@ import {
 } from 'react-native';
 import FontLoader from '../../../utilities/Font';
 import Constants from '../../../utilities/Constants';
-import { IconButtonDesign } from '../../../components/CustomButton';
+import { CustomButton } from '../../../components/CustomButton';
 import MenuDropdownButton from '../../../components/MenuDropButton';
-import Moment from 'moment';
-import { Foundation } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-import TopTabbar from './TopTabbar';
+import TopTabbar from '../../../components/TopTabbar/TopTabbar';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -27,39 +23,7 @@ const useComponentWillMount = (func) => {
 const useComponentDidMount = func => useEffect(func, []);
 
 function ProfileTab({navigation}) {
-    const getDetails = () => {
-        let data = {
-            name: navigation.getParam("name") == null 
-                ? 'Phạm Xuân Bách' : navigation.getParam("name"),
-            mail: navigation.getParam("mail") == null 
-                ? 'pxuanbach1412@gmail.com' : navigation.getParam("mail"),
-            username: 'pxuanbach1412',
-            password: '1',
-            description: navigation.getParam("description") == null 
-                ? 'tôi là...' : navigation.getParam("description"),
-            job: navigation.getParam("job") == null 
-                ? 'Student at UIT' : navigation.getParam("job"),
-            phone: navigation.getParam("phone") == null 
-                ? '0372363285' : navigation.getParam("phone"),
-            gender: navigation.getParam("gender") == null 
-                ? 'Male' : navigation.getParam("gender"),
-            liveIn: navigation.getParam("liveIn") == null 
-                ? 'Phan Rang-Tháp Chàm, Ninh Thuận, Vietnam' : navigation.getParam("liveIn"),
-            note: navigation.getParam("note") == null 
-                ? 'Mạnh, mạnh nữa, mạnh mãi' : navigation.getParam("note"),
-            birthday: navigation.getParam("birthday") == null 
-                ? '2001-03-30' : navigation.getParam("birthday"),
-            height: navigation.getParam("height") == null 
-                ? '175' : navigation.getParam("height"),
-            weight: navigation.getParam("weight") == null 
-                ? '55' : navigation.getParam("weight"),
-        };
-        return data;
-    }
-
     const [_menu, setMenu] = useState();
-    const [info, setInfo] = useState(getDetails);
-    const [isLoading, setLoading] = useState(false);
     const [image, setImage] = useState(null);
 
     const setMenuRef = ref => {
@@ -73,45 +37,51 @@ function ProfileTab({navigation}) {
         _menu.show();
     }
 
-    //run when navigate to this screen
-    const unsubscribe = navigation.addListener('didFocus', () => {
-        setInfo(getDetails)
-        console.log("get details")
-    });
-
-    useEffect(() => {
-        unsubscribe;
-        (async () => {
-          if (Platform.OS !== 'web') {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-              alert('Sorry, we need camera roll permissions to make this work!');
-            }
-          }
-        })();
-    }, []);
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [1, 1],
-          quality: 0.5,
-        });
     
-        console.log(result);
-    
-        if (!result.cancelled) {
-          setImage(result.uri);
-        }
-      };
 
     return (
         <SafeAreaView style={{
             height: '100%', 
             backgroundColor: Constants.COLOR.white
         }}>
-            {/* Avatar + name, mail + button settings */}
+            <View
+            style={{
+                height: windowHeight/10,
+                backgroundColor: Constants.COLOR.white,
+                flexDirection: "row",
+                alignItems: 'center',
+                paddingHorizontal: 2,
+                paddingVertical: 4,               
+                paddingTop: windowHeight/24
+            }}>
+                <View style={{
+                    width: '30%',
+                    justifyContent: 'flex-start'
+                }}>
+                    <FontLoader>
+                        <Text style={{
+                            fontFamily: "SemiBold",
+                            fontSize: windowHeight/30,
+                            paddingHorizontal: 12,
+                            color: Constants.COLOR.dark_green,
+                        }}>
+                            You
+                        </Text>
+                    </FontLoader>
+                </View>
+                <View style={{
+                    width: '70%',
+                    alignItems: 'flex-end'
+                }}>
+                    <MenuDropdownButton
+                    setMenuRef={setMenuRef}
+                    showMenu={showMenu}
+                    hideMenu={hideMenu}
+                    navigation={navigation}>
+                    </MenuDropdownButton>
+                </View>
+            </View>
+            {/* Avatar + name, mail + button settings
             <SafeAreaView>
                 <View style={{
                     flexDirection: 'row',
@@ -119,7 +89,6 @@ function ProfileTab({navigation}) {
                     paddingVertical: 4,
                     paddingTop: windowHeight/24,
                 }}>
-                    {/* avatar */}
                     <View style={{
                         height: windowWidth/3,
                         width: windowWidth/3
@@ -155,7 +124,6 @@ function ProfileTab({navigation}) {
                                 color={Constants.COLOR.white} />
                         </TouchableOpacity>
                     </View>
-                    {/* name, mail + button settings */}
                     <View style={{
                         justifyContent: 'center',
                     }}>
@@ -201,7 +169,6 @@ function ProfileTab({navigation}) {
                                     {info.mail}
                                 </Text>
                             </FontLoader>
-                            {/* line */}
                             <View style={{
                                 borderWidth: 0.4, 
                                 borderColor: Constants.COLOR.green,
@@ -238,7 +205,6 @@ function ProfileTab({navigation}) {
                             color={Constants.COLOR.green}
                             backgroundColor={Constants.COLOR.white}/>
                             <View style={{width: 8}}></View>
-                            {/* dropdown menu */}
                             <MenuDropdownButton
                             setMenuRef={setMenuRef}
                             showMenu={showMenu}
@@ -249,112 +215,16 @@ function ProfileTab({navigation}) {
                         </View>
                     </View>
                 </View>
-                {/* line */}
                 <View style={{
                     borderWidth: 0.45,
                     borderColor: Constants.COLOR.second_green,
                     marginTop: 8,
                     marginHorizontal: 12,
                 }}/>
-            </SafeAreaView>
+            </SafeAreaView> */}
+
             {/* Information */}
-            <ScrollView>
-                <TopTabbar></TopTabbar>
-                {isLoading 
-                ? <View style={{   
-                    marginTop: 200,
-                    height: '100%',
-                    width: '100%',
-                    alignItems: 'center',
-                }}>
-                    <FontLoader>
-                        <Text style={{
-                            color: Constants.COLOR.second_green,
-                            fontSize: 30,
-                            fontFamily: 'SemiRegular',
-                            alignSelf: 'center',}}
-                        >Loading...</Text>
-                    </FontLoader>  
-                </View>
-                : <View>     
-                    <View style={{padding: 4}}>
-                        <Text style={styles.title}>Description:</Text>
-                        <View style={{
-                            padding: 4
-                        }}>
-                            <Text style={styles.text}>{info.description}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Username:</Text>
-                        <View style={{width: '85%'}}>
-                            <Text numberOfLines={1} ellipsizeMode='tail'
-                            style={styles.text}>{info.username}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Your birthday:</Text>
-                        <View style={{width: '85%'}}>
-                            <Text numberOfLines={1} ellipsizeMode='tail'
-                            style={styles.text}>{Moment(info.birthday).format('DD/MM/YYYY')}</Text>
-                        </View>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
-                        <View style={{
-                            padding: 4,
-                            flexDirection: 'row'
-                        }}>
-                            <Text style={styles.label}>Height:</Text>
-                            <Text style={styles.text}>{info.height} cm</Text>
-                        </View>
-                        <View style={[styles.container, {paddingEnd: 28}]}>
-                            <Text style={styles.label}>Weight:</Text>
-                            <Text style={styles.text}>{info.weight} kg</Text>
-                        </View>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
-                        <View style={{
-                            padding: 4,
-                            flexDirection: 'row'
-                        }}>
-                            <Text style={styles.label}>Gender:</Text>
-                            <Text style={styles.text}>{info.gender}</Text>
-                            
-                        </View>
-                        <View style={[styles.container, {paddingEnd: 28}]}>
-                            <Text style={styles.label}>Mobile:</Text>
-                            <Text style={styles.text}>{info.phone}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Job:</Text>
-                        <Text style={styles.text}>{info.job}</Text>
-                    </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Live in:</Text>
-                        <View style={{width: '85%'}}>
-                            <Text numberOfLines={2} ellipsizeMode='tail'
-                            style={styles.text}>{info.liveIn}</Text>
-                        </View>
-                    </View>
-                    <View style={{
-                        padding: 4,
-                    }}>
-                        <Text style={styles.label}>Notes for me:</Text>
-                        <View>
-                            <Text numberOfLines={5} ellipsizeMode='tail'
-                            style={styles.text}>{info.note}</Text>
-                        </View>
-                    </View>
-                </View>}
-                
-            </ScrollView>
+            <TopTabbar></TopTabbar>
         </SafeAreaView>
         
     )
