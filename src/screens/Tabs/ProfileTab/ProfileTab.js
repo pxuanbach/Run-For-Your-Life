@@ -37,8 +37,6 @@ function ProfileTab({navigation}) {
         _menu.show();
     }
 
-    
-
     return (
         <SafeAreaView style={{
             height: '100%', 

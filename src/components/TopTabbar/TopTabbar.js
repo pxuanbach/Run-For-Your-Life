@@ -21,7 +21,7 @@ const TopTabbar = createMaterialTopTabNavigator({
                 (<FontLoader>
                     <Text style={{
                         color: Constants.COLOR.second_green,
-                        fontSize: windowHeight/38,
+                        fontSize: windowHeight/36,
                         fontFamily: 'SemiRegular',
                         alignSelf: 'center',
                     }}>Progress</Text>
@@ -35,7 +35,7 @@ const TopTabbar = createMaterialTopTabNavigator({
                 (<FontLoader>
                     <Text style={{
                         color: Constants.COLOR.second_green,
-                        fontSize: windowHeight/38,
+                        fontSize: windowHeight/36,
                         fontFamily: 'SemiRegular',
                         alignSelf: 'center',
                     }}>Activities</Text>
@@ -49,7 +49,7 @@ const TopTabbar = createMaterialTopTabNavigator({
                 (<FontLoader>
                     <Text style={{
                         color: Constants.COLOR.second_green,
-                        fontSize: windowHeight/38,
+                        fontSize: windowHeight/36,
                         fontFamily: 'SemiRegular',
                         alignSelf: 'center',
                     }}>Profile</Text>

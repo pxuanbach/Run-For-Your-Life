@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import { View, Dimensions, Text, Image,
-    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView
+    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity
 } from 'react-native';
 import Constants from '../../utilities/Constants';
 import FontLoader from '../../utilities/Font';
 import Moment from 'moment';
 import { Foundation } from '@expo/vector-icons';
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 import { IconButtonDesign } from '../CustomButton';
+import ButtonSheetModal from '../CustomModal';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -32,8 +31,6 @@ function Profile({navigation}) {
                 ? 'Male' : navigation.getParam("gender"),
             liveIn: navigation.getParam("liveIn") == null 
                 ? 'Phan Rang-Tháp Chàm, Ninh Thuận, Vietnam' : navigation.getParam("liveIn"),
-            note: navigation.getParam("note") == null 
-                ? 'Mạnh, mạnh nữa, mạnh mãi' : navigation.getParam("note"),
             birthday: navigation.getParam("birthday") == null 
                 ? '2001-03-30' : navigation.getParam("birthday"),
             height: navigation.getParam("height") == null 
@@ -45,6 +42,7 @@ function Profile({navigation}) {
     }
     const [info, setInfo] = useState(getDetails);
     const [image, setImage] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
 
     //run when navigate to this screen
     const unsubscribe = navigation.addListener('didFocus', () => {
@@ -54,36 +52,18 @@ function Profile({navigation}) {
 
     useEffect(() => {
         unsubscribe;
-        (async () => {
-          if (Platform.OS !== 'web') {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-              alert('Sorry, we need camera roll permissions to make this work!');
-            }
-          }
-        })();
     }, []);
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [1, 1],
-          quality: 0.5,
-        });
-    
-        console.log(result);
-    
-        if (!result.cancelled) {
-          setImage(result.uri);
-        }
-      };
-
 
     return (
         <SafeAreaView style={{height: '100%', backgroundColor: Constants.COLOR.white}}>
             <ScrollView>
+                
                 <SafeAreaView>
+                    <ButtonSheetModal
+                    image={image}
+                    setImage={setImage}
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}/>
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
@@ -109,7 +89,7 @@ function Profile({navigation}) {
                                 marginHorizontal: 4
                             }}>
                             </Image>}
-                            <TouchableOpacity onPress={pickImage}
+                            <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}
                             style={{
                                 position: 'absolute',
                                 bottom: -2,
@@ -173,7 +153,6 @@ function Profile({navigation}) {
                                         phone: info.phone,
                                         gender: info.gender,
                                         liveIn: info.liveIn,
-                                        note: info.note,
                                         birthday: info.birthday,
                                         height: info.height,
                                         weight: info.weight
@@ -269,15 +248,6 @@ function Profile({navigation}) {
                         <View style={{width: '85%'}}>
                             <Text numberOfLines={2} ellipsizeMode='tail'
                             style={styles.text}>{info.liveIn}</Text>
-                        </View>
-                    </View>
-                    <View style={{
-                        padding: 4,
-                    }}>
-                        <Text style={styles.label}>Notes for me:</Text>
-                        <View>
-                            <Text numberOfLines={5} ellipsizeMode='tail'
-                            style={styles.text}>{info.note}</Text>
                         </View>
                     </View>
                 </View>

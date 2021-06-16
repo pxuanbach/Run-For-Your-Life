@@ -1,12 +1,11 @@
 import React, {useState} from 'react';
-import {Text, Image, 
-    TouchableOpacity, FlatList, 
+import {Text, Image, StyleSheet,
+    TouchableOpacity, FlatList, Share,
     View, Modal, SafeAreaView, Dimensions
 } from 'react-native';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 import {IconButtonDesign} from './CustomButton';
-import { StyleSheet } from 'react-native';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -69,6 +68,27 @@ const ListFoodCard = ({data, type}) => {
     var [curItem, setCurItem] = useState("urlImage", 
         "_id", "name", "type", "calories", "totalWeight", 
         "fat", "protein", "carbohydrates", "cholesterol");
+    
+        const onShare = async () => {
+            try {
+              const result = await Share.share({
+                message: curItem.urlImage,
+                url: curItem.urlImage,
+                title: (curItem.name + "\n" + curItem.type + "\n" + curItem.urlImage),
+            });
+              if (result.action === Share.sharedAction) {
+                if (result.activityType) {
+                  // shared with activity type of result.activityType
+                } else {
+                  // shared
+                }
+              } else if (result.action === Share.dismissedAction) {
+                // dismissed
+              }
+            } catch (error) {
+              alert(error.message);
+            }
+          };
 
     return (
         <SafeAreaView>
@@ -132,6 +152,7 @@ const ListFoodCard = ({data, type}) => {
                         padding: 4
                     }}>
                         <IconButtonDesign
+                        onPress={onShare}
                         text="Share"
                         width={120}
                         height={46}

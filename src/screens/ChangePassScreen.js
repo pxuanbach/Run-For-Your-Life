@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Text, TextInput,
+import { View, Dimensions, Text, Alert,
     SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView
 } from 'react-native';
 import {CustomButton, IconButtonDesign} from '../components/CustomButton';
@@ -7,15 +7,46 @@ import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 import {TextFieldInput, TextFieldSecureInput} 
     from '../components/InputFieldDesign';
+import Axios from 'axios';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 function ChangePassScreen({navigation}) {
     const [enableshift,setenableShift] = useState(false);
-    const [currentPassword, setCurrentPassword] = useState();
-    const [newPassword, setNewPassword] = useState();
-    const [reNewPassword, setReNewPassword] = useState();
+    const [username, setUsername] = useState("bachdeptrai");
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [reNewPassword, setReNewPassword] = useState("");
+
+    const handleChangePass = () => {
+        console.log(username, currentPassword, newPassword, reNewPassword);
+        if (currentPassword == "" || newPassword == "" || reNewPassword == "")
+            return Alert.alert(
+                "Oops!",
+                "Input is empty!",
+            )
+        if (newPassword != reNewPassword)
+            return Alert.alert(
+                "Oops!",
+                "New password is different from confirm password",
+            )
+        Axios.post("https://runapp1108.herokuapp.com/api/users/changePass", 
+        {username, currentPassword, newPassword})
+        .then((res) => {
+            Alert.alert(
+                "Success ✓",
+                "Change password successfully!",
+            );
+        })
+        .catch((err) => {
+            Alert.alert(
+                "Failed",
+                "Password change failed",
+            );
+        })
+    }
+
     return (
         <SafeAreaView style={{height: '100%'}}>
             <View
@@ -68,7 +99,7 @@ function ChangePassScreen({navigation}) {
                         </View>
                         <View style={{width: '56%'}}>
                             <Text numberOfLines={1} ellipsizeMode='tail'
-                            style={styles.text}>{navigation.getParam("username")}</Text>
+                            style={styles.text}>{username}</Text>
                         </View>
                     </View>
                     <TextFieldSecureInput
@@ -91,6 +122,7 @@ function ChangePassScreen({navigation}) {
                         alignSelf: 'center',
                     }}>
                         <IconButtonDesign
+                        onPress={handleChangePass}
                         height={windowHeight/18}
                         text="Change"
                         iconName="published-with-changes"/>

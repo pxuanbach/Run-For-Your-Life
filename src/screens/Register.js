@@ -21,7 +21,7 @@ function Register({navigation}){
         isValidPassword: true,
     });
 const setValue = (fieldName, value) => setData({...data, [fieldName]: value});
-const [username,setUsername]=useState()
+const [username,setUsername]=useState("")
 const [password,setPassword]=useState()
 const [email,setEmail]= useState()
 const [RePassword,setRePassword]=useState()
@@ -127,8 +127,8 @@ function ValidUser(username) {
                 overflow: 'scroll'
             }}>
                 <View style={{
-                    paddingVertical: windowHeight/24,
-                    padding: 12,
+                    paddingTop: windowHeight/24,
+                    paddingHorizontal: 12,
                     flexDirection: 'column',
                     
                 }}>
@@ -137,30 +137,36 @@ function ValidUser(username) {
                         iconName='arrow-back-ios'
                         iconSize={windowHeight/20}>
                     </CustomButton>
-                    <Text style={{
-                        fontFamily: 'SemiBold', 
-                        fontSize: windowHeight/12,
-                        color: Constants.COLOR.white,
-                    }}>
-                        Create new Account
-                    </Text>
-                    <View style={{
-                        position: 'absolute',
-                        bottom: 10,
-                        right: 10,
-                    }}
-                    >
-                        <FontAwesome5 
-                            name="running" 
-                            size={windowHeight/8} 
-                            color={Constants.COLOR.white} 
-                        />
-                    </View>
-                    
                 </View>
                 <ScrollView style={{
-                    paddingVertical: 12
+                    paddingVertical: 4
                 }}>
+                    <View style={{flexDirection:'row'}}>
+                        <View style={{
+                            width: '75%',
+                            paddingLeft: 8
+                        }}>
+                            <Text style={{
+                                fontFamily: 'SemiBold', 
+                                fontSize: windowHeight/14,
+                                color: Constants.COLOR.white,
+                            }}>
+                                Create new Account
+                            </Text>
+                        </View>
+                        
+                        <View style={{
+                            width: '25%',
+                            justifyContent: 'center'
+                        }}>
+                            <FontAwesome5 
+                                name="running" 
+                                size={windowHeight/8} 
+                                color={Constants.COLOR.white} 
+                            />
+                        </View>
+                    </View>
+                    
                     <KeyboardAvoidingView>
                             <TextInputDesign
                                 onEndEditing={(text) => setValue("username",text)}
@@ -169,7 +175,7 @@ function ValidUser(username) {
                                 iconName='user-alt'
                                 isSecured={false}>
                             </TextInputDesign>
-                            {  
+                            {username != "" &&
                             <Text style={{
                                 color: '#dfede8' ,
                                 fontSize: windowHeight/46,

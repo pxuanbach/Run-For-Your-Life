@@ -20,7 +20,6 @@ function EditScreen({navigation}) {
     const [phone, setPhone] = useState(navigation.getParam('phone'));
     const [gender, setGender] = useState(navigation.getParam('gender'));
     const [liveIn, setLiveIn] = useState(navigation.getParam('liveIn'));
-    const [note, setNote] = useState(navigation.getParam('note'));
     const [height, setHeight] = useState(navigation.getParam('height'));
     const [weight, setWeight] = useState(navigation.getParam('weight'));
 
@@ -76,7 +75,6 @@ function EditScreen({navigation}) {
                             phone: phone,
                             gender: gender,
                             liveIn: liveIn,
-                            note: note,
                             birthday: date,
                             height: height,
                             weight: weight
@@ -151,15 +149,10 @@ function EditScreen({navigation}) {
                     <BoxTextFieldInput
                     onChangeText={(text) => setDescription(text)}
                     onFocus={() => setenableShift(false)}
+                    numberOfLines={4}
                     title="Description"
                     text={description}/>
-                    <BoxTextFieldInput
-                    onChangeText={(text) => setNote(text)}
-                    onFocus={() => setenableShift(false)}
-                    numberOfLines={4}
-                    title="Note"
-                    text={note}/>
-                    <View style={{height: windowHeight/8}}></View>
+                    <View style={{height: windowHeight/7}}></View>
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>
