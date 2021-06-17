@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage, } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage, Alert, } from "react-native";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import haversine from "haversine";
-
+import moment from 'moment';
+import { FontAwesome5, FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 
@@ -12,54 +13,111 @@ const STORAGE_KEY = 'expo-home-locations';
 
 const LATITUDE = 10.8699237;
 const LONGTITUDE = 106.8016194;
+const LATITUDE_DELTA = 0.001;
+const LONGTITUDE_DELTA = 0.001;
 
 const locationEventsEmitter = new EventEmitter();
 
-export default class GeofenceView extends React.Component {
+export default class GeofenceTab extends React.Component {
+  static navigationOptions = {
+    title: 'Run',
+    headerLeft: () => null,
+    headerTintColor: 'white',
+    headerStyle: {
+      backgroundColor: 'green',
+    },
+    headerTitleStyle: {
+      alignSelf: 'center',
+    },
+  };
+
   constructor(props) {
     super(props);
 
     this.state = {
-      // Route
+      // Activity
       routes: [],
-
+      markerOnRoute: [],
+    
       // Coordinate
       routeCoordinates: [],      
       prevLatLng: { LATITUDE, LONGTITUDE },
       coordinate: ({
         latitude: 10.8699237,
         longitude: 106.8016194,
-        latitudeDelta: 0.006,
-        longitudeDelta: 0.006,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGTITUDE_DELTA,
+        speed: 0,
       }),
-
+    
       // Data
-      distanceTravelled: 0,
+      avgPace: 0,
+      distance: 0,
+      distanceMarker: 0,
+      time: 0,
+    
+      // Timer
+      start: 0,
+      now: 0,
+      laps: [],
       
-      // State
-      statement: "hasNotStarted",
+      // Controller
+      statement: "isNotActive",
+      opacityRecordBox: 1,
+      region: ({
+        latitude: 10.8699237,
+        longitude: 106.8016194,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGTITUDE_DELTA,
+      }),
     };
   }
 
   componentDidMount = async () => {    
     await AsyncStorage.removeItem(STORAGE_KEY);
+    this.setState({
+      routes: [],
+      markerOnRoute: [],
+    })
+    this.getCurrentLocation();
     this.startActivity();
   }
 
   componentWillUnmount() {
-    //this.stopActivity();
+    console.log('Unmount');
+    this.stopActivity();
+    clearInterval(this.timer);
+    locationEventsEmitter.removeAllListeners();
   }
 
   // Tracking
 
-  startActivity = async () => {
-    const { fore_status } = await Location.requestForegroundPermissionsAsync();
-    if (fore_status !== 'granted') {
+  getCurrentLocation = async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
       console.log('Foreground permissions to access location was denied!');
     }
 
-    const { back_status } = await Location.requestBackgroundPermissionsAsync();
-    if (back_status !== 'granted') {
+    const location = await Location.getCurrentPositionAsync();
+
+    let currentLocation = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: LATITUDE_DELTA,
+      longitudeDelta: LONGTITUDE_DELTA, 
+    }
+
+    this.setState({
+      region: currentLocation,
+      coordinate: currentLocation,
+    })
+
+    console.log('Getting current location!');
+  }
+
+  startActivity = async () => {
+    const { status } = await Location.requestBackgroundPermissionsAsync();
+    if (status !== 'granted') {
       console.log('Background permissions to access location was denied!');
     }
 
@@ -74,21 +132,22 @@ export default class GeofenceView extends React.Component {
         coordinate: {
           latitude: locations[locations.length-1].latitude,
           longitude: locations[locations.length-1].longitude,
-          latitudeDelta: 0.0006,
-          longitudeDelta: 0.0006,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGTITUDE_DELTA,
+          speed: locations[locations.length-1].speed,
         }
       })
 
       switch (this.state.statement) {
-        case "hasNotStarted":
-          this.waitStarting();
+        case "isNotActive":
+          this.waitActive();
           break;
         case "isActive":
           this.updateCoordinates(locations);
+          this.addMarker();
           break;
         case "isPaused":
-          this.waitResuming();
-          //console.log('latest routes: ', this.state.routes[this.state.routes.length-1]);
+          this.waitActive();
           break;
         default:
           break;
@@ -102,32 +161,24 @@ export default class GeofenceView extends React.Component {
 
   // Handling coordinates
 
-  waitStarting = async () => {
+  waitActive = async () => {
     await AsyncStorage.removeItem(STORAGE_KEY);
-    this.setState({ 
-      routes: [],
-      routeCoordinates: [], 
-    });
   }
 
   updateCoordinates = (locations) => {
-    const { distanceTravelled, routes } = this.state;
+    const { distance, distanceMarker, routes } = this.state;
 
-    // routes[routes.length-1] = locations;
     routes.pop();
     routes.push(locations);
 
     this.setState({ 
       routes: routes,
       routeCoordinates: locations,
-      distanceTravelled:
-        distanceTravelled + this.calcDistance(locations[locations.length-1]),
+      distance: distance + this.calcDistance(locations[locations.length-1])*10,
+      distanceMarker: distanceMarker + this.calcDistance(locations[locations.length-1])*10,
+      avgPace: this.calcAVGPage(locations[locations.length-1]),
       prevLatLng: locations[locations.length-1],
     });
-  }
-
-  waitResuming = async () => {
-    await AsyncStorage.removeItem(STORAGE_KEY);
   }
 
   calcDistance = newLatLng => {
@@ -135,15 +186,85 @@ export default class GeofenceView extends React.Component {
     return haversine(prevLatLng, newLatLng) || 0;
   };
 
+  calcAVGPage = () => {
+    const { avgPace, coordinate } = this.state;
+    const currentPace = coordinate.speed * 1000 / 60;
+    if (avgPace == 0) {
+      return currentPace;
+    }
+    else {
+      return (avgPace + currentPace) / 2;
+    }
+  }
+
+  addMarker = () => {
+    const { markerOnRoute, distanceMarker, coordinate } = this.state;
+    if (distanceMarker >= 0.5) {
+      markerOnRoute.push(coordinate);
+      this.setState({ 
+        markerOnRoute: markerOnRoute,
+        distanceMarker: 0, 
+      });
+    }  
+  }
+
+  //  Handle timer
+
+  startTimer = () => {
+    const now = new Date().getTime()
+    this.setState({
+      start: now,
+      now,
+      laps: [0],
+    })
+    this.timer = setInterval(() => {
+      this.setState({ now: new Date().getTime()})
+    }, 100)
+  }
+
+  stopTimer = () => {
+    clearInterval(this.timer)
+    const { laps, now, start } = this.state
+    const [firstLap, ...other] = laps
+    this.setState({
+      time: moment.duration(laps.reduce((total, curr) => total + curr, 0) + now - start).asMinutes(),
+      laps: [firstLap + now - start, ...other],
+      start: 0,
+      now: 0,
+    })
+  }
+
+  resetTimer = () => {
+    this.setState({
+      laps: [],
+      start: 0,
+      now: 0,
+    })
+  }
+
+  resumeTimer = () => {
+    const now = new Date().getTime()
+    this.setState({
+      start: now,
+      now,
+    })
+    this.timer = setInterval(() => {
+      this.setState({ now: new Date().getTime()})
+    }, 100)
+  }
   // Controller
 
   onPress_btnStart = async () => {
     this.setState({ statement: "isActive"});
+
+    this.startTimer();
   }
 
   onPress_btnPause = () => {
     this.setState({ statement: "isPaused"});
     this.setState({ routeCoordinates: [] });
+
+    this.stopTimer();
   }
 
   onPress_btnResume = async () => {
@@ -157,10 +278,48 @@ export default class GeofenceView extends React.Component {
     });
 
     this.setState({ statement: "isActive"});
+
+    this.resumeTimer();
   }
 
   onPress_btnFinish = () => {
-    this.setState({ statement: "hasNotStarted" });
+    if (this.state.routes.length > 0) {
+      this.props.navigation.navigate('SaveActivityScreen', {
+        distance: this.state.distance,
+        avgPace: this.state.avgPace,
+        time: this.state.time,
+        routes: this.state.routes,
+        markerOnRoute: this.state.markerOnRoute,
+      });
+    }
+    else {
+      Alert.alert(
+        "Not moving yet?",
+        "App needs a longer activity to upload and analyze. Please continue or start over.",
+        [
+          {
+            text: "Discard",
+          },
+          {
+            text: "Resume",
+          }
+        ]
+      )
+    }
+    // this.resetTimer();
+  }
+
+  onPress_btnLocate = () => {
+    this.getCurrentLocation();
+  }
+
+  onPress_btnShowRecordBox = () => {
+    if (this.state.opacityRecordBox == 0) {
+      this.setState({ opacityRecordBox: 1 });
+    }
+    else {
+      this.setState({ opacityRecordBox: 0 });
+    }
   }
 
   // Render
@@ -168,12 +327,12 @@ export default class GeofenceView extends React.Component {
   renderButton() {
     const { statement } = this.state;
     switch (statement) {
-      case "hasNotStarted":
+      case "isNotActive":
         return (
           <TouchableOpacity 
-            style={[styles.roundedButton, {backgroundColor: "green"}]}
+            style={[styles.button, {backgroundColor: "green"}]}
             onPress={this.onPress_btnStart}>
-              <Text style={styles.bottomBarContent}>
+              <Text style={styles.buttonTitle}>
                 START
               </Text>
           </TouchableOpacity>
@@ -181,9 +340,9 @@ export default class GeofenceView extends React.Component {
       case "isActive":
         return (
           <TouchableOpacity 
-            style={[styles.roundedButton, {backgroundColor: "green"}]}
+            style={[styles.button, {backgroundColor: "green"}]}
             onPress={this.onPress_btnPause}>
-              <Text style={styles.bottomBarContent}>
+              <Text style={styles.buttonTitle}>
                 PAUSE
               </Text>
           </TouchableOpacity>
@@ -192,98 +351,159 @@ export default class GeofenceView extends React.Component {
         return (
           <React.Fragment>
             <TouchableOpacity 
-              style={[styles.roundedButton, {backgroundColor: "green"}]}
+              style={[styles.button, {
+                backgroundColor: "white",
+                borderColor: "green",
+                borderWidth: 1,
+              }]}
               onPress={this.onPress_btnResume}>
-                <Text style={styles.bottomBarContent}>
+                <Text style={[styles.buttonTitle, {color: "green"}]}>
                   RESUME
                 </Text>
             </TouchableOpacity>
             
             <TouchableOpacity 
-              style={[styles.roundedButton, {backgroundColor: "green"}]}
+              style={[styles.button, {backgroundColor: "green"}]}
               onPress={this.onPress_btnFinish}>
-                <Text style={styles.bottomBarContent}>
+                <Text style={styles.buttonTitle}>
                   FINISH
                 </Text>
             </TouchableOpacity>
           </React.Fragment>
         )
-      case "hasFinished":
-        break;
       default:
         break;
     }
   }
 
-  randomColor = () => {
-    const colorArray = ['red', 'green', 'black', 'blue', 'yellow'];
-    return colorArray[Math.floor(Math.random() * colorArray.length)];
-  }
-
   render() {
+    const { now, start, laps } = this.state;
+    const timer = now - start;
+
     return (
       <View style={styles.container}>
-        <Text>{JSON.stringify(this.state.region)}</Text>
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          showUserLocation
-          followUserLocation
-          loadingEnabled
-          region={this.state.coordinate}>
-          
-          {
-            this.state.routes.map((route, index) => {
-              return (
-                <Polyline
-                  key={index}
-                  coordinates={route}
-                  strokeWidth={6}
-                  strokeColor='green'/>
-              )
-            })
-          }
-                   
-          <Marker.Animated
-            ref={marker => {
-              this.marker = marker;
-            }}
-            coordinate={this.state.coordinate}
-          />
-        </MapView>
+        <Map 
+          region={this.state.region}
+          routes={this.state.routes}
+          coordinate={this.state.coordinate}
+          markerOnRoute={this.state.markerOnRoute}/>
 
-        <View style={styles.logContainer}>
+        <View style={[styles.recordBox, { opacity: this.state.opacityRecordBox }]}>
           <View style={{
                   width: '100%', 
                   height: 80,
                   alignItems: "center",
                 }}>
-            <Text style={styles.titleItem}>TIME</Text>
+            <Text style={styles.itemTitle}>TIME</Text>
             
-            <Text style={styles.contentItem}>0:00:00</Text>
+            <Timer 
+              interval={laps.reduce((total, curr) => total + curr, 0) + timer}
+              style={styles.itemContent}/>
           </View >
           
           <View style={styles.item}>
-            <Text style={styles.titleItem}>DISTANCE (km)</Text>
-            <Text style={styles.contentItem}>
-              {parseFloat(this.state.distanceTravelled).toFixed(2)}
+            <Text style={styles.itemTitle}>DISTANCE (km)</Text>
+            <Text style={styles.itemContent}>
+              {parseFloat(this.state.distance).toFixed(2)}
             </Text>
           </View>
 
           <View style={styles.item}>
-            <Text style={styles.titleItem}>AVG PACE (/km)</Text>
-            <Text style={styles.contentItem}>
-              -:--
+            <Text style={styles.itemTitle}>AVG PACE (/km)</Text>
+            <Text style={styles.itemContent}>
+              {parseFloat(this.state.avgPace).toFixed(2)}
             </Text>
           </View>
         </View>
 
-        <View style={styles.buttonContainer}>
+        <View style={styles.buttonRow}>
+          <TouchableOpacity 
+            style={[styles.button, 
+            {
+              borderWidth: 1,
+              borderColor: 'green',
+              backgroundColor: 'white',
+              width: 40,
+              height: 40,
+            }]}
+            onPress={this.onPress_btnShowRecordBox}>
+            {
+              this.state.opacityRecordBox ? (
+                <Entypo name="eye-with-line" size={20} color="green" />
+              ) : (
+                <Entypo name="eye" size={20} color="green" />
+              )
+            } 
+          </TouchableOpacity>
+
           {this.renderButton()}
+          
+          <TouchableOpacity 
+            style={[styles.button, 
+            {
+              backgroundColor: "green",
+              width: 40,
+              height: 40,
+            }]}
+            onPress={this.onPress_btnLocate}>
+
+            <MaterialIcons name="my-location" size={20} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
     );
   }
+}
+
+const Map = React.memo(props => {
+  return (
+    <MapView
+      style={styles.map}
+      provider={PROVIDER_GOOGLE}
+      showUserLocation
+      followUserLocation
+      loadingEnabled
+      region={props.region}>
+      
+      {
+        props.routes.map((route, index) => {
+          return (
+            <Polyline
+              key={index}
+              coordinates={route}
+              strokeWidth={6}
+              strokeColor='green'/>
+          )
+        })
+      }
+
+      {
+        props.markerOnRoute.map((marker, index) => {
+          return (
+            <Marker 
+              key={index}
+              coordinate={marker} 
+              anchor={{x:0.5, y:0.5}}>
+              <FontAwesome name="check-circle" size={16} color="gold" />
+            </Marker>
+          )
+        })
+      }
+                
+      <Marker
+        coordinate={props.coordinate}>
+        <FontAwesome5 name="map-marker-alt" size={24} color="gold" />
+      </Marker>
+    </MapView>
+  )
+})
+
+function Timer({ interval, style }) {
+  const pad = (n) => n < 10 ? '0' + n : n;
+  const duration = moment.duration(interval);
+  return (
+    <Text style={style}>{duration.hours()}:{pad(duration.minutes())}:{pad(duration.seconds())}</Text>
+  )
 }
 
 async function getSavedLocations() {
@@ -308,9 +528,8 @@ TaskManager.defineTask('background-location-task', async ({ data: { locations },
     const newLocations = locations.map(({ coords }) => ({
       latitude: coords.latitude,
       longitude: coords.longitude,
+      speed: coords.speed,
     }));
-
-    //console.log('new Coordinate: ', newLocations);
 
     savedLocations.push(...newLocations);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(savedLocations));
@@ -327,47 +546,48 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject
   },
-  roundedButton: {
+  button: {
     width: 80,
     height: 80,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 100,
-    paddingHorizontal: 12,
-    marginHorizontal: 10,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  buttonContainer: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    alignItems: "center",
-    justifyContent: "center",
+  buttonTitle: {
+    fontSize: 18,
+    color: 'white',
+  },
+  buttonRow: {
     width: "100%",
-    backgroundColor: "rgba(52, 52, 52, 0)",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    paddingVertical: 10,
+    backgroundColor: "white",
+    borderTopColor: "green",
+    borderTopWidth: 1,
   },
-  logContainer:
+  recordBox:
   {
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'flex-start',
-    backgroundColor: "green",
-    borderRadius: 20,
-    marginHorizontal: 10,
+    backgroundColor: "white"
   },
   item:
   {
     width: '50%',
-    height: 80,
     alignItems: "center",
   },
-  titleItem:
+  itemTitle:
   {
     marginTop: 5,
     fontSize: 12,
   },
-  contentItem:
+  itemContent:
   {
-    marginVertical: 12,
-    fontSize: 24,
+    marginVertical: 8,
+    fontSize: 30,
     fontWeight: "bold",
   },
 });

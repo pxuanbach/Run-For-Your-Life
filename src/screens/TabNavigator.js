@@ -3,12 +3,12 @@ import {Dimensions} from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import {HomeTab, Tab1} from './Tabs';
 import Constants from '../utilities/Constants';
 import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
 import ProfileTabNavigator from './Tabs/ProfileTab/Navigator';
-import GeofenceTab from './Tabs/GeofenceTab/GeofenceTab';
+import GeofenceTabNavigator from './Tabs/GeofenceTab/Navigator';
 import HomeTabNavigator from './Tabs/HomeTab/Navigator';
 
 const windowHeight = Dimensions.get('window').height;
@@ -24,13 +24,13 @@ const BottomTabNavigator = createBottomTabNavigator({
             },
         }
     },
-    GeofenceTab: {
-        screen: GeofenceTab,
+    GeofenceTabNavigator: {
+        screen: GeofenceTabNavigator,
         navigationOptions: {
-            tabBarLabel: 'More',
+            tabBarLabel: 'Record',
             tabBarIcon: ({ tintColor }) => {
-                return <AntDesign name='profile' 
-                size={28} style={{color: tintColor}}></AntDesign>
+                return <MaterialCommunityIcons name="record-circle-outline" 
+                size={28} style={{color: tintColor}}></MaterialCommunityIcons>
             },
         }
     },
