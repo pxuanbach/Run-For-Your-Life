@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { SafeAreaView } from 'react-native';
 import {Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
-import ViewShowData from '../../components/ViewShowData';
+import ViewShowData from '../../../components/ViewShowData';
 import { StatusBar } from 'expo-status-bar';
 import {
     LineChart,
@@ -21,10 +21,10 @@ const listButtonChart=[
     {status:'Distance',unit:'km'},
     {status:'Time',unit:'min'},
     {status:'Avg Pace',unit:'/km'},
-    {status:'Calories',unit:'calo'},
+    {status:'Calories',unit:'calo'}
 ]
 
-function HomeTab() {
+function HomeScreen({navigation}) {
     const [status, setStatus] = useState('Distance')
     const setStatusFilter = status=>{
         setStatus(status)
@@ -157,12 +157,11 @@ function HomeTab() {
                     borderRadius:22, 
                     borderColor:"#ffcad4"
                     }}>
-                    <View 
-                    style={styles.listButtonChart}>
+                    <View style={styles.listButtonChart}>
                         {
                             listButtonChart.map(c=>(
                                 <TouchableOpacity
-                                key={c.status} 
+                                key={c.status}
                                 style={[styles.btnChart, status == c.status && styles.btnTabActive]}
                                 onPress={()=> {setStatusFilter(c.status) , setUnit(c.unit)}}
                                 >
@@ -204,6 +203,7 @@ function HomeTab() {
                 <ViewShowData timeStatus= 'month'></ViewShowData>
 
                 <TouchableOpacity 
+                onPress={()=> navigation.navigate('ActivitiesScreen')}
                 style={{backgroundColor:"#dddddd",
                     borderRadius:20,
                     width:windowWidth*0.9,
@@ -212,8 +212,10 @@ function HomeTab() {
                     alignContent:'center',
                     alignItems:'center',
                     alignSelf:'center',
-                    paddingHorizontal:10
-                }}>
+                    paddingHorizontal:10,
+                    marginBottom:10
+                }}
+                >
                     <FontAwesome5 name="running" size={24} color="black" />
                     <Text>  All Activities</Text>
                 </TouchableOpacity>
@@ -222,7 +224,7 @@ function HomeTab() {
     )
 }
 
-export default HomeTab
+export default HomeScreen
 
 const styles=StyleSheet.create({
     container:{
@@ -295,3 +297,4 @@ const styles=StyleSheet.create({
         fontWeight:'bold'
     }
 })
+

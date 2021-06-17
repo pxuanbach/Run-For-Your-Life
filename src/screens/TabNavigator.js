@@ -9,12 +9,13 @@ import Constants from '../utilities/Constants';
 import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
 import ProfileTabNavigator from './Tabs/ProfileTab/Navigator';
 import GeofenceTabNavigator from './Tabs/GeofenceTab/Navigator';
+import HomeTabNavigator from './Tabs/HomeTab/Navigator';
 
 const windowHeight = Dimensions.get('window').height;
 
 const BottomTabNavigator = createBottomTabNavigator({
-    HomeTab: {
-        screen: HomeTab,
+    HomeTabNavigator: {
+        screen: HomeTabNavigator,
         navigationOptions: {
             tabBarLabel: 'Home',
             tabBarIcon: ({ tintColor }) => {
