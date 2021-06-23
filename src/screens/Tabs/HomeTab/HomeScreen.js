@@ -13,6 +13,10 @@ import {
   } from "react-native-chart-kit";
 import { flexDirection } from 'styled-system';
 import { FontAwesome5 } from '@expo/vector-icons';
+import Monment from 'moment';
+import moment from 'moment';
+import { useEffect } from 'react/cjs/react.production.min';
+import { forEach } from 'async';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -30,6 +34,29 @@ function HomeScreen({navigation}) {
         setStatus(status)
     }
     const [unit, setUnit] = useState('km')
+
+        var date = moment().format();
+        var d = date.split('T');
+        var today=d[0];
+
+    var api_get_today = 'http://localhost:3000/api/activities/date='+today;
+    const [listDataToday, setListDataToday] = useState([]);
+    const [isLoading, setLoading] = useState(true);
+    var _listDataToday=[];
+    console.log(api_get_today)
+
+    fetch(api_get_today)
+    .then((res)=>res.json())
+    .then((res_json)=>{
+        console.log(res_json)
+    })
+    
+
+    //console.log(listDataToday)
+
+
+
+    
     return (
         <SafeAreaView>
             <StatusBar style="auto"/>
