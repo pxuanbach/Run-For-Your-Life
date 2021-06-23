@@ -1,9 +1,12 @@
 import React from 'react';
-import {Text,View,Image, TouchableOpacity,} from 'react-native';
+import {Text,View,Image, TouchableOpacity, Dimensions} from 'react-native';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 
-const FoodRecommendCard = ({image, text, onPress, h = 90, w = 400}) => {
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
+const FoodRecommendCard = ({image, text, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
@@ -15,16 +18,18 @@ const FoodRecommendCard = ({image, text, onPress, h = 90, w = 400}) => {
                 elevation: 8
             }}>
                 <Image
-                    source={image}
-                    style={{height: h/7, width: '100%', borderRadius: 15,}}>
+                    source={{
+                        uri: image
+                    }}
+                    style={{height: windowHeight/7, width: '100%', borderRadius: 15,}}>
                 </Image>
                 <View
                 style={{
                     position: 'absolute',
                     bottom: 0,
                     right: 0,
-                    height: h/18,
-                    width: w/2 - 16,
+                    height: windowHeight/18,
+                    width: windowWidth/2 - 16,
                     backgroundColor: Constants.COLOR.white,
                     borderTopLeftRadius: 15,
                     borderBottomRightRadius: 15,
@@ -35,7 +40,7 @@ const FoodRecommendCard = ({image, text, onPress, h = 90, w = 400}) => {
                     <FontLoader>
                         <Text style={{
                             position: 'absolute',
-                            fontSize: h/28,
+                            fontSize: windowHeight/28,
                             fontFamily: 'SemiBold',
                             color: Constants.COLOR.dark_green
                         }}>

@@ -179,22 +179,18 @@ const ListFoodCard = ({data, type}) => {
                 renderItem={({item}) => {
                     return (
                         <View item = {item} key={item._id}>
-                            {item.type === String(type) ?
-                            <View>
-                                <FoodCard
-                                onPress={() => {
-                                    setModalVisible(!modalVisible)
-                                    setCurItem(item)
-                                }}
-                                windowHeight={windowHeight}
-                                windowWidth={windowWidth}
-                                urlImage={item.urlImage}
-                                name={item.name}
-                                calories={item.calories}
-                                >
-                                </FoodCard>
-                            </View>
-                            : null}
+                            <FoodCard
+                            onPress={() => {
+                                setModalVisible(!modalVisible)
+                                setCurItem(item)
+                            }}
+                            windowHeight={windowHeight}
+                            windowWidth={windowWidth}
+                            urlImage={item.urlImage}
+                            name={item.name}
+                            calories={item.calories}
+                            >
+                            </FoodCard>
                         </View>
                     )
                 }}
