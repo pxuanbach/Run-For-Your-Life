@@ -5,7 +5,7 @@ import { View, Dimensions, Text, TextInput,
 import {CustomButton, IconButtonDesign} from '../../../components/CustomButton';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
-import {TextFieldInput, DateFieldInput, BoxTextFieldInput} 
+import {TextFieldInput, DateFieldInput, PickerFieldInput, BoxTextFieldInput} 
     from '../../../components/InputFieldDesign';
 
 const windowHeight = Dimensions.get('window').height;
@@ -20,50 +20,40 @@ function EditScreen({navigation}) {
     const [phone, setPhone] = useState(navigation.getParam('phone'));
     const [gender, setGender] = useState(navigation.getParam('gender'));
     const [liveIn, setLiveIn] = useState(navigation.getParam('liveIn'));
-    const [note, setNote] = useState(navigation.getParam('note'));
     const [height, setHeight] = useState(navigation.getParam('height'));
     const [weight, setWeight] = useState(navigation.getParam('weight'));
 
-    const [enableshift,setenableShift] = useState(false)
+    const [_menu, setMenu] = useState();
+    const [enableshift,setenableShift] = useState(false);
+
+    const setMenuRef = ref => {
+        setMenu(ref);
+    }
+    const hideMenu = () => {
+        _menu.hide();
+    }
+
+    const showMenu = () => {
+        _menu.show();
+    }
     return (
-        <SafeAreaView>
-            {/* header: back button + tittle */}
+        <SafeAreaView style={{backgroundColor: Constants.COLOR.light_gray}}>
+            {/* header: tittle + Save button */}
             <View
             style={{
-                height: windowHeight/10,
-                backgroundColor: Constants.COLOR.white,
                 flexDirection: "row",
-                alignItems: "center",
-                paddingHorizontal: 2,
-                paddingVertical: 4,               
-                paddingTop: windowHeight/24
+                paddingHorizontal: 2, 
+                paddingVertical: 4        
             }}>
                 <View style={{
-                    width: '15%',
-                    justifyContent: 'flex-start'
-                }}>
-                    <CustomButton 
-                        onPress={
-                            () => {
-                                navigation.popToTop()
-                                navigation.push("ProfileTab")
-                            }
-                        }
-                        color={Constants.COLOR.dark_green}
-                        iconName="arrow-back-ios"
-                        iconSize={32}>
-                    </CustomButton>
-                </View>
-                <View style={{
-                    width: '60%',
-                    justifyContent: 'center',
-                    alignSelf: 'center'
+                    width: '50%',
+                    alignItems: 'flex-start'
                 }}>
                     <FontLoader>
                         <Text style={{
                             fontFamily: "SemiBold",
-                            fontSize: 28,
-                            paddingHorizontal: 32,
+                            fontSize: windowHeight/30,
+                            paddingHorizontal: 12,
                             color: Constants.COLOR.dark_green,
                         }}>
                             Edit Profile
@@ -71,35 +61,64 @@ function EditScreen({navigation}) {
                     </FontLoader>
                 </View>
                 <View style={{
-                    width: '25%',
-                    justifyContent: 'flex-end'
+                    width: '48%',
+                    alignItems: 'flex-end',
                 }}>
                     <IconButtonDesign
-                    height={40}
+                    onPress={() => {
+                        navigation.navigate("Profile", 
+                        {
+                            name: name, 
+                            mail: mail,
+                            description: description,
+                            job: job,
+                            phone: phone,
+                            gender: gender,
+                            liveIn: liveIn,
+                            birthday: date,
+                            height: height,
+                            weight: weight
+                        })
+                    }}
+                    width={80}
+                    height={36}
                     text="Save"
-                    color={Constants.COLOR.green}
-                    backgroundColor={Constants.COLOR.white}/>
+                    fontSize={windowHeight/28}
+                    color={Constants.COLOR.white}
+                    backgroundColor={Constants.COLOR.green}/>
                 </View>
             </View>
             <KeyboardAvoidingView behavior="position" enabled={enableshift}>
                 <ScrollView>
                     {/* infomation */}
                     <TextFieldInput
+                    onChangeText={(text) => setName(text)}
                     onFocus={() => setenableShift(false)}
                     title="Name"
                     placeholder="name"
                     text={name}/>
+                    <PickerFieldInput
+                    title="Gender"
+                    gender={gender}
+                    setGender={setGender}
+                    setMenuRef={setMenuRef}
+                    showMenu={showMenu}
+                    hideMenu={hideMenu}>
+                    </PickerFieldInput>
                     <TextFieldInput
+                    onChangeText={(text) => setMail(text)}
                     onFocus={() => setenableShift(false)}
                     title="Mail"
                     placeholder="mail"
                     text={mail}/>
                     <TextFieldInput
+                    onChangeText={(text) => setPhone(text)}
                     onFocus={() => setenableShift(false)}
-                    title="Gender"
-                    placeholder="gender"
-                    text={gender}/>
+                    title="Phone"
+                    placeholder="phone"
+                    text={phone}/>
                     <TextFieldInput
+                    onChangeText={(text) => setJob(text)}
                     onFocus={() => setenableShift(false)}
                     title="Job"
                     placeholder="job"
@@ -109,30 +128,31 @@ function EditScreen({navigation}) {
                     date={date}
                     setDate={setDate}/>
                     <TextFieldInput
+                    onChangeText={(text) => setHeight(text)}
                     onFocus={() => setenableShift(false)}
                     title="Height"
                     placeholder="000"
                     text={height}
                     unit="cm"/>
                     <TextFieldInput
+                    onChangeText={(text) => setWeight(text)}
                     onFocus={() => setenableShift(false)}
                     title="Weight"
                     placeholder="000"
                     text={weight}
                     unit="kg"/>
                     <BoxTextFieldInput
+                    onChangeText={(text) => setLiveIn(text)}
                     onFocus={() => setenableShift(false)}
                     title="Live In"
                     text={liveIn}/>
                     <BoxTextFieldInput
-                    onFocus={() => setenableShift(false)}
-                    title="Description"
-                    text={description}/>
-                    <BoxTextFieldInput
+                    onChangeText={(text) => setDescription(text)}
                     onFocus={() => setenableShift(false)}
                     numberOfLines={4}
-                    title="Note"
-                    text={note}/>
+                    title="Description"
+                    text={description}/>
+                    <View style={{height: windowHeight/7}}></View>
                 </ScrollView>
             </KeyboardAvoidingView>
         </SafeAreaView>

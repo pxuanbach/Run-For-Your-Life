@@ -1,5 +1,5 @@
-import React from 'react';
-import {Text, Dimensions, TouchableOpacity , ImageBackground} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, Dimensions, TouchableOpacity , ImageBackground, AsyncStorage} from 'react-native';
 import FontLoader from '../utilities/Font';
 import Constants from '../utilities/Constants';
 
@@ -7,6 +7,25 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 function Welcome({navigation}) {
+
+    const  _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem("isUsed");
+          console.log(value); // log 1
+          if (value == 1) {
+            navigation.navigate('Login');
+          }
+        } catch (error) {
+            
+        }
+      };
+      
+    useEffect(() => {
+        let isMounted = true;
+        _retrieveData();
+        return () => { isMounted = false };
+    }, []);
+    
     return (
         <ImageBackground source={require('../images/background.png')}
             style={{width:"100%",height:"100%"}}>

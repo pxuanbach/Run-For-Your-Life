@@ -2,30 +2,26 @@ import React from 'react';
 import {Dimensions} from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import {HomeTab, Tab1} from './Tabs';
+import {HomeTab, GeofenceTab, ProfileTab} from './Tabs';
 import Constants from '../utilities/Constants';
 import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
-import ProfileTabNavigator from './Tabs/ProfileTab/Navigator';
-import GeofenceTabNavigator from './Tabs/GeofenceTab/Navigator';
-import HomeTabNavigator from './Tabs/HomeTab/Navigator';
 
 const windowHeight = Dimensions.get('window').height;
 
 const BottomTabNavigator = createBottomTabNavigator({
-    HomeTabNavigator: {
-        screen: HomeTabNavigator,
+    HomeTab: {
+        screen: HomeTab,
         navigationOptions: {
             tabBarLabel: 'Home',
             tabBarIcon: ({ tintColor }) => {
-                return <MaterialIcons name='home' 
-                size={28} style={{color: tintColor}}></MaterialIcons>
+                return <MaterialCommunityIcons name="home-outline" 
+                size={30} style={{color: tintColor}} />
             },
         }
     },
-    GeofenceTabNavigator: {
-        screen: GeofenceTabNavigator,
+    GeofenceTab: {
+        screen: GeofenceTab,
         navigationOptions: {
             tabBarLabel: 'Record',
             tabBarIcon: ({ tintColor }) => {
@@ -39,15 +35,15 @@ const BottomTabNavigator = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: 'Nutrition',
             tabBarIcon: ({ tintColor }) => {
-                return <MaterialIcons name='food-bank' 
-                size={28} style={{color: tintColor}}></MaterialIcons>
+                return <MaterialCommunityIcons name="food-drumstick-outline" 
+                size={28} style={{color: tintColor}} />
             },
         }
     },
-    ProfileTabNavigator: {
-        screen: ProfileTabNavigator,
+    ProfileTab: {
+        screen: ProfileTab,
         navigationOptions: {
-            tabBarLabel: 'Profile',
+            tabBarLabel: 'You',
             tabBarIcon: ({ tintColor }) => {
                 return <AntDesign name='user' 
                 size={28} style={{color: tintColor}}></AntDesign>
@@ -55,6 +51,7 @@ const BottomTabNavigator = createBottomTabNavigator({
         },
     }
 },{
+    initialRouteName: 'HomeTab',
     tabBarOptions: {
         inactiveTintColor: Constants.COLOR.second_green,
         activeTintColor: Constants.COLOR.white,
@@ -67,4 +64,4 @@ const BottomTabNavigator = createBottomTabNavigator({
     }
 });
   
-  export default createAppContainer(BottomTabNavigator);
+export default createAppContainer(BottomTabNavigator);

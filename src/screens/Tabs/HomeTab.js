@@ -11,7 +11,6 @@ import {
     ContributionGraph,
     StackedBarChart
   } from "react-native-chart-kit";
-import { flexDirection } from 'styled-system';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 const windowHeight = Dimensions.get('window').height;
@@ -22,6 +21,7 @@ const listButtonChart=[
     {status:'Time',unit:'min'},
     {status:'Avg Pace',unit:'/km'},
     {status:'Calories',unit:'calo'},
+    //{status:'Activities', unit:'acts'}
 ]
 
 function HomeTab() {
@@ -157,12 +157,10 @@ function HomeTab() {
                     borderRadius:22, 
                     borderColor:"#ffcad4"
                     }}>
-                    <View 
-                    style={styles.listButtonChart}>
+                    <View style={styles.listButtonChart}>
                         {
                             listButtonChart.map(c=>(
-                                <TouchableOpacity
-                                key={c.status} 
+                                <TouchableOpacity 
                                 style={[styles.btnChart, status == c.status && styles.btnTabActive]}
                                 onPress={()=> {setStatusFilter(c.status) , setUnit(c.unit)}}
                                 >

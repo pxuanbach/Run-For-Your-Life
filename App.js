@@ -1,12 +1,26 @@
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import {Welcome, Login, Register, BottomTabNavigator} from './src/screens'
+import {Welcome, Login, Register, BottomTabNavigator, AppLoading} from './src/screens'
+import ChangePassScreen from './src/screens/ChangePassScreen';
 
 const stackNavigatorOptions = {
   headerShown:false
 }
 
-const AppNavigator = createStackNavigator({
+const AppStack = createStackNavigator({
+  BottomTabNavigator: {
+    screen: BottomTabNavigator,
+  },
+  ChangePassScreen: {
+    screen: ChangePassScreen,
+  }
+},
+{
+  defaultNavigationOptions : stackNavigatorOptions
+}
+);
+
+const AuthStack = createStackNavigator({
   Welcome: {
     screen: Welcome,
   },
@@ -16,13 +30,21 @@ const AppNavigator = createStackNavigator({
   Register: {
     screen: Register,
   },
-  BottomTabNavigator: {
-    screen: BottomTabNavigator,
-  },
 },
 {
   defaultNavigationOptions : stackNavigatorOptions
 }
 );
 
-export default createAppContainer(AppNavigator)
+export default createAppContainer(
+  createSwitchNavigator(
+    {
+      Loading: AppLoading,
+      App: AppStack,
+      Auth: AuthStack,
+    },
+    {
+      initialRouteName: 'Loading'
+    }
+  )
+)

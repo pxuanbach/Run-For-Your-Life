@@ -7,6 +7,7 @@ import FontLoader from '../utilities/Font';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Moment from 'moment';
 import { MaterialIcons } from '@expo/vector-icons';
+import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -22,15 +23,19 @@ const TextFieldInput = ({title, placeholder, text, unit='', onEndEditing, onChan
                 <View style={{
                     width: unit != '' ? '15%' : '76%',
                     backgroundColor: Constants.COLOR.white,
-                    paddingHorizontal: 2
+                    paddingHorizontal: 2,
+                    borderWidth: 1,
+                    borderRadius: 4,
                 }}>
                     <TextInput 
                     onFocus={onFocus}
                     numberOfLines={1}
                     onEndEditing={onEndEditing}
                     onChangeText={onChangeText}
-                    keyboardType={unit != '' ? "numeric" : "default"}
-                    maxLength={unit != '' ? 3 : 34}
+                    keyboardType={unit != '' ? "numeric" 
+                            : title != "Phone" ? "default" : "numeric"}
+                    maxLength={unit != '' ? 3 
+                            : title != "Phone" ? 34 : 10}
                     underlineColorAndroid="transparent"
                     placeholder = {placeholder}
                     style={styles.text}> 
@@ -77,8 +82,9 @@ const DateFieldInput = ({title, date, setDate}) => {
                 flexDirection: 'row', 
                 alignSelf: 'center',
                 backgroundColor: Constants.COLOR.white,
-                borderRadius: 5,
-                paddingHorizontal: 2
+                borderRadius: 4,
+                padding: 2,
+                borderWidth: 1
             }}>
                 <Text style={styles.text}>{Moment(date).format('DD/MM/YYYY')}</Text>
                 <MaterialIcons 
@@ -102,6 +108,80 @@ const DateFieldInput = ({title, date, setDate}) => {
     )
 }
 
+const PickerFieldInput = ({title, gender, setGender, setMenuRef, showMenu, hideMenu}) => {
+    const changeText = text => {
+        hideMenu(),
+        setGender(text)
+    }
+    
+    return (
+        <View style={styles.container}>
+            <View style={{width: '23%'}}>
+                <Text style={styles.title}>{title}: </Text>
+            </View>
+            <TouchableOpacity onPress={() => showMenu()}
+            style={{
+                width: '30%',
+                backgroundColor: Constants.COLOR.white, 
+                padding: 2,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                borderWidth: 1,
+                borderRadius: 4,
+            }}>
+                    <Menu
+                    ref={setMenuRef}
+                    button={<Text
+                    onPress={showMenu} 
+                    style={styles.text}>{gender}</Text> }
+                    >
+                        <FontLoader>
+                            <MenuItem onPress={() => changeText("Male")}
+                            textStyle={{
+                                fontFamily: "RobotoRegular",
+                                fontSize: windowHeight/38,
+                                color: Constants.COLOR.second_green,
+                                alignSelf: 'center'
+                            }}>
+                                Male
+                            </MenuItem>
+                            <MenuDivider />
+                            <MenuItem onPress={() => changeText("Female")}
+                            textStyle={{
+                                fontFamily: "RobotoRegular",
+                                fontSize: windowHeight/38,
+                                color: Constants.COLOR.second_green,
+                                alignSelf: 'center'
+                            }}>
+                                Female
+                            </MenuItem>
+                            <MenuDivider />
+                            <MenuItem onPress={() => changeText("Unknown")}
+                            textStyle={{
+                                fontFamily: "RobotoRegular",
+                                fontSize: windowHeight/38,
+                                color: Constants.COLOR.second_green,
+                                alignSelf: 'center'
+                            }}>
+                                Unknown
+                            </MenuItem>
+                            <MenuDivider />
+                        </FontLoader>
+                    </Menu>
+                    <View style={{alignSelf: 'center'}}>
+                        <MaterialIcons 
+                        name="arrow-drop-down" 
+                        size={26} 
+                        color={Constants.COLOR.second_green}/>
+                    </View>
+                
+                
+            </TouchableOpacity>
+
+        </View>
+    )
+}
+
 const BoxTextFieldInput = ({title, text, numberOfLines=2, onFocus, onChangeText, onEndEditing}) => {
     return (
         <View>
@@ -111,7 +191,9 @@ const BoxTextFieldInput = ({title, text, numberOfLines=2, onFocus, onChangeText,
                 <Text style={styles.title}>{title}: </Text>
                 <View style={{
                     backgroundColor: Constants.COLOR.white,
-                    marginHorizontal: 4
+                    marginHorizontal: 4,
+                    borderRadius: 5,
+                    borderWidth: 1
                 }}>
                     <TextInput
                     onChangeText={onChangeText}
@@ -129,10 +211,45 @@ const BoxTextFieldInput = ({title, text, numberOfLines=2, onFocus, onChangeText,
     )
 }
 
+const TextFieldSecureInput = ({title, onFocus, onEndEditing, onChangeText, placeholder}) => {
+    return (
+        <View style={{
+            padding: 2,
+            flexDirection: "row",
+            height: windowHeight/19,
+        }}>
+            <View style={{
+                width: '44%'
+            }}>
+                <Text style={styles.title}>{title}: </Text>
+            </View>
+            <View style={{
+                    width: '55%',
+                    backgroundColor: Constants.COLOR.white,
+                    paddingHorizontal: 2,
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }}>
+                    <TextInput 
+                    secureTextEntry={true}
+                    onFocus={onFocus}
+                    numberOfLines={1}
+                    onEndEditing={onEndEditing}
+                    onChangeText={onChangeText}
+                    maxLength={25}
+                    underlineColorAndroid="transparent"
+                    placeholder = {placeholder}
+                    style={styles.text}> 
+                    </TextInput>
+                </View>
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 4,
+        padding: 2,
         flexDirection: 'row',
         height: windowHeight/19
     },
@@ -154,11 +271,14 @@ const styles = StyleSheet.create({
         paddingLeft: 8,
         color: Constants.COLOR.second_green,
         fontFamily: 'SemiRegular',
+        textAlignVertical: 'top',
     },
 })
 
 export {
     TextFieldInput,
     DateFieldInput,
-    BoxTextFieldInput
+    PickerFieldInput,
+    BoxTextFieldInput,
+    TextFieldSecureInput
 }

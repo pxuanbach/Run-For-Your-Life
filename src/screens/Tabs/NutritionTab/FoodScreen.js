@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Text, SafeAreaView } from 'react-native';
+import { View, Dimensions, Text, SafeAreaView, ActivityIndicator } from 'react-native';
 import {CustomButton} from '../../../components/CustomButton';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
@@ -16,6 +16,7 @@ function FoodScreen({navigation}) {
     var listData = [];
 
     useEffect(() => {
+        let isMounted = true;
         fetch(postApi)
           .then((response) => response.json())
           .then((json) => {
@@ -27,6 +28,7 @@ function FoodScreen({navigation}) {
           })
           .catch((error) => console.error(error))
           .finally(() => setLoading(false));
+          return () => { isMounted = false };
     }, []);
 
     return (
@@ -46,7 +48,7 @@ function FoodScreen({navigation}) {
                     onPress={
                         () => {
                             navigation.popToTop()
-                            navigation.push("NutritionTab")
+                            navigation.navigate("NutritionTab")
                         }
                     }
                     color={Constants.COLOR.dark_green}
@@ -67,19 +69,11 @@ function FoodScreen({navigation}) {
             {isLoading 
             // Loading screen
             ? <View style={{   
-                position: 'absolute',
-                top: windowHeight/2 + 8,
-                width: '100%',
-                alignItems: 'center',
+                flex: 1,
+                justifyContent: 'center',
+                paddingTop: windowHeight/3 
             }}>
-                <FontLoader>
-                    <Text style={{
-                        color: Constants.COLOR.second_green,
-                        fontSize: 30,
-                        fontFamily: 'SemiRegular',
-                        alignSelf: 'center',}}
-                    >Loading...</Text>
-                </FontLoader>  
+                <ActivityIndicator size="large" color={Constants.COLOR.green}/>
             </View>
             //Show list food screen
             : <SafeAreaView style={{

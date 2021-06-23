@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Text, View, Dimensions} from 'react-native';
+import {Text, View, Dimensions, AsyncStorage} from 'react-native';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
-import { IconButtonDesign } from './CustomButton';
+import { CustomButton, IconButtonDesign } from './CustomButton';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 
@@ -9,20 +9,29 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const MenuDropdownButton = ({setMenuRef, hideMenu, showMenu,
-    navigation, setModalVisible, moveToEditScreen}) => {
+    navigation, info}) => {
+    const removeData = async () => {
+        try {
+            await AsyncStorage.removeItem("username");
+            await AsyncStorage.removeItem("authToken");
+        } catch (err) {
+            alert(err);
+        } finally {
+            //
+        }
+    }
+
     return (
         <View>
             <Menu
             ref={setMenuRef}
-            button={<IconButtonDesign
+            button={<CustomButton
                 onPress={showMenu}
                 height={windowHeight/20}
-                text="More"
-                fontSize={windowHeight/28}
-                iconName='more-horiz'
+                iconName='more-vert'
                 iconSize={28}
-                color={Constants.COLOR.green}
-                backgroundColor={Constants.COLOR.white}/> }
+                color={Constants.COLOR.dark_green}
+                backgroundColor={Constants.COLOR.white}/>}
             >
                 <FontLoader>
                     <MenuItem style={{width: '100%'}}
@@ -36,7 +45,8 @@ const MenuDropdownButton = ({setMenuRef, hideMenu, showMenu,
                     </MenuItem>
                     <MenuDivider />
                     <MenuItem style={{width: '100%'}}
-                    onPress={hideMenu}
+                    onPress={() => {hideMenu(); 
+                        navigation.navigate("ChangePassScreen")}}
                     textStyle={{
                         fontFamily: "RobotoRegular",
                         fontSize: windowHeight/42,
@@ -56,7 +66,10 @@ const MenuDropdownButton = ({setMenuRef, hideMenu, showMenu,
                     </MenuItem>
                     <MenuDivider />
                     <MenuItem style={{width: '100%'}}
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => {
+                        removeData();
+                        navigation.navigate("Login");
+                    }}
                     textStyle={{
                         fontFamily: "RobotoRegular",
                         fontSize: windowHeight/42,

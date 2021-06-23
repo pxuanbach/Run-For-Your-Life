@@ -19,17 +19,17 @@ const CustomButton = ({onPress, iconName, iconSize=28,
 }
 
 const IconButtonDesign = ({onPress, width, height, text, fontSize=30,
-        iconName, iconSize=30, color=Constants.COLOR.white, backgroundColor=Constants.COLOR.green}) => {
+        iconName, iconSize=30, color=Constants.COLOR.white, 
+        backgroundColor=Constants.COLOR.green}) => {
     return (
         <TouchableOpacity
         onPress={onPress}
         style={{
-            flexDirection: 'row',
             height: height,
             width: width,
+            alignItems: 'center',
             borderRadius: 10,
             backgroundColor:backgroundColor,
-            alignSelf: 'center',
             borderWidth: 0.4,
             borderColor: Constants.COLOR.second_green,
             paddingHorizontal: 4,
