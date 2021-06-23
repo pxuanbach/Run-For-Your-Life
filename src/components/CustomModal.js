@@ -24,20 +24,49 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
         })();
     }, []);
 
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [1, 1],
-          quality: 0.5,
-        });
-    
-        console.log(result);
-    
-        if (!result.cancelled) {
-          setImage(result.uri);
-        }
-      };
+
+      // Funcition upload image
+      const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jamesnguyen/upload';
+      const CLOUDINARY_UPLOAD_PRESET = 'nub4abmm';
+  
+  
+      let openImagePickerAsync = async () => {
+          let permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+          if (permissionResult.granted === false) {
+            alert('Permission to access camera roll is required!');
+            return;
+          }
+          let pickerResult = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            base64: true
+          });
+          if (pickerResult.cancelled === true) {
+            return;
+          }
+      
+          let base64Img = `data:image/jpg;base64,${pickerResult.base64}`;
+      
+          let data = {
+            "file": base64Img,
+            "upload_preset": CLOUDINARY_UPLOAD_PRESET,
+          }
+      
+          fetch(CLOUDINARY_URL, {
+            body: JSON.stringify(data),
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
+          }).then(async r => {
+            let data = await r.json()
+            setImage(data.url);
+            console.log(data.url)
+          }).catch(err => console.log(err))
+        }; 
+
+
+
     
     //Chưa hoàn thành
     const pickFromCamera = async ()=>{
@@ -98,7 +127,7 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
                     <View style={styles.container}>
                         <IconButtonDesign
                         onPress={() => {
-                            pickImage();
+                            openImagePickerAsync();
                             setModalVisible(false);
                         }}
                         height={windowHeight/20}
