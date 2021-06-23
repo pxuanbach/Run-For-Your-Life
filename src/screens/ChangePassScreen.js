@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Text, Alert,
-    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView
+import { View, Dimensions, Text, Alert, AsyncStorage,
+    SafeAreaView, StyleSheet, ScrollView, KeyboardAvoidingView
 } from 'react-native';
 import {CustomButton, IconButtonDesign} from '../components/CustomButton';
 import Constants from '../utilities/Constants';
@@ -14,14 +14,14 @@ const windowWidth = Dimensions.get('window').width;
 
 function ChangePassScreen({navigation}) {
     const [enableshift,setenableShift] = useState(false);
-    const [username, setUsername] = useState("bachdeptrai");
+    const [username, setUsername] = useState();
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [reNewPassword, setReNewPassword] = useState("");
 
     const handleChangePass = () => {
         console.log(username, currentPassword, newPassword, reNewPassword);
-        if (currentPassword == "" || newPassword == "" || reNewPassword == "")
+        if (currentPassword == "" || newPassword == "" || reNewPassword == "" || username == "")
             return Alert.alert(
                 "Oops!",
                 "Input is empty!",
@@ -46,6 +46,24 @@ function ChangePassScreen({navigation}) {
             );
         })
     }
+
+    const  _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem("username");
+          if (value !== null) {
+            setUsername(value);
+            console.log(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+        }
+      };
+
+    useEffect(() => {
+        let isMounted = true;
+        _retrieveData();
+        return () => { isMounted = false };
+    }, [])
 
     return (
         <SafeAreaView style={{height: '100%'}}>
