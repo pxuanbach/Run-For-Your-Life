@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Text, Image,
+import { View, Dimensions, Text, Image, AsyncStorage,
     SafeAreaView, StyleSheet, ScrollView, TouchableOpacity
 } from 'react-native';
 import Constants from '../../utilities/Constants';
@@ -19,8 +19,6 @@ function Profile({navigation}) {
                 ? 'Phạm Xuân Bách' : navigation.getParam("name"),
             mail: navigation.getParam("mail") == null 
                 ? 'pxuanbach1412@gmail.com' : navigation.getParam("mail"),
-            username: 'pxuanbach1412',
-            password: '1',
             description: navigation.getParam("description") == null 
                 ? 'tôi là...' : navigation.getParam("description"),
             job: navigation.getParam("job") == null 
@@ -40,18 +38,33 @@ function Profile({navigation}) {
         };
         return data;
     }
+    const [username, setUsername] = useState();
     const [info, setInfo] = useState(getDetails);
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
+    const  _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem("username");
+          if (value !== null) {
+            setUsername(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+        }
+      };
+
     //run when navigate to this screen
     const unsubscribe = navigation.addListener('didFocus', () => {
-        setInfo(getDetails)
+        setInfo(getDetails);
+        _retrieveData();
         console.log("get details")
     });
 
     useEffect(() => {
+        let isMounted = true;
         unsubscribe;
+        return () => { isMounted = false };
     }, []);
 
     return (
@@ -166,13 +179,6 @@ function Profile({navigation}) {
                                 color={Constants.COLOR.green}
                                 backgroundColor={Constants.COLOR.white}/>
                                 <View style={{width: 8}}></View>
-                                {/* <MenuDropdownButton
-                                setMenuRef={setMenuRef}
-                                showMenu={showMenu}
-                                hideMenu={hideMenu}
-                                navigation={navigation}
-                                info={info}>
-                                </MenuDropdownButton> */}
                             </View>
                         </View>
                     </View>
@@ -190,13 +196,6 @@ function Profile({navigation}) {
                             padding: 4
                         }}>
                             <Text style={styles.text}>{info.description}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Username:</Text>
-                        <View style={{width: '85%'}}>
-                            <Text numberOfLines={1} ellipsizeMode='tail'
-                            style={styles.text}>{info.username}</Text>
                         </View>
                     </View>
                     <View style={styles.container}>

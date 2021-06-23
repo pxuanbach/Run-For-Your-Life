@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import {
-    Text, View, ScrollView, SafeAreaView, Platform,
-    Image, Dimensions, StyleSheet, TouchableOpacity
+    Text, View, ScrollView, SafeAreaView,
+    Dimensions, StyleSheet, AsyncStorage
 } from 'react-native';
 import FontLoader from '../../../utilities/Font';
 import Constants from '../../../utilities/Constants';
@@ -25,6 +25,7 @@ const useComponentDidMount = func => useEffect(func, []);
 function ProfileTab({navigation}) {
     const [_menu, setMenu] = useState();
     const [image, setImage] = useState(null);
+    const [username, setUsername] = useState();
 
     const setMenuRef = ref => {
         setMenu(ref);
@@ -37,6 +38,24 @@ function ProfileTab({navigation}) {
         _menu.show();
     }
 
+    const  _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem("username");
+          if (value !== null) {
+            setUsername(value);
+            console.log(value);
+          }
+        } catch (error) {
+          // Error retrieving data
+        }
+      };
+
+    useEffect(() => {
+        let isMounted = true;
+        _retrieveData();
+        return () => { isMounted = false };
+    }, [])
+    
     return (
         <SafeAreaView style={{
             height: '100%', 
@@ -53,7 +72,7 @@ function ProfileTab({navigation}) {
                 paddingTop: windowHeight/24
             }}>
                 <View style={{
-                    width: '30%',
+                    width: '70%',
                     justifyContent: 'flex-start'
                 }}>
                     <FontLoader>
@@ -63,12 +82,12 @@ function ProfileTab({navigation}) {
                             paddingHorizontal: 12,
                             color: Constants.COLOR.dark_green,
                         }}>
-                            You
+                            {username}
                         </Text>
                     </FontLoader>
                 </View>
                 <View style={{
-                    width: '70%',
+                    width: '30%',
                     alignItems: 'flex-end'
                 }}>
                     <MenuDropdownButton

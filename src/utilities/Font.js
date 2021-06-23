@@ -5,20 +5,19 @@ const FontLoader = ({ children }) => {
     const [fontsLoaded, setFontsLoaded] = React.useState(false);
   
     React.useEffect(() => {
+      let cleaned = true;
       async function loadFonts() {
         await Font.loadAsync({
-            Montserrat: require('../../src/fonts/Montserrat.ttf'),
-            MontserratRegular: require('../../src/fonts/Montserrat-Regular.ttf'),
-            RobotoBold: require('../../src/fonts/RobotoBold.ttf'),
-            RobotoRegular: require('../../src/fonts/RobotoRegular.ttf'),
-            SemiRegular: require('../../src/fonts/BarlowSemiCondensed-Regular.ttf'),
-            SemiBold: require('../../src/fonts/BarlowSemiCondensed-SemiBold.ttf'),
+          SemiRegular: require('../../src/fonts/BarlowSemiCondensed-Regular.ttf'),
+          SemiBold: require('../../src/fonts/BarlowSemiCondensed-SemiBold.ttf'),
+          RobotoBold: require('../../src/fonts/RobotoBold.ttf'),
+          RobotoRegular: require('../../src/fonts/RobotoRegular.ttf'),
         });
   
         setFontsLoaded(true);
       }
-  
       loadFonts();
+      return () => { cleaned = false };
     }, []);
   
     if (!fontsLoaded) {

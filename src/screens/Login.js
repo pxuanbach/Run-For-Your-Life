@@ -1,45 +1,64 @@
-import React, { useState } from 'react';
-import {Text, View, Image, TouchableOpacity, KeyboardAvoidingView, Dimensions} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {Text, View, Image, TouchableOpacity, ActivityIndicator,
+    KeyboardAvoidingView, Dimensions, AsyncStorage
+} from 'react-native';
 import FontLoader from '../utilities/Font';
 import TextInputDesign from '../components/TextInputDesign';
 import Constants from '../utilities/Constants';
 import Axios from "axios";
+import AppLoading from './AppLoading';
 
 const windowHeight = Dimensions.get('window').height;
 
 function Login({navigation}) {
     const [username,setUsername] = useState()
     const [password,setPassword] = useState()
+    const [isLoading, setIsLoading] = useState(true)
     const handleLogin =() => {
-    console.log(username,password);    
-    Axios.post("https://runapp1108.herokuapp.com/api/users/login",{username,password})
-        .then((res)=>{
-            navigation.navigate('BottomTabNavigator')
-        })
-        .catch((err)=>{
-            Alert.alert(
-                "Oops!",
-                "Tài khoản hoặc mật khẩu sai rồi!!!",
-            );
-                    
-        })
+        console.log(username,password);    
+        Axios.post("https://runapp1108.herokuapp.com/api/users/login",{username,password})
+            .then((res)=>{
+                _storeData('authToken',res.data);
+                _storeData('username', username);
+                _storeData('isUsed', '1');
+                navigation.navigate('BottomTabNavigator');
+            })
+            .catch((err)=>{
+                Alert.alert(
+                    "Oops!",
+                    "Tài khoản hoặc mật khẩu sai rồi!!!",
+                );
+            })
     }
 
-    // const isValidMail = (text) => {
-    //     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-    //     if (reg.test(text) === false) {
-    //         console.log("Email is Not Correct");
-    //         setData({ email: text })
-    //         return false;
-    //     }
-    //     else {
-    //         setData({ email: text })
-    //         console.log("Email is Correct");
-    //     }
-    // }
+    //run when navigate to this screen
+    const unsubscribe = navigation.addListener('didFocus', () => {
+        setTimeout(() => {
+            console.log("time out")
+            setIsLoading(false);
+          }, 1000);
+        console.log("get details")
+    });
+
+    const _storeData = async (key, data) => {
+        try {
+          await AsyncStorage.setItem(
+            key, data
+          );
+        } catch (error) {
+          // Error saving data
+        }
+      };
 
     return(
-        <View>
+        isLoading ? <View style={{
+            flex: 1,
+            justifyContent: 'center',
+            backgroundColor: Constants.COLOR.green
+        }}>
+            <ActivityIndicator size={50} color={Constants.COLOR.white}/>
+        </View>
+        : <View>
             <Image
                 source={require('../images/background2.png')}
                 style={{height: '35%', width: '100%'}}>

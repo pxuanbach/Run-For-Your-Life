@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Text, View, Dimensions} from 'react-native';
+import {Text, View, Dimensions, AsyncStorage} from 'react-native';
 import Menu, { MenuItem, MenuDivider } from 'react-native-material-menu';
 import { CustomButton, IconButtonDesign } from './CustomButton';
 import Constants from '../utilities/Constants';
@@ -10,7 +10,17 @@ const windowWidth = Dimensions.get('window').width;
 
 const MenuDropdownButton = ({setMenuRef, hideMenu, showMenu,
     navigation, info}) => {
-    
+    const removeData = async () => {
+        try {
+            await AsyncStorage.removeItem("username");
+            await AsyncStorage.removeItem("authToken");
+        } catch (err) {
+            alert(err);
+        } finally {
+            //
+        }
+    }
+
     return (
         <View>
             <Menu
@@ -56,7 +66,10 @@ const MenuDropdownButton = ({setMenuRef, hideMenu, showMenu,
                     </MenuItem>
                     <MenuDivider />
                     <MenuItem style={{width: '100%'}}
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => {
+                        removeData();
+                        navigation.navigate("Login");
+                    }}
                     textStyle={{
                         fontFamily: "RobotoRegular",
                         fontSize: windowHeight/42,

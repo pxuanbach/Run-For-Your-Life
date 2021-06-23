@@ -72,14 +72,14 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
     const pickFromCamera = async ()=>{
         const {granted} =  await Permissions.askAsync(Permissions.CAMERA)
         if(granted){
-             let data =  await ImagePicker.launchCameraAsync({
+             let result =  await ImagePicker.launchCameraAsync({
                   mediaTypes:ImagePicker.MediaTypeOptions.Images,
                   allowsEditing:true,
                   aspect:[1,1],
                   quality:0.5
               })
               if (!result.cancelled) {
-                setImage(data);
+                setImage(result.uri);
               }
         }else{
            Alert.alert("you need to give up permission to work")
