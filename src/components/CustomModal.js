@@ -6,51 +6,75 @@ import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 import { IconButtonDesign } from './CustomButton';
 import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
 
-    useEffect(() => {
-        (async () => {
-          if (Platform.OS !== 'web') {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-              alert('Sorry, we need camera roll permissions to make this work!');
-            }
-          }
-        })();
-    }, []);
+    const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jamesnguyen/upload';
+    const CLOUDINARY_UPLOAD_PRESET = 'nub4abmm';
+
+    const uploadHandle = (pickerResult) => {
+        let base64Img = `data:image/jpg;base64,${pickerResult.base64}`;
+    
+        let data = {
+          "file": base64Img,
+          "upload_preset": CLOUDINARY_UPLOAD_PRESET,
+        }
+    
+        fetch(CLOUDINARY_URL, {
+          body: JSON.stringify(data),
+          headers: {
+            'content-type': 'application/json'
+          },
+          method: 'POST',
+        }).then(async r => {
+          let data = await r.json()
+          setImage(data.url);
+          console.log(data.url) //
+        }).catch(err => console.log(err))
+      };
 
     const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          aspect: [1, 1],
-          quality: 0.5,
-        });
-    
-        console.log(result);
-    
-        if (!result.cancelled) {
-          setImage(result.uri);
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if(status === 'granted'){
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [1, 1],
+                quality: 0.5,
+                base64: true
+              });
+          
+              console.log(result);
+              if (result.cancelled === true) {
+                  return;
+              }
+              //setImage(result.uri);
+              uploadHandle(result);
         }
+        else {
+            Alert.alert("you need to give up permission to work")
+        }
+        
       };
     
     //Chưa hoàn thành
     const pickFromCamera = async ()=>{
-        const {granted} =  await Permissions.askAsync(Permissions.CAMERA)
-        if(granted){
+        const {status} =  await ImagePicker.requestCameraPermissionsAsync();
+        if(status === 'granted'){
              let result =  await ImagePicker.launchCameraAsync({
                   mediaTypes:ImagePicker.MediaTypeOptions.Images,
                   allowsEditing:true,
                   aspect:[1,1],
-                  quality:0.5
+                  quality: 0.5,
+                  base64: true
               })
               if (!result.cancelled) {
-                setImage(result.uri);
+                  console.log(result);
+                  //setImage(result.uri);
+                uploadHandle(result);
               }
         }else{
            Alert.alert("you need to give up permission to work")
