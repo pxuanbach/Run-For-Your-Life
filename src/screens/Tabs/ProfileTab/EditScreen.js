@@ -19,7 +19,7 @@ function EditScreen({navigation}) {
     const [job, setJob] = useState(navigation.getParam('job'));
     const [phone, setPhone] = useState(navigation.getParam('phone'));
     const [gender, setGender] = useState(navigation.getParam('gender'));
-    const [liveIn, setLiveIn] = useState(navigation.getParam('liveIn'));
+    const [address, setAddress] = useState(navigation.getParam('address'));
     const [height, setHeight] = useState(navigation.getParam('height'));
     const [weight, setWeight] = useState(navigation.getParam('weight'));
 
@@ -74,7 +74,7 @@ function EditScreen({navigation}) {
                             job: job,
                             phone: phone,
                             gender: gender,
-                            liveIn: liveIn,
+                            address: address,
                             birthday: date,
                             height: height,
                             weight: weight
@@ -142,10 +142,10 @@ function EditScreen({navigation}) {
                     text={weight}
                     unit="kg"/>
                     <BoxTextFieldInput
-                    onChangeText={(text) => setLiveIn(text)}
+                    onChangeText={(text) => setAddress(text)}
                     onFocus={() => setenableShift(false)}
                     title="Live In"
-                    text={liveIn}/>
+                    text={address}/>
                     <BoxTextFieldInput
                     onChangeText={(text) => setDescription(text)}
                     onFocus={() => setenableShift(false)}

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Dimensions, Text, Image, AsyncStorage,
-    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity
+    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity,Alert
 } from 'react-native';
 import Constants from '../../utilities/Constants';
 import FontLoader from '../../utilities/Font';
@@ -8,6 +8,9 @@ import Moment from 'moment';
 import { Foundation } from '@expo/vector-icons';
 import { IconButtonDesign } from '../CustomButton';
 import ButtonSheetModal from '../CustomModal';
+import jwt_decode from "jwt-decode";
+ import Axios from 'axios';
+
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -15,33 +18,37 @@ const windowWidth = Dimensions.get('window').width;
 function Profile({navigation}) {
     const getDetails = () => {
         let data = {
-            name: navigation.getParam("name") == null 
-                ? 'Phạm Xuân Bách' : navigation.getParam("name"),
+            fullname: navigation.getParam("name") == null 
+                ? 'Loading...' : navigation.getParam("name"),
             mail: navigation.getParam("mail") == null 
-                ? 'pxuanbach1412@gmail.com' : navigation.getParam("mail"),
+                ? 'Loading...' : navigation.getParam("mail"),
             description: navigation.getParam("description") == null 
-                ? 'tôi là...' : navigation.getParam("description"),
+                ? 'Loading...' : navigation.getParam("description"),
             job: navigation.getParam("job") == null 
-                ? 'Student at UIT' : navigation.getParam("job"),
+                ? 'Loading...' : navigation.getParam("job"),
             phone: navigation.getParam("phone") == null 
-                ? '0372363285' : navigation.getParam("phone"),
+                ? 'Loading...' : navigation.getParam("phone"),
             gender: navigation.getParam("gender") == null 
-                ? 'Male' : navigation.getParam("gender"),
-            liveIn: navigation.getParam("liveIn") == null 
-                ? 'Phan Rang-Tháp Chàm, Ninh Thuận, Vietnam' : navigation.getParam("liveIn"),
+                ? 'Loading...' : navigation.getParam("gender"),
+            address: navigation.getParam("address") == null 
+                ? 'Loading...' : navigation.getParam("address"),
             birthday: navigation.getParam("birthday") == null 
-                ? '2001-03-30' : navigation.getParam("birthday"),
+                ? 'Loading...' : navigation.getParam("birthday"),
             height: navigation.getParam("height") == null 
-                ? '175' : navigation.getParam("height"),
+                ? 'Loading...' : navigation.getParam("height"),
             weight: navigation.getParam("weight") == null 
-                ? '55' : navigation.getParam("weight"),
+                ? 'Loading...' : navigation.getParam("weight"),
         };
         return data;
     }
-    const [username, setUsername] = useState();
-    const [info, setInfo] = useState(getDetails);
+    const [username, setUsername] = useState([]);
+    const [info, setInfo] = useState({});
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+
+
+
+    
 
     const  _retrieveData = async () => {
         try {
@@ -54,18 +61,35 @@ function Profile({navigation}) {
         }
       };
 
-    //run when navigate to this screen
-    const unsubscribe = navigation.addListener('didFocus', () => {
-        setInfo(getDetails);
-        _retrieveData();
-        console.log("get details")
-    });
 
-    useEffect(() => {
-        let isMounted = true;
-        unsubscribe;
-        return () => { isMounted = false };
-    }, []);
+      
+
+
+     
+
+    //run when navigate to this screen
+    useEffect( () => {
+     
+        console.log("get details")
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
+            .then( (res)=>{
+                setInfo(res.data)
+            })
+            .catch((error)=>{
+                console.log(error.response.data)
+            })
+            
+        }) 
+                  
+    },[])
+       
+
+
 
     return (
         <SafeAreaView style={{height: '100%'}}>
@@ -136,7 +160,7 @@ function Profile({navigation}) {
                                         fontSize: windowHeight/30,
                                         color: Constants.COLOR.green,
                                     }}>
-                                        {info.name}
+                                        {info.fullname}
                                     </Text>
                                     <Text numberOfLines={1} ellipsizeMode='tail'
                                     style={{
@@ -162,13 +186,13 @@ function Profile({navigation}) {
                                 onPress={() => {
                                     navigation.navigate('EditScreen', 
                                     {   
-                                        name: info.name, 
+                                        name: info.fullname, 
                                         mail: info.mail,
                                         description: info.description,
                                         job: info.job,
                                         phone: info.phone,
                                         gender: info.gender,
-                                        liveIn: info.liveIn,
+                                        address: info.address,
                                         birthday: info.birthday,
                                         height: info.height,
                                         weight: info.weight
@@ -196,9 +220,11 @@ function Profile({navigation}) {
                         <View style={{
                             padding: 4
                         }}>
-                            <Text style={styles.text}>{info.description}</Text>
+                            <Text style={styles.text}>{(!info.description)?   'I am ...'  :info.description}</Text>
                         </View>
                     </View>
+
+
                     <View style={{
                         marginVertical: 4,
                         backgroundColor: Constants.COLOR.white,
@@ -207,13 +233,14 @@ function Profile({navigation}) {
                             <Text style={styles.label}>Your birthday:</Text>
                             <View style={{width: '85%'}}>
                                 <Text numberOfLines={1} ellipsizeMode='tail'
-                                style={styles.text}>{Moment(info.birthday).format('DD/MM/YYYY')}</Text>
+                                style={styles.text}>{ (!info.birthday)?   ''  :   Moment(info.birthday).format('DD/MM/YYYY')}</Text>
                             </View>
                         </View>
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between'
                         }}>
+
                             <View style={{
                                 padding: 8,
                                 flexDirection: 'row'
@@ -223,13 +250,15 @@ function Profile({navigation}) {
                             </View>
                             <View style={[styles.container, {paddingEnd: 28}]}>
                                 <Text style={styles.label}>Weight:</Text>
-                                <Text style={styles.text}>{info.weight} kg</Text>
+                                <Text style={styles.text}>{(!info.weight)?  '' : info.weight } kg</Text>
                             </View>
+
                         </View>
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between'
                         }}>
+
                             <View style={{
                                 padding: 8,
                                 flexDirection: 'row'
@@ -240,19 +269,20 @@ function Profile({navigation}) {
                             </View>
                             <View style={[styles.container, {paddingEnd: 28}]}>
                                 <Text style={styles.label}>Mobile:</Text>
-                                <Text style={styles.text}>{info.phone}</Text>
+                                <Text style={styles.text}>{(!info.phone)?   ''  :info.phone}</Text>
                             </View>
                         </View>
                         <View style={styles.container}>
                             <Text style={styles.label}>Job:</Text>
-                            <Text style={styles.text}>{info.job}</Text>
+                            <Text style={styles.text}>{(!info.job)?   ''  :info.job}</Text>
                         </View>
                         <View style={styles.container}>
                             <Text style={styles.label}>Live in:</Text>
                             <View style={{width: '85%'}}>
                                 <Text numberOfLines={2} ellipsizeMode='tail'
-                                style={styles.text}>{info.liveIn}</Text>
+                                style={styles.text}>{info.address}</Text>
                             </View>
+
                         </View>
                     </View>
                 </View>
