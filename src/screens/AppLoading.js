@@ -27,8 +27,9 @@ function AppLoading({navigation}) {
     //Dang xu ly
     const tokenValid = async () => {
         try {
+            const value = await AsyncStorage.getItem("username");
             const token = await AsyncStorage.getItem("authToken");
-            console.log(token);   //username + token
+            console.log("token: " + token);   //username + token
             if (token !== null) {
                 const hearders = {
                     'auth-token': token,
@@ -38,13 +39,18 @@ function AppLoading({navigation}) {
                 })
                 .then((res)=>{
                     console.log(res.status);
-                    navigation.navigate('App');
+                    if (value !== null)
+                        navigation.navigate('App');
+                    else
+                        navigation.navigate('Auth');
                 })
                 .catch((err)=>{
                     console.log(err);
                     navigation.navigate('Auth');
                 })
             }
+            else
+                navigation.navigate('Auth');
           } catch (error) {
           }
         
@@ -52,7 +58,8 @@ function AppLoading({navigation}) {
 
     useEffect(() => {
         let isMounted = true;
-        tokenValid()
+        console.log("apploading");
+        tokenValid();
         //_retrieveData();
         return () => { isMounted = false };
     }, []);

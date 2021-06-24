@@ -7,7 +7,9 @@ import FontLoader from '../../utilities/Font';
 import Moment from 'moment';
 import { Foundation } from '@expo/vector-icons';
 import { IconButtonDesign } from '../CustomButton';
-import ButtonSheetModal from '../CustomModal';
+import {ButtonSheetModal} from '../CustomModal';
+import jwt_decode from "jwt-decode";
+import Axios from 'axios';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -16,29 +18,31 @@ function Profile({navigation}) {
     const getDetails = () => {
         let data = {
             name: navigation.getParam("name") == null 
-                ? 'Phạm Xuân Bách' : navigation.getParam("name"),
+                ? '' : navigation.getParam("name"),
             mail: navigation.getParam("mail") == null 
-                ? 'pxuanbach1412@gmail.com' : navigation.getParam("mail"),
+                ? '' : navigation.getParam("mail"),
             description: navigation.getParam("description") == null 
-                ? 'tôi là...' : navigation.getParam("description"),
+                ? '' : navigation.getParam("description"),
             job: navigation.getParam("job") == null 
-                ? 'Student at UIT' : navigation.getParam("job"),
+                ? '' : navigation.getParam("job"),
             phone: navigation.getParam("phone") == null 
-                ? '0372363285' : navigation.getParam("phone"),
+                ? '' : navigation.getParam("phone"),
             gender: navigation.getParam("gender") == null 
-                ? 'Male' : navigation.getParam("gender"),
+                ? 'Unknown' : navigation.getParam("gender"),
             liveIn: navigation.getParam("liveIn") == null 
-                ? 'Phan Rang-Tháp Chàm, Ninh Thuận, Vietnam' : navigation.getParam("liveIn"),
+                ? '' : navigation.getParam("liveIn"),
             birthday: navigation.getParam("birthday") == null 
-                ? '2001-03-30' : navigation.getParam("birthday"),
+                ? '' : navigation.getParam("birthday"),
             height: navigation.getParam("height") == null 
-                ? '175' : navigation.getParam("height"),
+                ? '' : navigation.getParam("height"),
             weight: navigation.getParam("weight") == null 
-                ? '55' : navigation.getParam("weight"),
+                ? '' : navigation.getParam("weight"),
         };
         return data;
     }
     const [username, setUsername] = useState();
+    const [UserID,setUserID]= useState([]);
+    const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
     const [info, setInfo] = useState(getDetails);
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -53,11 +57,29 @@ function Profile({navigation}) {
           // Error retrieving data
         }
       };
-
+    
+      const AxiosData = async() => {
+        console.log("get details")
+        const token =  await AsyncStorage.getItem("authToken")
+        
+        let vl = jwt_decode(token)
+        console.log('Token decode',vl._id)
+        setUserID(vl._id)
+        Axios.post("https://runapp1108.herokuapp.com/api/users/getInfo",{UserID})
+        .then((res) => {
+            console.log("data: " + res.data.name);
+            setInfo(res.data);
+        })
+        .catch((err) => {
+            console.log("error: " + err);
+        })
+        console.log('Thong tin nguoi dung',info)  
+    }
+    
     //run when navigate to this screen
     const unsubscribe = navigation.addListener('didFocus', () => {
-        setInfo(getDetails);
         _retrieveData();
+        AxiosData();
         console.log("get details")
     });
 

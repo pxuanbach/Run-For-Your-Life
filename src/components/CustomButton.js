@@ -60,7 +60,28 @@ const IconButtonDesign = ({onPress, width, height, text, fontSize=30,
     )
 }
 
+const PhraseButton = ({phrase, onPress, windowHeight}) => {
+    return (
+        <TouchableOpacity onPress={onPress}
+        style={{
+            flexDirection: 'row',
+            paddingVertical: windowHeight/90
+        }}>
+            <MaterialIcons name="arrow-right" size={30} color={Constants.COLOR.dark_green} />
+            <Text style={{
+                fontFamily: 'RobotoRegular',
+                fontSize: windowHeight/40,
+                color: Constants.COLOR.second_green,
+                paddingHorizontal: 8, 
+            }}>
+                {phrase}.
+            </Text>
+        </TouchableOpacity>
+    )
+}
+
 export {
     CustomButton,
     IconButtonDesign,
+    PhraseButton
 } 

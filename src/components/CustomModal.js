@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {
-    View, Modal, Dimensions, Text, StyleSheet
+    View, Modal, Dimensions, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
+
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
-import { IconButtonDesign } from './CustomButton';
+import { IconButtonDesign, PhraseButton } from './CustomButton';
 import * as ImagePicker from 'expo-image-picker';
 
 const windowHeight = Dimensions.get('window').height;
@@ -144,12 +145,117 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
     )
 }
 
+const TestRModal = ({setR, modalVisible, setModalVisible}) => {
+    return (
+        <View>
+            <Modal
+            transparent={true}
+            animationType='slide'
+            visible={modalVisible}
+            onRequestClose={() => {setModalVisible(!modalVisible)}}>
+                <View style={{
+                    flex: 1,
+                    marginHorizontal: 12,
+                    marginVertical: windowHeight/7,
+                    backgroundColor: Constants.COLOR.white,
+                    borderRadius: 15,
+                    borderWidth: 2,
+                    borderColor: Constants.COLOR.second_green
+                }}>
+                    <View style={{
+                        padding: 4,
+                        width: '93%'
+                    }}>
+                        <FontLoader>
+                            <Text style={{
+                                fontFamily: 'SemiBold',
+                                fontSize: windowHeight/28,
+                                color: Constants.COLOR.dark_green,
+                                paddingHorizontal: 12, 
+                            }}>
+                                Calculator
+                            </Text>
+                            <Text style={{
+                                fontFamily: 'RobotoRegular',
+                                fontSize: windowHeight/36,
+                                color: Constants.COLOR.second_green,
+                                paddingHorizontal: 12,
+                                padding: windowHeight/100, 
+                            }}>
+                                Activity level
+                            </Text>
+                        </FontLoader>
+                        <View>
+                            <PhraseButton
+                            onPress={() => {
+                                setR(1.2);
+                                setModalVisible(false);
+                            }}
+                            windowHeight={windowHeight}
+                            phrase="Sedentary people (office work, only eating and sleeping)"
+                            />
+                            <PhraseButton
+                            onPress={() => {
+                                setR(1.375);
+                                setModalVisible(false);
+                            }}
+                            windowHeight={windowHeight}
+                            phrase="Light exercisers (exercise 1-3 times/week)"
+                            />
+                            <PhraseButton
+                            onPress={() => {
+                                setR(1.55);
+                                setModalVisible(false);
+                            }}
+                            windowHeight={windowHeight}
+                            phrase="Moderately active people (exercise 3-5 times/week, exercise every day)"
+                            />
+                            <PhraseButton
+                            onPress={() => {
+                                setR(1.725);
+                                setModalVisible(false);
+                            }}
+                            windowHeight={windowHeight}
+                            phrase="Heavy exercisers (regularly active, playing sports and exercising 6-7 times a week)"
+                            />
+                            <PhraseButton
+                            onPress={() => {
+                                setR(1.9);
+                                setModalVisible(false);
+                            }}
+                            windowHeight={windowHeight}
+                            phrase="Very heavy exercisers (exercise 2 times/day, manual labor)"
+                            />
+                        </View>
+                    </View>
+                    <View style={{
+                        alignSelf: 'center',
+                        padding: windowHeight/120
+                    }}>
+                        <IconButtonDesign
+                        onPress={() => setModalVisible(!modalVisible)}
+                        text="Close"
+                        width={120}
+                        height={46}
+                        iconName="cancel">
+                        </IconButtonDesign>
+                    </View>
+                </View>
+            </Modal>
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
         padding: 4,
         marginTop: windowHeight/200,
         borderRadius: 10,
         alignSelf: 'center'
+    },
+    testContainer: {
+        flexDirection: 'row',
+        paddingVertical: 4
     },
     text: {
         fontFamily: "SemiBold",
@@ -167,4 +273,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ButtonSheetModal
+export {
+    TestRModal,
+    ButtonSheetModal
+} 
