@@ -68,19 +68,22 @@ function Profile({navigation}) {
     }, []);
 
     return (
-        <SafeAreaView style={{height: '100%', backgroundColor: Constants.COLOR.white}}>
+        <SafeAreaView style={{height: '100%'}}>
             <ScrollView>
-                
                 <SafeAreaView>
                     <ButtonSheetModal
                     image={image}
                     setImage={setImage}
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}/>
+                    {/* Photo + Name, Email */}
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
-                        paddingVertical: 4,
+                        marginBottom: 8,
+                        padding: 4,
+                        paddingVertical: 8,
+                        backgroundColor: Constants.COLOR.white
                     }}>
                         <View style={{
                             height: windowWidth/3,
@@ -182,15 +185,13 @@ function Profile({navigation}) {
                             </View>
                         </View>
                     </View>
-                    <View style={{
-                        borderWidth: 0.45,
-                        borderColor: Constants.COLOR.second_green,
-                        marginTop: 8,
-                        marginHorizontal: 12,
-                    }}/>
                 </SafeAreaView>
                 <View>     
-                    <View style={{padding: 4}}>
+                    <View style={{
+                        padding: 4, 
+                        marginBottom: 4,
+                        backgroundColor: Constants.COLOR.white,
+                    }}>
                         <Text style={styles.title}>Description:</Text>
                         <View style={{
                             padding: 4
@@ -198,55 +199,60 @@ function Profile({navigation}) {
                             <Text style={styles.text}>{info.description}</Text>
                         </View>
                     </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Your birthday:</Text>
-                        <View style={{width: '85%'}}>
-                            <Text numberOfLines={1} ellipsizeMode='tail'
-                            style={styles.text}>{Moment(info.birthday).format('DD/MM/YYYY')}</Text>
-                        </View>
-                    </View>
                     <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
+                        marginVertical: 4,
+                        backgroundColor: Constants.COLOR.white,
                     }}>
+                        <View style={styles.container}>
+                            <Text style={styles.label}>Your birthday:</Text>
+                            <View style={{width: '85%'}}>
+                                <Text numberOfLines={1} ellipsizeMode='tail'
+                                style={styles.text}>{Moment(info.birthday).format('DD/MM/YYYY')}</Text>
+                            </View>
+                        </View>
                         <View style={{
-                            padding: 4,
-                            flexDirection: 'row'
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
                         }}>
-                            <Text style={styles.label}>Height:</Text>
-                            <Text style={styles.text}>{info.height} cm</Text>
+                            <View style={{
+                                padding: 8,
+                                flexDirection: 'row'
+                            }}>
+                                <Text style={styles.label}>Height:</Text>
+                                <Text style={styles.text}>{info.height} cm</Text>
+                            </View>
+                            <View style={[styles.container, {paddingEnd: 28}]}>
+                                <Text style={styles.label}>Weight:</Text>
+                                <Text style={styles.text}>{info.weight} kg</Text>
+                            </View>
                         </View>
-                        <View style={[styles.container, {paddingEnd: 28}]}>
-                            <Text style={styles.label}>Weight:</Text>
-                            <Text style={styles.text}>{info.weight} kg</Text>
-                        </View>
-                    </View>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                    }}>
                         <View style={{
-                            padding: 4,
-                            flexDirection: 'row'
+                            flexDirection: 'row',
+                            justifyContent: 'space-between'
                         }}>
-                            <Text style={styles.label}>Gender:</Text>
-                            <Text style={styles.text}>{info.gender}</Text>
-                            
+                            <View style={{
+                                padding: 8,
+                                flexDirection: 'row'
+                            }}>
+                                <Text style={styles.label}>Gender:</Text>
+                                <Text style={styles.text}>{info.gender}</Text>
+                                
+                            </View>
+                            <View style={[styles.container, {paddingEnd: 28}]}>
+                                <Text style={styles.label}>Mobile:</Text>
+                                <Text style={styles.text}>{info.phone}</Text>
+                            </View>
                         </View>
-                        <View style={[styles.container, {paddingEnd: 28}]}>
-                            <Text style={styles.label}>Mobile:</Text>
-                            <Text style={styles.text}>{info.phone}</Text>
+                        <View style={styles.container}>
+                            <Text style={styles.label}>Job:</Text>
+                            <Text style={styles.text}>{info.job}</Text>
                         </View>
-                    </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Job:</Text>
-                        <Text style={styles.text}>{info.job}</Text>
-                    </View>
-                    <View style={styles.container}>
-                        <Text style={styles.label}>Live in:</Text>
-                        <View style={{width: '85%'}}>
-                            <Text numberOfLines={2} ellipsizeMode='tail'
-                            style={styles.text}>{info.liveIn}</Text>
+                        <View style={styles.container}>
+                            <Text style={styles.label}>Live in:</Text>
+                            <View style={{width: '85%'}}>
+                                <Text numberOfLines={2} ellipsizeMode='tail'
+                                style={styles.text}>{info.liveIn}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -257,7 +263,7 @@ function Profile({navigation}) {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 4,
+        padding: 8,
         flexDirection: 'row'
     },
     title: {

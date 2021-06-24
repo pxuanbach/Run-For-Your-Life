@@ -69,26 +69,32 @@ const ListFoodCard = ({data, type}) => {
         "_id", "name", "type", "calories", "totalWeight", 
         "fat", "protein", "carbohydrates", "cholesterol");
     
-        const onShare = async () => {
-            try {
-              const result = await Share.share({
-                message: curItem.urlImage,
-                url: curItem.urlImage,
-                title: (curItem.name + "\n" + curItem.type + "\n" + curItem.urlImage),
-            });
-              if (result.action === Share.sharedAction) {
-                if (result.activityType) {
-                  // shared with activity type of result.activityType
-                } else {
-                  // shared
-                }
-              } else if (result.action === Share.dismissedAction) {
-                // dismissed
-              }
-            } catch (error) {
-              alert(error.message);
+    let messShare = 'Name: '+curItem.name+'\n'+
+        'Type: '+curItem.type+'\n'+'Calories: '+curItem.calories+'\n'+
+        'Total weight: '+curItem.totalWeight+' g.\n'+
+        'Fat: '+curItem.fat+' g.\n'+'Protein: '+curItem.protein+' g.\n'+
+        'Carbohydrates: '+curItem.carbohydrates+' g.\n'+
+        'Cholesterol: '+curItem.cholesterol+' mg.\n'+curItem.urlImage;
+    
+    const onShare = async () => {
+        try {
+            const result = await Share.share({
+            message: messShare,
+            url: messShare,
+        });
+            if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+                // shared with activity type of result.activityType
+            } else {
+                // shared
             }
-          };
+            } else if (result.action === Share.dismissedAction) {
+            // dismissed
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+    };
 
     return (
         <SafeAreaView>

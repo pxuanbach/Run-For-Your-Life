@@ -52,13 +52,15 @@ const BottomTabNavigator = createBottomTabNavigator({
     }
 },{
     initialRouteName: 'HomeTab',
+    backBehavior: 'history',
     tabBarOptions: {
         inactiveTintColor: Constants.COLOR.second_green,
         activeTintColor: Constants.COLOR.white,
         style: {
             height: 58,
             backgroundColor: Constants.COLOR.green,
-            borderTopWidth: 0
+            borderTopWidth: 0,
+            elevation: 8
         }
         
     }
