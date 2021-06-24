@@ -43,7 +43,6 @@ function Profile({navigation}) {
     }
     const [username, setUsername] = useState([]);
     const [info, setInfo] = useState({});
-    const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
 
