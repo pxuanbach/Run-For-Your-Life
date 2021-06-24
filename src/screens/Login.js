@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Text, View, Image, TouchableOpacity, ActivityIndicator,
-    KeyboardAvoidingView, Dimensions, AsyncStorage
+    KeyboardAvoidingView, Dimensions,Alert
 } from 'react-native';
 import FontLoader from '../utilities/Font';
 import TextInputDesign from '../components/TextInputDesign';
