@@ -66,6 +66,7 @@ function FoodScreen({navigation}) {
                     </Text>
                 </FontLoader>
             </View>
+            
             {isLoading 
             // Loading screen
             ? <View style={{   

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { SafeAreaView } from 'react-native';
 import {Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
 import ViewShowData from '../../components/ViewShowData';
@@ -13,6 +13,7 @@ import {
   } from "react-native-chart-kit";
 import { flexDirection } from 'styled-system';
 import { FontAwesome5 } from '@expo/vector-icons';
+import moment from 'moment';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -30,6 +31,63 @@ function Progress({navigation}) {
         setStatus(status)
     }
     const [unit, setUnit] = useState('km')
+
+    /***************************************************************************** */
+    //xát định string api lấy dữ lấy api đúng với tháng này, tháng rồi
+        var month= moment().format();
+        var m=month.split('-')
+        var this_month=m[0]+"-"+m[1]
+        console.log("this month: ",this_month)
+        var last_month=""
+        if(Number.parseInt(m[1])===1){
+            var last_year = (Number.parseInt(m[0])-1).toString()
+            last_month= last_year+"-12"
+        }
+        else{
+            var int_last_month=((Number.parseInt(m[1]))-1)
+            if(int_last_month<10){
+                last_month= m[0]+"-0"+ int_last_month.toString()
+            }
+            else{
+                last_month= m[0]+"-"+ int_last_month.toString()
+            }
+        }
+        console.log("last month: ",last_month)
+
+        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/month="+this_month
+        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/month="+last_month
+        console.log(api_get_data_this_month)
+        console.log(api_get_data_last_month)
+
+        /// fecth data this month về từ api lưu vào dataThisMonth , dataLastMonth
+        const [isLoading, setIsLoading] = useState(true)
+        const [dataThisMonth, setDataThisMonth]=useState([])
+        var listDataThisMonth=[]
+
+        useEffect(()=>{
+            fetch(api_get_data_this_month)
+            .then((res)=>res.json())
+            .then((json)=>{
+                json.map((data)=>{
+                    listDataThisMonth.push(data)
+                });
+                setDataThisMonth(listDataThisMonth);
+            })
+            .catch((err)=>console.log(err))
+            .finally(setIsLoading(false));
+        },[]);
+
+        console.log(dataThisMonth)
+        console.log(isLoading)
+        //tính distance tháng này
+        function get_distance(dataMonth){
+            var _distance=0;
+            dataMonth.forEach(element => {
+                _distance+=element.distance
+            });
+            return _distance;
+        }
+    /***************************************************************************** */
 
 
     return (
@@ -180,7 +238,10 @@ function Progress({navigation}) {
                     </View>
                 </ScrollView>
                 <Text style={styles.titleToday}>Monthly</Text>
-                <ViewShowData timeStatus= 'month'></ViewShowData>
+                <ViewShowData 
+                timeStatus= 'month'
+                distanceThis= {get_distance(dataThisMonth)}
+                ></ViewShowData>
             </ScrollView>
         </SafeAreaView>
     )
