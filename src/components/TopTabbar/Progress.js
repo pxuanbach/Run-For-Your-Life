@@ -157,7 +157,8 @@ function Progress({navigation}) {
                     marginHorizontal:15, 
                     borderWidth:2, 
                     borderRadius:22, 
-                    borderColor:"#ffcad4"
+                    borderColor:"#ffcad4",
+                    paddingHorizontal:1
                     }}>
                     <View 
                     style={styles.listButtonChart}>
@@ -214,6 +215,7 @@ const styles=StyleSheet.create({
     },
     btnTabActive:{
         backgroundColor: "#ffcad4",
+        position:'relative'
     },
     textTabActive:{
         color:'#fff'
@@ -240,7 +242,8 @@ const styles=StyleSheet.create({
        justifyContent:'center',
        alignContent:'center',
        alignSelf:'center',
-       alignItems:'center'
+       alignItems:'center',
+       borderRadius:22
     },
     btnChart:{
         width: windowWidth/4.4,
@@ -249,7 +252,8 @@ const styles=StyleSheet.create({
         borderColor:"black",
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:22
+        borderRadius:22,
+        position:"relative"
     },
     titleToday:{
         marginLeft:10,

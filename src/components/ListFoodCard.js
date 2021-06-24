@@ -68,7 +68,7 @@ const ListFoodCard = ({data, type}) => {
     var [curItem, setCurItem] = useState("urlImage", 
         "_id", "name", "type", "calories", "totalWeight", 
         "fat", "protein", "carbohydrates", "cholesterol");
-    
+        
         const onShare = async () => {
             try {
               const result = await Share.share({
