@@ -6,12 +6,12 @@ import FontLoader from '../utilities/Font';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const FoodRecommendCard = ({image, text, onPress}) => {
+const PlanRecommendedCard = ({image, tittle, text, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
             width: '100%',
-            paddingVertical: 6,
+            marginTop: 12,
             elevation: 7
         }}>
             <View style={{
@@ -21,28 +21,35 @@ const FoodRecommendCard = ({image, text, onPress}) => {
                     source={{
                         uri: image
                     }}
-                    style={{height: windowHeight/6, width: '100%', borderRadius: 15,}}>
+                    style={{
+                        height: windowHeight/4, 
+                        width: '100%', 
+                        borderTopLeftRadius: 15,
+                        borderTopRightRadius: 15,
+                    }}>
                 </Image>
                 <View
                 style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0,
-                    height: windowHeight/18,
-                    width: windowWidth/2 - 16,
+                    height: windowHeight/12,
                     backgroundColor: Constants.COLOR.white,
-                    borderTopLeftRadius: 15,
                     borderBottomRightRadius: 15,
+                    borderBottomLeftRadius: 15,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    elevation: 7,
+                    elevation: 7
                 }}>
                     <FontLoader>
                         <Text style={{
-                            position: 'absolute',
                             fontSize: windowHeight/28,
                             fontFamily: 'SemiBold',
                             color: Constants.COLOR.dark_green
+                        }}>
+                            {tittle}
+                        </Text>
+                        <Text style={{
+                            fontSize: windowHeight/40,
+                            fontFamily: 'SemiRegular',
+                            color: Constants.COLOR.second_green
                         }}>
                             {text}
                         </Text>
@@ -54,4 +61,4 @@ const FoodRecommendCard = ({image, text, onPress}) => {
     )
 }
 
-export default FoodRecommendCard;
+export default PlanRecommendedCard;

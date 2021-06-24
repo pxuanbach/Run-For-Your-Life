@@ -1,10 +1,10 @@
-import HomeTab from './HomeTab';
+import PlansTab from './PlansTab/PlansTab';
 import NutritionTab from './NutritionTab/NutritionTab';
 import GeofenceTab from './GeofenceTab/GeofenceTab';
 import ProfileTab from './ProfileTab/ProfileTab';
 
 export {
-    HomeTab,
+    PlansTab,
     NutritionTab,
     GeofenceTab,
     ProfileTab,
