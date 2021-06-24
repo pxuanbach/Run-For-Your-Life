@@ -42,8 +42,7 @@ function Profile({navigation}) {
         return data;
     }
     const [username, setUsername] = useState([]);
-    const [UserID,setUserID]= useState([]);
-    const [info, setInfo] = useState([]);
+    const [info, setInfo] = useState({});
     const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -63,25 +62,32 @@ function Profile({navigation}) {
         }
       };
 
+
+      
+
+
+     
+
     //run when navigate to this screen
-    useEffect(() => {
-        async function AxiosData() {
-
-
+    useEffect( () => {
+     
         console.log("get details")
-        const token =  await AsyncStorage.getItem("authToken")
-        let vl = jwt_decode(token)
-        console.log('Token decode',vl._id)
-        setUserID(vl._id)
-        const res = await Axios.post("https://runapp1108.herokuapp.com/api/users/getInfo",{UserID})
-        setInfo(res.data)
-        console.log('Thong tin nguoi dung',info)  
-        }
-        AxiosData()
-
-
-
-    },)
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
+            .then( (res)=>{
+                setInfo(res.data)
+            })
+            .catch((error)=>{
+                console.log(error.response.data)
+            })
+            
+        }) 
+                  
+    },[])
        
 
 
