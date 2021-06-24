@@ -3,17 +3,17 @@ import {Dimensions} from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import {HomeTab, GeofenceTab, ProfileTab} from './Tabs';
+import {PlansTab, GeofenceTab, ProfileTab} from './Tabs';
 import Constants from '../utilities/Constants';
 import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
 
 const windowHeight = Dimensions.get('window').height;
 
 const BottomTabNavigator = createBottomTabNavigator({
-    HomeTab: {
-        screen: HomeTab,
+    PlansTab: {
+        screen: PlansTab,
         navigationOptions: {
-            tabBarLabel: 'Home',
+            tabBarLabel: 'Plan',
             tabBarIcon: ({ tintColor }) => {
                 return <MaterialCommunityIcons name="home-outline" 
                 size={30} style={{color: tintColor}} />
@@ -51,7 +51,7 @@ const BottomTabNavigator = createBottomTabNavigator({
         },
     }
 },{
-    initialRouteName: 'HomeTab',
+    initialRouteName: 'PlansTab',
     backBehavior: 'history',
     tabBarOptions: {
         inactiveTintColor: Constants.COLOR.second_green,
