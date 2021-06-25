@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Text, View, FlatList, 
     ScrollView, Dimensions, SafeAreaView
@@ -37,20 +37,26 @@ function NutritionTab({navigation}) {
     const [gender, setGender] = useState("");
     const [height, setHeight] = useState(175);
     const [weight, setWeight] = useState(55);
-    const [birthday, setbirthday] = useState(new Date());
+    const [birthday, setbirthday] = useState(new Date("2001-03-30"));
 
     const calculateDailyCalorie = () => {
         let bmr = 0;
+        var currentDay = new Date();
         if (gender === "Male") {
             bmr = (13.397 * weight) + (4.799 * height) 
-                - (5.677 * (Date.now.getFullYear() - birthday.getFullYear())) + 88.362;
+                - (5.677 * (currentDay.getFullYear() - birthday.getFullYear())) + 88.362;
         }
         else {
             bmr = (9.247 * weight) + (3.098 * height) 
-                - (4.33 * (Date.now.getFullYear() - birthday.getFullYear())) + 447.593;
+                - (4.33 * (currentDay.getFullYear() - birthday.getFullYear())) + 447.593;
         }
-        setCalorie(R*bmr);
+        console.log((R*bmr).toFixed(2));
+        setCalorie((R*bmr).toFixed(2));
     }
+
+    useEffect(() => {
+        calculateDailyCalorie();
+    }, []);
 
     return (
         <SafeAreaView style={{
@@ -60,7 +66,12 @@ function NutritionTab({navigation}) {
             <TestRModal
             setR={setR}
             modalVisible={modalVisible}
-            setModalVisible={setModalVisible}/>
+            setModalVisible={setModalVisible}
+            setCalorie={setCalorie}
+            gender={gender}
+            weight={weight}
+            height={height}
+            birthday={birthday}/>
             {/* header */}
             <View style={{
                 height: windowHeight/16,
@@ -149,12 +160,21 @@ function NutritionTab({navigation}) {
             }}>
                 <IconButtonDesign
                 onPress={() => setModalVisible(!modalVisible)}
-                iconName="calculate"
+                iconName="assignment"
                 iconSize={32}
                 height={windowWidth/8}
-                width={windowWidth/2}
-                text="Calculator"/>
-                
+                width={windowWidth/3}
+                text="Test"/>
+                <View style={{
+                    width: windowWidth*2/3
+                }}>
+                    <Text style={{
+                        fontFamily: 'RobotoRegular',
+                        fontSize: windowHeight/40,
+                        color: Constants.COLOR.second_green,
+                        paddingHorizontal: 8,
+                    }}>Complete test to calculate your daily calorie intake.</Text>
+                </View>
             </View>
             {/* Tag + list type food */}
             <View style={{

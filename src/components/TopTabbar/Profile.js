@@ -17,7 +17,7 @@ const windowWidth = Dimensions.get('window').width;
 function Profile({navigation}) {
     const getDetails = () => {
         let data = {
-            name: navigation.getParam("name") == null 
+            fullname: navigation.getParam("name") == null 
                 ? '' : navigation.getParam("name"),
             mail: navigation.getParam("mail") == null 
                 ? '' : navigation.getParam("mail"),
@@ -29,8 +29,8 @@ function Profile({navigation}) {
                 ? '' : navigation.getParam("phone"),
             gender: navigation.getParam("gender") == null 
                 ? 'Unknown' : navigation.getParam("gender"),
-            liveIn: navigation.getParam("liveIn") == null 
-                ? '' : navigation.getParam("liveIn"),
+            address: navigation.getParam("address") == null 
+                ? '' : navigation.getParam("address"),
             birthday: navigation.getParam("birthday") == null 
                 ? '' : navigation.getParam("birthday"),
             height: navigation.getParam("height") == null 
@@ -158,7 +158,7 @@ function Profile({navigation}) {
                                         fontSize: windowHeight/30,
                                         color: Constants.COLOR.green,
                                     }}>
-                                        {info.name}
+                                        {info.fullname}
                                     </Text>
                                     <Text numberOfLines={1} ellipsizeMode='tail'
                                     style={{
@@ -190,7 +190,7 @@ function Profile({navigation}) {
                                         job: info.job,
                                         phone: info.phone,
                                         gender: info.gender,
-                                        liveIn: info.liveIn,
+                                        address: info.address,
                                         birthday: info.birthday,
                                         height: info.height,
                                         weight: info.weight

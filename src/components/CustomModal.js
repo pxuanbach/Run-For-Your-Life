@@ -145,14 +145,30 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
     )
 }
 
-const TestRModal = ({setR, modalVisible, setModalVisible}) => {
+const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, gender, weight, height, birthday}) => {
+    const calculateDailyCalorie = (R) => {
+        let bmr = 0;
+        var currentDay = new Date();
+        if (gender === "Male") {
+            bmr = (13.397 * weight) + (4.799 * height) 
+                - (5.677 * (currentDay.getFullYear() - birthday.getFullYear())) + 88.362;
+        }
+        else {
+            bmr = (9.247 * weight) + (3.098 * height) 
+                - (4.33 * (currentDay.getFullYear() - birthday.getFullYear())) + 447.593;
+        }
+        console.log(R*bmr);
+        setCalorie((R*bmr).toFixed(2));
+    }
     return (
         <View>
             <Modal
             transparent={true}
             animationType='slide'
             visible={modalVisible}
-            onRequestClose={() => {setModalVisible(!modalVisible)}}>
+            onRequestClose={() => {
+                setModalVisible(!modalVisible)
+            }}>
                 <View style={{
                     flex: 1,
                     marginHorizontal: 12,
@@ -189,6 +205,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible}) => {
                             <PhraseButton
                             onPress={() => {
                                 setR(1.2);
+                                calculateDailyCalorie(1.2);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -197,6 +214,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible}) => {
                             <PhraseButton
                             onPress={() => {
                                 setR(1.375);
+                                calculateDailyCalorie(1.375);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -205,6 +223,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible}) => {
                             <PhraseButton
                             onPress={() => {
                                 setR(1.55);
+                                calculateDailyCalorie(1.55);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -213,6 +232,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible}) => {
                             <PhraseButton
                             onPress={() => {
                                 setR(1.725);
+                                calculateDailyCalorie(1.725);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -221,6 +241,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible}) => {
                             <PhraseButton
                             onPress={() => {
                                 setR(1.9);
+                                calculateDailyCalorie(1.9);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
