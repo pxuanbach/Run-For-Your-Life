@@ -54,39 +54,49 @@ function Progress({navigation}) {
         }
         console.log("last month: ",last_month)
 
-        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/month="+this_month
-        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/month="+last_month
+        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/month/"+this_month
+        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/month/"+last_month
         console.log(api_get_data_this_month)
         console.log(api_get_data_last_month)
 
         /// fecth data this month về từ api lưu vào dataThisMonth , dataLastMonth
         const [isLoading, setIsLoading] = useState(true)
         const [dataThisMonth, setDataThisMonth]=useState([])
+        const [dataLastMonth,setDataLastMonth] = useState([])
         var listDataThisMonth=[]
+        var listDataLastMonth=[]
 
         useEffect(()=>{
-            fetch(api_get_data_this_month)
-            .then((res)=>res.json())
-            .then((json)=>{
-                json.map((data)=>{
-                    listDataThisMonth.push(data)
-                });
-                setDataThisMonth(listDataThisMonth);
-            })
-            .catch((err)=>console.log(err))
-            .finally(setIsLoading(false));
+            //fecth data this month
+            try {
+                //this month
+                fetch(api_get_data_this_month)
+                .then((res)=>res.json())
+                .then((json)=>{
+                    json.map((data)=>{
+                        listDataThisMonth.push(data)
+                    });
+                    setDataThisMonth(listDataThisMonth);
+                })
+                .catch((err)=>console.log(err))
+                .finally(setIsLoading(false));
+                //last month
+                fetch(api_get_data_last_month)
+                .then((res)=>res.json())
+                .then((json)=>{
+                    json.map((data)=>{
+                        listDataLastMonth.push(data)
+                    });
+                    setDataLastMonth(listDataLastMonth);
+                })
+                .catch((err)=>console.log(err))
+                .finally(setIsLoading(false));
+            } catch (error) {
+                console.log('Error: ',error.message);
+            }
+
         },[]);
 
-        console.log(dataThisMonth)
-        console.log(isLoading)
-        //tính distance tháng này
-        function get_distance(dataMonth){
-            var _distance=0;
-            dataMonth.forEach(element => {
-                _distance+=element.distance
-            });
-            return _distance;
-        }
     /***************************************************************************** */
 
 
@@ -240,7 +250,8 @@ function Progress({navigation}) {
                 <Text style={styles.titleToday}>Monthly</Text>
                 <ViewShowData 
                 timeStatus= 'month'
-                distanceThis= {get_distance(dataThisMonth)}
+                dataThisMonth = {dataThisMonth}
+                dataLastMonth ={dataLastMonth}
                 ></ViewShowData>
             </ScrollView>
         </SafeAreaView>

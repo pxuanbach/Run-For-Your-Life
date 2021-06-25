@@ -14,69 +14,52 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 
-const ViewShowData =({timeStatus,distanceThis})=>
+const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
 {
     const [status, setStatus] = useState('timeStatus')
+    console.log(dataThisMonth)
 
-    // //xát định string api lấy dữ lấy api đúng với tháng này, tháng rồi
-    // var month= moment().format();
-    // var m=month.split('-')
-    // var this_month=m[0]+"-"+m[1]
-    // console.log("this month: ",this_month)
-    // var last_month=""
-    // if(Number.parseInt(m[1])===1)
-    // {
-    //     var last_year = (Number.parseInt(m[0])-1).toString()
-    //     last_month= last_year+"-12"
-    // }
-    // else 
-    // {
-    //     var int_last_month=((Number.parseInt(m[1]))-1)
-    //     if(int_last_month<10)
-    //     {
-    //         last_month= m[0]+"-0"+ int_last_month.toString()
-    //     }
-    //     else
-    //     {
-    //         last_month= m[0]+"-"+ int_last_month.toString()
-    //     }
-    // }
-    // console.log("last month: ",last_month)
-
-    // var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/month="+this_month
-    // var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/month="+last_month
-    // console.log(api_get_data_this_month)
-    // console.log(api_get_data_last_month)
-
-    // /// fecth data this month về từ api lưu vào dataThisMonth , dataLastMonth
-    // const [isLoading, setIsLoading] = useState(true)
-    // const [dataThisMonth, setDataThisMonth]=useState([])
-    // var listDataThisMonth=[]
-
-    // useEffect(()=>{
-    //     fetch(api_get_data_this_month)
-    //     .then((res)=>res.json())
-    //     .then((json)=>{
-    //         json.map((data)=>{
-    //             listDataThisMonth.push(data)
-    //         });
-    //         setDataThisMonth(listDataThisMonth);
-    //     })
-    //     .catch((err)=>console.log(err))
-    //     .finally(setIsLoading(false));
-    // },[]);
-
-    // console.log(dataThisMonth)
-    // console.log(isLoading)
-    // //tính distance tháng này
-    // function get_distance(dataMonth){
-    //     var _distance=0;
-    //     dataMonth.forEach(element => {
-    //         _distance+=element.distance
-    //     });
-    //     return _distance;
-    // }
-
+    function get_distance(data){
+        var _distance=0;
+        data.forEach(element => {
+            _distance+=element.distance
+        });
+        return _distance;
+    }
+    function get_avg_pace(data){
+        var _avg = 0;
+        var _total_avg = 0;
+        var count = 0;
+        data.forEach(element=>{
+            _total_avg+= element.avgPace;
+            count++;
+        });
+        if(count!=0){
+            _avg= _total_avg/count;
+        }
+        return _avg;
+    }
+    function get_time(data){
+        var _time =0;
+        data.forEach(element=>{
+            _time+=element.time;
+        })
+        return _time;
+    }
+    function get_calories(data){
+        var _calories=0;
+        data.forEach(element=>{
+            _calories+=element.calories;
+        })
+        return _calories;
+    }
+    function get_count_activities(data){
+        var _count=0;
+        data.forEach(element=>{
+            _count++;
+        })
+        return _count;
+    }
 
 
     return(
@@ -117,10 +100,10 @@ const ViewShowData =({timeStatus,distanceThis})=>
                     <Text> Distance</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{distanceThis}</Text>
+                    <Text style={styles.textData}>{get_distance(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_distance(dataLastMonth)}</Text>
                 </View>          
             </View>
 
@@ -130,10 +113,10 @@ const ViewShowData =({timeStatus,distanceThis})=>
                     <Text> Avg Pace</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_avg_pace(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_avg_pace(dataLastMonth)}</Text>
                 </View>
                     
             </View>
@@ -143,10 +126,10 @@ const ViewShowData =({timeStatus,distanceThis})=>
                     <Text> Time</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_time(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_time(dataLastMonth)}</Text>
                 </View>
                     
             </View>
@@ -156,10 +139,10 @@ const ViewShowData =({timeStatus,distanceThis})=>
                     <Text> Calories Burned</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataLastMonth)}</Text>
                 </View>
                     
             </View>
@@ -169,10 +152,10 @@ const ViewShowData =({timeStatus,distanceThis})=>
                     <Text> Activities</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_count_activities(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_count_activities(dataLastMonth)}</Text>
                 </View>            
             </View>        
         </View>

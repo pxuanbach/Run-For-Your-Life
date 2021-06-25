@@ -22,6 +22,7 @@ function Login({navigation}) {
                 _storeData('username', username);
                 _storeData('isUsed', '1');
                 navigation.navigate('BottomTabNavigator');
+                
             })
             .catch((err)=>{
                 Alert.alert(
