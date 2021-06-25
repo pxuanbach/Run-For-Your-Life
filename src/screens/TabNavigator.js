@@ -3,9 +3,10 @@ import {Dimensions} from 'react-native';
 import { createAppContainer } from 'react-navigation';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import {PlansTab, GeofenceTab, ProfileTab} from './Tabs';
+import {PlansTab, ProfileTab} from './Tabs';
 import Constants from '../utilities/Constants';
 import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
+import GeofenceTabNavigator from './Tabs/GeofenceTab/Navigator';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -20,8 +21,8 @@ const BottomTabNavigator = createBottomTabNavigator({
             },
         }
     },
-    GeofenceTab: {
-        screen: GeofenceTab,
+    GeofenceTabNavigator: {
+        screen: GeofenceTabNavigator,
         navigationOptions: {
             tabBarLabel: 'Record',
             tabBarIcon: ({ tintColor }) => {

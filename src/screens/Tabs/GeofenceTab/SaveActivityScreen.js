@@ -36,14 +36,9 @@ export default class SaveActivityScreen extends React.Component {
             calo: 0,
             weight: 60,
 
-            value: 2,
+            level: 2,
 
-            centerCoordinate: ({
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
-            })
+            centerCoordinate: null,
         };
     }
 
@@ -78,30 +73,25 @@ export default class SaveActivityScreen extends React.Component {
         let minY = Math.min.apply(null, y);
         let maxY = Math.max.apply(null, y);
 
-        // let delta = Math.max(maxX - minX, maxY - minY) * windowHeight / 250;
-
         this.setState({
             centerCoordinate: {    
                 latitude: (minX + maxX) / 2,
                 longitude: (minY + maxY) / 2,
-                latitudeDelta: maxX - minX,
-                longitudeDelta: maxY - minY,
+                latitudeDelta: (maxX - minX) * 2,
+                longitudeDelta: (maxY - minY) * 2,
             }
         }) 
     }
 
     onPress_btnDiscard = () => {
-        GeofenceTab.stopLocationUpdates();
         this.props.navigation.dispatch(resetAction);
     }
 
     onPress_btnSave = () => {
-        GeofenceTab.stopLocationUpdates();
         this.props.navigation.dispatch(resetAction);
     }
 
     render() {        
-        const { navigation } = this.props;
         return (
             <ScrollView 
             style={{width: '100%'}}
@@ -230,9 +220,8 @@ export default class SaveActivityScreen extends React.Component {
                 <Text style={{
                     color: 'green',
                     fontSize: 24,
-                    marginVertical: 10,
                 }}>
-                    {LEVEL[this.state.value]}
+                    {LEVEL[this.state.level]}
                 </Text>
                 
                 <Slider
@@ -242,8 +231,8 @@ export default class SaveActivityScreen extends React.Component {
                     step={1}
                     minimumTrackTintColor={'lime'}
                     thumbTintColor={'green'}
-                    value={this.state.value}
-                    onValueChange={value => this.setState({value: value})}/>
+                    value={this.state.level}
+                    onValueChange={value => this.setState({level: value})}/>
 
                 <View style={styles.containerTxtInput}>
                     <TextInput 
@@ -266,7 +255,7 @@ export default class SaveActivityScreen extends React.Component {
                         borderColor: 'green',
                         borderWidth: 1.5,
                     }]}
-                    onPress={() => this.onPress_btnDiscard}>
+                    onPress={this.onPress_btnDiscard}>
                         <Text style={[styles.buttonTitle, {color: 'green'}]}>
                             DISCARD
                         </Text>
@@ -276,7 +265,7 @@ export default class SaveActivityScreen extends React.Component {
                     {
                         backgroundColor: 'green',
                     }]}
-                    onPress={() => this.onPress_btnSave}>
+                    onPress={this.onPress_btnSave}>
                         <Text style={[styles.buttonTitle, {color: 'white'}]}>
                             SAVE
                         </Text>
@@ -341,8 +330,8 @@ const styles = StyleSheet.create({
         marginVertical: 3,
     },
     map: {
-        width: '85%',
-        height: 250,
+        width: '100%',
+        height: 280,
     },
     buttonRow: {
         width: "100%",

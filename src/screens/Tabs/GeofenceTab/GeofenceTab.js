@@ -62,7 +62,9 @@ export default class GeofenceTab extends React.Component {
     };
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = async () => {
+    await AsyncStorage.removeItem(STORAGE_KEY);
+    
     if (this.eventSubscription) {
       this.eventSubscription.remove();
     }
@@ -76,6 +78,12 @@ export default class GeofenceTab extends React.Component {
 
   didFocus = async () => {
     this.resetActivity();
+
+    const isTracking = await Location.hasStartedLocationUpdatesAsync(LOCATION_UPDATES_TASK);
+    console.log('Is tracking? ', isTracking);
+    if (isTracking == true) {
+      this.stopLocationUpdates();
+    }
     
     this.startLocationUpdates();
 
@@ -118,9 +126,12 @@ export default class GeofenceTab extends React.Component {
       timeInterval: 1000,
       distanceInterval: 1,
     });
+
+    console.log('[GeofenceTab] Call func startLocationUpdates');
   }
 
   async stopLocationUpdates() {
+    console.log('[GeofenceTab] Call func stopLocationUpdates');
     await Location.stopLocationUpdatesAsync(LOCATION_UPDATES_TASK);
   }
 
@@ -136,6 +147,9 @@ export default class GeofenceTab extends React.Component {
       distance: 0,
       distanceMarker: 0,
       time: 0,
+
+      // Control
+      statement: "isNotActive",
     });
 
     this.resetTimer();
@@ -259,14 +273,13 @@ export default class GeofenceTab extends React.Component {
     await AsyncStorage.removeItem(STORAGE_KEY);
     this.setState({ 
       statement: "isActive",
-
      });
 
     this.resumeTimer();
   }
 
   onPress_btnFinish = () => {
-    if (this.state.routes.length > 0) {
+    if (this.state.distance > 0) {
       this.props.navigation.navigate('SaveActivityScreen', {
         distance: this.state.distance,
         avgPace: this.state.avgPace,
@@ -283,7 +296,6 @@ export default class GeofenceTab extends React.Component {
           {
             text: "Discard",
             onPress: () => { 
-              this.stopLocationUpdates();
               this.resetActivity();
             },
           },
@@ -524,8 +536,6 @@ TaskManager.defineTask(LOCATION_UPDATES_TASK, async ({ data: { locations }, erro
     // Error occurred - check `error.message` for more details.
     return;
   }
-
-  console.log(locations);
 
   if (locations && locations.length > 0) {
     // do something with the locations captured in the background
