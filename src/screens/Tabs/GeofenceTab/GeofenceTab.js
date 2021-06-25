@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage, Alert, } from "react-native";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
+import { NavigationEvents } from 'react-navigation';
 import haversine from "haversine";
 import moment from 'moment';
 import { FontAwesome5, FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
@@ -10,9 +11,8 @@ import * as TaskManager from 'expo-task-manager';
 import { EventEmitter } from 'fbemitter';
 
 const STORAGE_KEY = 'expo-home-locations';
+const LOCATION_UPDATES_TASK = 'background-location-task';
 
-const LATITUDE = 10.8699237;
-const LONGTITUDE = 106.8016194;
 const LATITUDE_DELTA = 0.001;
 const LONGTITUDE_DELTA = 0.001;
 
@@ -33,149 +33,129 @@ export default class GeofenceTab extends React.Component {
 
   constructor(props) {
     super(props);
-
+    
     this.state = {
       // Activity
       routes: [],
       markerOnRoute: [],
-    
+
       // Coordinate
-      routeCoordinates: [],      
-      prevLatLng: { LATITUDE, LONGTITUDE },
-      coordinate: ({
-        latitude: 10.8699237,
-        longitude: 106.8016194,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGTITUDE_DELTA,
-        speed: 0,
-      }),
-    
+      currentRoute: [],
+      prevLatLng: null,
+      coordinate: null,
+
       // Data
       avgPace: 0,
       distance: 0,
       distanceMarker: 0,
       time: 0,
-    
+
       // Timer
       start: 0,
       now: 0,
       laps: [],
-      
+
       // Controller
       statement: "isNotActive",
       opacityRecordBox: 1,
-      region: ({
-        latitude: 10.8699237,
-        longitude: 106.8016194,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGTITUDE_DELTA,
-      }),
+      region: null,
     };
   }
 
-  componentDidMount = async () => {    
-    await AsyncStorage.removeItem(STORAGE_KEY);
-    this.setState({
-      routes: [],
-      markerOnRoute: [],
-    })
-    this.getCurrentLocation();
-    this.startActivity();
-  }
-
   componentWillUnmount() {
-    console.log('Unmount');
-    this.stopActivity();
+    if (this.eventSubscription) {
+      this.eventSubscription.remove();
+    }
+
+    this.stopLocationUpdates();
+
     clearInterval(this.timer);
-    locationEventsEmitter.removeAllListeners();
   }
 
   // Tracking
 
-  getCurrentLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      console.log('Foreground permissions to access location was denied!');
-    }
+  didFocus = async () => {
+    this.resetActivity();
+    
+    this.startLocationUpdates();
 
-    const location = await Location.getCurrentPositionAsync();
+    this.eventSubscription = locationEventsEmitter.addListener('update', locations => {
+      this.setState({
+        coordinate: locations[locations.length-1],
+        region: {
+          latitude: locations[locations.length-1].latitude,
+          longitude: locations[locations.length-1].longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGTITUDE_DELTA,
+        },
+      })
 
-    let currentLocation = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-      latitudeDelta: LATITUDE_DELTA,
-      longitudeDelta: LONGTITUDE_DELTA, 
-    }
-
-    this.setState({
-      region: currentLocation,
-      coordinate: currentLocation,
-    })
-
-    console.log('Getting current location!');
+      if (this.state.statement == "isActive") {
+        this.updateCoordinates(locations);
+        this.addMarker();
+      }
+      else {
+        this.setState({
+          prevLatLng: locations[locations.length-1],
+        })
+        this.clearItem();
+      }
+    });
   }
 
-  startActivity = async () => {
+  clearItem = async () => {
+    await AsyncStorage.removeItem(STORAGE_KEY);
+  }
+
+  async startLocationUpdates() {
     const { status } = await Location.requestBackgroundPermissionsAsync();
     if (status !== 'granted') {
       console.log('Background permissions to access location was denied!');
     }
 
-    await Location.startLocationUpdatesAsync('background-location-task', {
+    await Location.startLocationUpdatesAsync(LOCATION_UPDATES_TASK, {
       accuracy: Location.Accuracy.High,
-      timeInterval: 100,
+      timeInterval: 1000,
       distanceInterval: 1,
-    });
-
-    locationEventsEmitter.addListener('update', locations => {
-      this.setState({
-        coordinate: {
-          latitude: locations[locations.length-1].latitude,
-          longitude: locations[locations.length-1].longitude,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGTITUDE_DELTA,
-          speed: locations[locations.length-1].speed,
-        }
-      })
-
-      switch (this.state.statement) {
-        case "isNotActive":
-          this.waitActive();
-          break;
-        case "isActive":
-          this.updateCoordinates(locations);
-          this.addMarker();
-          break;
-        case "isPaused":
-          this.waitActive();
-          break;
-        default:
-          break;
-      }
     });
   }
 
-  stopActivity = async () => {
-    await Location.stopLocationUpdatesAsync('background-location-task');
+  async stopLocationUpdates() {
+    await Location.stopLocationUpdatesAsync(LOCATION_UPDATES_TASK);
+  }
+
+  resetActivity = async () => {
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    this.setState({
+      routes: [],
+      markerOnRoute: [],
+      currentRoute: [],
+
+      // Data
+      avgPace: 0,
+      distance: 0,
+      distanceMarker: 0,
+      time: 0,
+    });
+
+    this.resetTimer();
   }
 
   // Handling coordinates
 
-  waitActive = async () => {
-    await AsyncStorage.removeItem(STORAGE_KEY);
-  }
-
   updateCoordinates = (locations) => {
-    const { distance, distanceMarker, routes } = this.state;
+    const { distance, distanceMarker } = this.state;
+    const { laps, now, start } = this.state;
 
-    routes.pop();
-    routes.push(locations);
+    let time = moment.duration(laps.reduce((total, curr) => total + curr, 0) + now - start).asMinutes();
 
-    this.setState({ 
-      routes: routes,
-      routeCoordinates: locations,
-      distance: distance + this.calcDistance(locations[locations.length-1])*10,
-      distanceMarker: distanceMarker + this.calcDistance(locations[locations.length-1])*10,
+    this.setState({
+      time: time,
+      currentRoute: locations,
+      coordinate: locations[locations.length-1],
+
+      distance: distance + this.calcDistance(locations[locations.length-1]),
+      distanceMarker: distanceMarker + this.calcDistance(locations[locations.length-1]),
       avgPace: this.calcAVGPage(locations[locations.length-1]),
       prevLatLng: locations[locations.length-1],
     });
@@ -186,9 +166,9 @@ export default class GeofenceTab extends React.Component {
     return haversine(prevLatLng, newLatLng) || 0;
   };
 
-  calcAVGPage = () => {
-    const { avgPace, coordinate } = this.state;
-    const currentPace = coordinate.speed * 1000 / 60;
+  calcAVGPage = (coord) => {
+    const { avgPace } = this.state;
+    const currentPace = 1000 / 60 / coord.speed * 1.0438;
     if (avgPace == 0) {
       return currentPace;
     }
@@ -197,15 +177,16 @@ export default class GeofenceTab extends React.Component {
     }
   }
 
+
   addMarker = () => {
     const { markerOnRoute, distanceMarker, coordinate } = this.state;
     if (distanceMarker >= 0.5) {
       markerOnRoute.push(coordinate);
-      this.setState({ 
+      this.setState({
         markerOnRoute: markerOnRoute,
-        distanceMarker: 0, 
+        distanceMarker: 0,
       });
-    }  
+    }
   }
 
   //  Handle timer
@@ -218,7 +199,7 @@ export default class GeofenceTab extends React.Component {
       laps: [0],
     })
     this.timer = setInterval(() => {
-      this.setState({ now: new Date().getTime()})
+      this.setState({ now: new Date().getTime() })
     }, 100)
   }
 
@@ -249,35 +230,37 @@ export default class GeofenceTab extends React.Component {
       now,
     })
     this.timer = setInterval(() => {
-      this.setState({ now: new Date().getTime()})
+      this.setState({ now: new Date().getTime() })
     }, 100)
   }
+
   // Controller
 
-  onPress_btnStart = async () => {
-    this.setState({ statement: "isActive"});
+  onPress_btnStart = () => {
+    this.setState({ statement: "isActive" });
 
     this.startTimer();
   }
 
   onPress_btnPause = () => {
-    this.setState({ statement: "isPaused"});
-    this.setState({ routeCoordinates: [] });
+    this.setState({ statement: "isPaused" });
+
+    const { currentRoute, routes } = this.state;
+    routes.push(currentRoute);
+    this.setState({ 
+      routes: routes,
+      currentRoute: [], 
+    });
 
     this.stopTimer();
   }
 
   onPress_btnResume = async () => {
     await AsyncStorage.removeItem(STORAGE_KEY);
-
-    const { routeCoordinates, routes } = this.state;
-    routes.push(routeCoordinates);
-    
     this.setState({ 
-      routes: routes,
-    });
+      statement: "isActive",
 
-    this.setState({ statement: "isActive"});
+     });
 
     this.resumeTimer();
   }
@@ -299,6 +282,10 @@ export default class GeofenceTab extends React.Component {
         [
           {
             text: "Discard",
+            onPress: () => { 
+              this.stopLocationUpdates();
+              this.resetActivity();
+            },
           },
           {
             text: "Resume",
@@ -306,11 +293,18 @@ export default class GeofenceTab extends React.Component {
         ]
       )
     }
-    // this.resetTimer();
   }
 
-  onPress_btnLocate = () => {
-    this.getCurrentLocation();
+  onPress_btnLocate = async () => {
+    const { coords } = await Location.getCurrentPositionAsync();
+    this.setState({
+      region: {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGTITUDE_DELTA,
+      }
+    })
   }
 
   onPress_btnShowRecordBox = () => {
@@ -329,45 +323,45 @@ export default class GeofenceTab extends React.Component {
     switch (statement) {
       case "isNotActive":
         return (
-          <TouchableOpacity 
-            style={[styles.button, {backgroundColor: "green"}]}
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "green" }]}
             onPress={this.onPress_btnStart}>
-              <Text style={styles.buttonTitle}>
-                START
-              </Text>
+            <Text style={styles.buttonTitle}>
+              START
+            </Text>
           </TouchableOpacity>
         )
       case "isActive":
         return (
-          <TouchableOpacity 
-            style={[styles.button, {backgroundColor: "green"}]}
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: "green" }]}
             onPress={this.onPress_btnPause}>
-              <Text style={styles.buttonTitle}>
-                PAUSE
-              </Text>
+            <Text style={styles.buttonTitle}>
+              PAUSE
+            </Text>
           </TouchableOpacity>
         )
       case "isPaused":
         return (
           <React.Fragment>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={[styles.button, {
                 backgroundColor: "white",
                 borderColor: "green",
                 borderWidth: 1,
               }]}
               onPress={this.onPress_btnResume}>
-                <Text style={[styles.buttonTitle, {color: "green"}]}>
-                  RESUME
-                </Text>
+              <Text style={[styles.buttonTitle, { color: "green" }]}>
+                RESUME
+              </Text>
             </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={[styles.button, {backgroundColor: "green"}]}
+
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: "green" }]}
               onPress={this.onPress_btnFinish}>
-                <Text style={styles.buttonTitle}>
-                  FINISH
-                </Text>
+              <Text style={styles.buttonTitle}>
+                FINISH
+              </Text>
             </TouchableOpacity>
           </React.Fragment>
         )
@@ -380,27 +374,31 @@ export default class GeofenceTab extends React.Component {
     const { now, start, laps } = this.state;
     const timer = now - start;
 
+    if (!this.state.region) {
+      return <NavigationEvents onDidFocus={this.didFocus} />;
+    }
+
     return (
       <View style={styles.container}>
-        <Map 
+        <Map
           region={this.state.region}
           routes={this.state.routes}
+          currentRoute={this.state.currentRoute}
           coordinate={this.state.coordinate}
-          markerOnRoute={this.state.markerOnRoute}/>
+          markerOnRoute={this.state.markerOnRoute} />
 
         <View style={[styles.recordBox, { opacity: this.state.opacityRecordBox }]}>
           <View style={{
-                  width: '100%', 
-                  height: 80,
-                  alignItems: "center",
-                }}>
+            width: '100%',
+            alignItems: "center",
+          }}>
             <Text style={styles.itemTitle}>TIME</Text>
-            
-            <Timer 
+
+            <Timer
               interval={laps.reduce((total, curr) => total + curr, 0) + timer}
-              style={styles.itemContent}/>
+              style={styles.itemContent} />
           </View >
-          
+
           <View style={styles.item}>
             <Text style={styles.itemTitle}>DISTANCE (km)</Text>
             <Text style={styles.itemContent}>
@@ -417,8 +415,8 @@ export default class GeofenceTab extends React.Component {
         </View>
 
         <View style={styles.buttonRow}>
-          <TouchableOpacity 
-            style={[styles.button, 
+          <TouchableOpacity
+            style={[styles.button,
             {
               borderWidth: 1,
               borderColor: 'green',
@@ -433,22 +431,23 @@ export default class GeofenceTab extends React.Component {
               ) : (
                 <Entypo name="eye" size={20} color="green" />
               )
-            } 
+            }
           </TouchableOpacity>
 
           {this.renderButton()}
-          
-          <TouchableOpacity 
-            style={[styles.button, 
-            {
-              backgroundColor: "green",
-              width: 40,
-              height: 40,
-            }]}
-            onPress={this.onPress_btnLocate}>
 
-            <MaterialIcons name="my-location" size={20} color="white" />
-          </TouchableOpacity>
+          <TouchableOpacity
+                style={[styles.button,
+                {
+                  backgroundColor: "green",
+                  width: 40,
+                  height: 40,
+                }]}
+                onPress={this.onPress_btnLocate}>
+
+                <MaterialIcons name="my-location" size={20} color="white" />
+              </TouchableOpacity>
+          
         </View>
       </View>
     );
@@ -464,7 +463,7 @@ const Map = React.memo(props => {
       followUserLocation
       loadingEnabled
       region={props.region}>
-      
+
       {
         props.routes.map((route, index) => {
           return (
@@ -472,24 +471,29 @@ const Map = React.memo(props => {
               key={index}
               coordinates={route}
               strokeWidth={6}
-              strokeColor='green'/>
+              strokeColor='green' />
           )
         })
       }
 
+      <Polyline
+        coordinates={props.currentRoute}
+        strokeWidth={6}
+        strokeColor='green' />
+
       {
         props.markerOnRoute.map((marker, index) => {
           return (
-            <Marker 
+            <Marker
               key={index}
-              coordinate={marker} 
-              anchor={{x:0.5, y:0.5}}>
+              coordinate={marker}
+              anchor={{ x: 0.5, y: 0.5 }}>
               <FontAwesome name="check-circle" size={16} color="gold" />
             </Marker>
           )
         })
       }
-                
+
       <Marker
         coordinate={props.coordinate}>
         <FontAwesome5 name="map-marker-alt" size={24} color="gold" />
@@ -515,16 +519,19 @@ async function getSavedLocations() {
   }
 }
 
-TaskManager.defineTask('background-location-task', async ({ data: { locations }, error }) => {
+TaskManager.defineTask(LOCATION_UPDATES_TASK, async ({ data: { locations }, error }) => {
   if (error) {
     // Error occurred - check `error.message` for more details.
     return;
   }
+
+  console.log(locations);
+
   if (locations && locations.length > 0) {
     // do something with the locations captured in the background
 
     const savedLocations = await getSavedLocations();
-    
+
     const newLocations = locations.map(({ coords }) => ({
       latitude: coords.latitude,
       longitude: coords.longitude,
@@ -586,7 +593,7 @@ const styles = StyleSheet.create({
   },
   itemContent:
   {
-    marginVertical: 8,
+    marginBottom: 8,
     fontSize: 30,
     fontWeight: "bold",
   },
