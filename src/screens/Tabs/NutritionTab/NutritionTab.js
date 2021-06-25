@@ -119,6 +119,7 @@ function NutritionTab({navigation}) {
                 backgroundColor: Constants.COLOR.white,
                 borderRadius: 15,
                 marginTop: windowHeight/24,
+                elevation: 7
             }}>
                 <FontLoader>
                     <Text style={{
@@ -144,7 +145,8 @@ function NutritionTab({navigation}) {
                     justifyContent: 'center',
                     backgroundColor: Constants.COLOR.green,
                     borderTopLeftRadius: 15,
-                    borderBottomLeftRadius: 15
+                    borderBottomLeftRadius: 15,
+                    elevation: 7
                 }}>
                     <FontLoader>
                         <Text style={{
@@ -158,7 +160,7 @@ function NutritionTab({navigation}) {
                         </Text>
                     </FontLoader>
                 </View>
-                <View style={{width: 1}}></View>
+                <View style={{width: 2}}></View>
                 {/* main */}
                 <View style={{
                     height: windowHeight/8,
@@ -166,7 +168,8 @@ function NutritionTab({navigation}) {
                     backgroundColor: Constants.COLOR.white,
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: 15
+                    borderRadius: 15,
+                    elevation: 7
                 }}>
                     <FontLoader>
                         <Text numberOfLines={1} ellipsizeMode="tail"
@@ -193,6 +196,7 @@ function NutritionTab({navigation}) {
             {/* test */}
             {!isTested && <View style={{
                 padding: 8,
+                paddingHorizontal: 12,
                 alignContent: 'center',
                 flexDirection: 'row'
             }}>
