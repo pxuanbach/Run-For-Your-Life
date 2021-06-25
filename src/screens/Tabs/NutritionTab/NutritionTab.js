@@ -77,12 +77,17 @@ function NutritionTab({navigation}) {
             console.log('Token decode',vl._id)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then((res)=>{
+                if (checkNullUndefined(res.data.birthday))
+                    setBirthday(new Date(res.data.birthday));
                 if (checkNullUndefined(res.data.weight))
                     setWeight(res.data.weight);
+                console.log(res.data.weight)
                 if (checkNullUndefined(res.data.gender))
                     setGender(res.data.gender);
+                console.log(res.data.gender)
                 if (checkNullUndefined(res.data.height))
                     setHeight(res.data.height);
+                console.log(res.data.height)
             })
             .catch((error)=>{
                 console.log(error.response.data)
