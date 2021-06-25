@@ -43,7 +43,7 @@ function Progress({navigation}) {
         }
     //get userID
     const [username, setUsername]=useState()
-    const [userid, setUserid] = useState()
+    const [userid, setUserid] = useState('60c5ce6f6b3a9f002255b930')
     const  _retrieveData = async () => {
         try {
           const value = await AsyncStorage.getItem("username");
@@ -59,19 +59,18 @@ function Progress({navigation}) {
             _retrieveData();
             return () => { isMounted = false };
         }, [])
-
+        
         console.log('username:'+username)
-
         useEffect(()=>{
             fetch("https://my-app-de.herokuapp.com/api/users/getID/"+username)
             .then((res)=>res.text())
             .then((text)=>{
                 var u=text.split('"')
                 setUserid(u[1])
+                console.log(u[1])
             })
             .catch((err)=>console.log(err))
-        })
-
+        },[])
         console.log("userid:"+userid)
         //api this last month
         var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month;
@@ -94,7 +93,7 @@ function Progress({navigation}) {
         var listDataLastMonth=[]
         var listDataToday=[]
 
-        console.log("state");
+        console.log("end state");
         useEffect(()=>{
             let isMounted = true;
             try {
@@ -114,7 +113,6 @@ function Progress({navigation}) {
             return () => { isMounted = false };
             console.log("useEffect this month")
         },[])
-
         useEffect(()=>{
             let isMounted = true;
             try {
@@ -154,48 +152,8 @@ function Progress({navigation}) {
             return () => { isMounted = false };
             console.log("useEffect today")
         },[])
+        console.log("end useEffect")
 
-
-
-        // useEffect(()=>{
-        //     //fecth data this month
-        //     try {
-        //         //this month
-        //         fetch(api_get_data_this_month)
-        //         .then((res)=>res.json())
-        //         .then((json)=>{
-        //             json.map((data)=>{
-        //                 listDataThisMonth.push(data)
-        //             });
-        //             setDataThisMonth(listDataThisMonth);
-        //         })
-        //         .catch((err)=>console.log(err))
-        //         //last month
-        //         fetch(api_get_data_last_month)
-        //         .then((res)=>res.json())
-        //         .then((json)=>{
-        //             json.map((data)=>{
-        //                 listDataLastMonth.push(data)
-        //             });
-        //             setDataLastMonth(listDataLastMonth);
-        //         })
-        //         .catch((err)=>console.log(err))
-        //         //fecth today
-        //         fetch(api_get_data_today)
-        //         .then((res)=>res.json())
-        //         .then((json)=>{
-        //             json.map((data)=>{
-        //                 listDataToday.push(data)
-        //             });
-        //             setDataToday(listDataToday);
-        //         })
-        //         .catch((err)=>console.log(err))
-        //     } catch (error) {
-        //         console.log('Error: ',error.message);
-        //     }
-        //     console.log("useEffect")
-        // },[]);
-    /***************************************************************************** */
     return (
         <SafeAreaView>
             <StatusBar style="auto"/>
