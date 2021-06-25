@@ -45,6 +45,7 @@ function Profile({navigation}) {
     const [info, setInfo] = useState({});
     const [image, setImage] = useState('https://i.postimg.cc/prCqJnSB/Screen-Shot-2021-06-25-at-17-26-19.png');
     const [modalVisible, setModalVisible] = useState(false);
+    const imagedefault = 'https://i.postimg.cc/prCqJnSB/Screen-Shot-2021-06-25-at-17-26-19.png'
 
 
 
@@ -116,23 +117,14 @@ function Profile({navigation}) {
                         <View style={{
                             height: windowWidth/3,
                             width: windowWidth/3
-                        }}>
-                            {image != null ?
-                            <Image source={{ uri: image }}
+                        }}>                   
+                            <Image source={(!info.image)? { uri: imagedefault }: {uri: info.image}}
                             style={{ 
                                 height: windowWidth/3,
                                 width: windowWidth/3,
                                 borderRadius: 100,
                                 marginHorizontal: 4
-                            }}/>
-                            : <Image source={require('../../images/back.png')}
-                            style={{
-                                height: windowWidth/3,
-                                width: windowWidth/3,
-                                borderRadius: 100,
-                                marginHorizontal: 4
-                            }}>
-                            </Image>}
+                            }}/>                          
                             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}
                             style={{
                                 position: 'absolute',
