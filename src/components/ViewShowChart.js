@@ -27,8 +27,6 @@ function ViewShowChart({data}){
         setStatus(status)
     }
     const [unit, setUnit] = useState('km')
-    
-
     return(
         <SafeAreaView>
             <View style={{alignItems:'center'}}>

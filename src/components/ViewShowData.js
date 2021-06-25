@@ -17,7 +17,6 @@ const windowWidth = Dimensions.get('window').width;
 const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
 {
     const [status, setStatus] = useState('timeStatus')
-    console.log(dataThisMonth)
 
     function get_distance(data){
         var _distance=0;
@@ -94,7 +93,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                 </Text>
             </View>
 
-            <View style={{flexDirection:'row'}}>
+            <View style={{flexDirection:'row',marginBottom:-1}}>
                 <View style={styles.distance}>
                     <MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
                     <Text> Distance</Text>

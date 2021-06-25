@@ -19,20 +19,7 @@ import moment from 'moment';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const listButtonChart=[
-    {status:'Distance',unit:'km'},
-    {status:'Time',unit:'min'},
-    {status:'Avg Pace',unit:'/km'},
-    {status:'Calories',unit:'calo'},
-]
-
 function Progress({navigation}) {
-    const [status, setStatus] = useState('Distance')
-    const setStatusFilter = status=>{
-        setStatus(status)
-    }
-    const [unit, setUnit] = useState('km')
-
     /***************************************************************************** */
     //api this month, last month
         var month= moment().format();
@@ -53,14 +40,15 @@ function Progress({navigation}) {
                 last_month= m[0]+"-"+ int_last_month.toString()
             }
         }
-        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/month/"+this_month
-        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/month/"+last_month
+        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/userID/60c5ce6f6b3a9f002255b930/month/"+this_month
+        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/userID/60c5ce6f6b3a9f002255b930/month/"+last_month
         //api today
         var today= moment().format();
         var t = today.split('T');
         today=t[0];
+        console.log(today)
 
-        var api_get_data_today = "https://my-app-de.herokuapp.com/api/activities/date/"+today;
+        var api_get_data_today = "https://my-app-de.herokuapp.com/api/activities/userID/60c5ce6f6b3a9f002255b930/date/"+today;
 
         /// fecth data về từ api lưu vào các state
         const [isLoading, setIsLoading] = useState(true)
@@ -70,6 +58,7 @@ function Progress({navigation}) {
         var listDataThisMonth=[]
         var listDataLastMonth=[]
         var listDataToday=[]
+        console.log("reset state");
 
         useEffect(()=>{
             //fecth data this month
@@ -84,7 +73,6 @@ function Progress({navigation}) {
                     setDataThisMonth(listDataThisMonth);
                 })
                 .catch((err)=>console.log(err))
-                .finally(setIsLoading(false));
                 //last month
                 fetch(api_get_data_last_month)
                 .then((res)=>res.json())
@@ -95,7 +83,6 @@ function Progress({navigation}) {
                     setDataLastMonth(listDataLastMonth);
                 })
                 .catch((err)=>console.log(err))
-                .finally(setIsLoading(false));
                 //fecth today
                 fetch(api_get_data_today)
                 .then((res)=>res.json())
@@ -106,15 +93,11 @@ function Progress({navigation}) {
                     setDataToday(listDataToday);
                 })
                 .catch((err)=>console.log(err))
-                .finally(setIsLoading(false));
-
-
             } catch (error) {
                 console.log('Error: ',error.message);
             }
-
+            console.log("useEffect")
         },[]);
-
     /***************************************************************************** */
 
 
