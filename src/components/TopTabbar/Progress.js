@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {SafeAreaView, Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
 import ViewShowData from '../../components/ViewShowData';
 import ViewShowToday from '../ViewShowToday';
+import ViewShowChart from '../ViewShowChart';
 import { StatusBar } from 'expo-status-bar';
 import {
     LineChart,
@@ -141,95 +142,18 @@ function Progress({navigation}) {
                 <Text style={styles.titleToday}>Today</Text>
                 <ViewShowToday
                 data={dataToday}/>
-                
-                <View>
+            
                 <Text style={styles.titleToday}>This week</Text>
+                <ViewShowChart>
 
-                    <View style={{alignItems:'center'}}>
-                        <LineChart
-                            data={{
-                            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun"],
-                            datasets: [
-                                {
-                                data: [
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                ]
-                                }
-                            ]
-                            }}
-                            width= {windowWidth*0.9}
-                            height={220}
-                            yAxisLabel=""
-                            yAxisSuffix={unit}
-                            yAxisInterval={1} // optional, defaults to 1
-                            chartConfig={{
-                                backgroundColor: "#e26a00",
-                                backgroundGradientFrom: "#ffcad4",
-                                backgroundGradientTo: "#ffe5d8",
-                                decimalPlaces: 0, // làm chữ số thập phân, defaults to 2dp
-                                color: (opacity = 1) => `rgba(255, 55, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(225, 255, 255, ${opacity})`,
-                            style: {
-                                borderRadius: 15
-                            },
-                            propsForDots: {
-                                r: "5",
-                                strokeWidth: "2",
-                                stroke: "#ffa726"
-                            }
-                            }}
-                            bezier
-                            style={{
-                            marginVertical: 5,
-                            borderRadius: 20
-                            }}
-                        />
-                    </View>
-                </View>
-                <ScrollView 
-                style={{
-                    flexDirection:'row', 
-                    marginHorizontal:15, 
-                    borderWidth:2, 
-                    borderRadius:22, 
-                    borderColor:"#ffcad4",
-                    paddingHorizontal:1
-                    }}>
-                    <View 
-                    style={styles.listButtonChart}>
-                        {
-                            listButtonChart.map(c=>(
-                                <TouchableOpacity
-                                key={c.status} 
-                                style={[styles.btnChart, status == c.status && styles.btnTabActive]}
-                                onPress={()=> {setStatusFilter(c.status) , setUnit(c.unit)}}
-                                >
-                                    <Text
-                                    style={styles.textTab}
-                                    >
-                                        {c.status}
-                                    </Text>                  
-                                </TouchableOpacity>
-                            ))
-                        }
-                    </View>
-                </ScrollView>
-
-
+                </ViewShowChart>
+             
                 <Text style={styles.titleToday}>Monthly</Text>
                 <ViewShowData 
                 timeStatus= 'month'
                 dataThisMonth = {dataThisMonth}
                 dataLastMonth ={dataLastMonth}
                 />
-
-
             </ScrollView>
         </SafeAreaView>
     )
