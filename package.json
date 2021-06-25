@@ -21,6 +21,7 @@
     "expo-task-manager": "~9.1.0",
     "fbemitter": "^3.0.0",
     "haversine": "^1.1.1",
+    "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
     "jwt-decode": "^3.1.2",
     "native-base": "^3.0.0-next.37",

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Dimensions, Text, Image, AsyncStorage,
-    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity
+    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity,Alert
 } from 'react-native';
 import Constants from '../../utilities/Constants';
 import FontLoader from '../../utilities/Font';
@@ -11,6 +11,7 @@ import {ButtonSheetModal} from '../CustomModal';
 import jwt_decode from "jwt-decode";
 import Axios from 'axios';
 
+
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
@@ -18,34 +19,36 @@ function Profile({navigation}) {
     const getDetails = () => {
         let data = {
             fullname: navigation.getParam("name") == null 
-                ? '' : navigation.getParam("name"),
+                ? 'Loading...' : navigation.getParam("name"),
             mail: navigation.getParam("mail") == null 
-                ? '' : navigation.getParam("mail"),
+                ? 'Loading...' : navigation.getParam("mail"),
             description: navigation.getParam("description") == null 
-                ? '' : navigation.getParam("description"),
+                ? 'Loading...' : navigation.getParam("description"),
             job: navigation.getParam("job") == null 
-                ? '' : navigation.getParam("job"),
+                ? 'Loading...' : navigation.getParam("job"),
             phone: navigation.getParam("phone") == null 
-                ? '' : navigation.getParam("phone"),
+                ? 'Loading...' : navigation.getParam("phone"),
             gender: navigation.getParam("gender") == null 
-                ? 'Unknown' : navigation.getParam("gender"),
+                ? 'Loading...' : navigation.getParam("gender"),
             address: navigation.getParam("address") == null 
-                ? '' : navigation.getParam("address"),
+                ? 'Loading...' : navigation.getParam("address"),
             birthday: navigation.getParam("birthday") == null 
-                ? '' : navigation.getParam("birthday"),
+                ? 'Loading...' : navigation.getParam("birthday"),
             height: navigation.getParam("height") == null 
-                ? '' : navigation.getParam("height"),
+                ? 'Loading...' : navigation.getParam("height"),
             weight: navigation.getParam("weight") == null 
-                ? '' : navigation.getParam("weight"),
+                ? 'Loading...' : navigation.getParam("weight"),
         };
         return data;
     }
-    const [username, setUsername] = useState();
-    const [UserID,setUserID]= useState([]);
-    const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
-    const [info, setInfo] = useState(getDetails);
+    const [username, setUsername] = useState([]);
+    const [info, setInfo] = useState({});
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
+
+
+
+    
 
     const  _retrieveData = async () => {
         try {
@@ -57,37 +60,30 @@ function Profile({navigation}) {
           // Error retrieving data
         }
       };
-    
-      const AxiosData = async() => {
-        console.log("get details")
-        const token =  await AsyncStorage.getItem("authToken")
-        
-        let vl = jwt_decode(token)
-        console.log('Token decode',vl._id)
-        setUserID(vl._id)
-        Axios.post("https://runapp1108.herokuapp.com/api/users/getInfo",{UserID})
-        .then((res) => {
-            console.log("data: " + res.data.name);
-            setInfo(res.data);
-        })
-        .catch((err) => {
-            console.log("error: " + err);
-        })
-        console.log('Thong tin nguoi dung',info)  
-    }
-    
-    //run when navigate to this screen
-    const unsubscribe = navigation.addListener('didFocus', () => {
-        _retrieveData();
-        AxiosData();
-        console.log("get details")
-    });
+      
 
-    useEffect(() => {
-        let isMounted = true;
-        unsubscribe;
-        return () => { isMounted = false };
-    }, []);
+    //run when navigate to this screen
+    useEffect( () => {
+        console.log("get details")
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
+            .then( (res)=>{
+                setInfo(res.data)
+            })
+            .catch((error)=>{
+                console.log(error.response.data)
+            })
+            
+        }) 
+                  
+    },[])
+       
+
+
 
     return (
         <SafeAreaView style={{height: '100%'}}>
@@ -184,7 +180,7 @@ function Profile({navigation}) {
                                 onPress={() => {
                                     navigation.navigate('EditScreen', 
                                     {   
-                                        name: info.name, 
+                                        name: info.fullname, 
                                         mail: info.mail,
                                         description: info.description,
                                         job: info.job,
@@ -218,9 +214,11 @@ function Profile({navigation}) {
                         <View style={{
                             padding: 4
                         }}>
-                            <Text style={styles.text}>{info.description}</Text>
+                            <Text style={styles.text}>{(!info.description)?   'I am ...'  :info.description}</Text>
                         </View>
                     </View>
+
+
                     <View style={{
                         marginVertical: 4,
                         backgroundColor: Constants.COLOR.white,
@@ -229,13 +227,14 @@ function Profile({navigation}) {
                             <Text style={styles.label}>Your birthday:</Text>
                             <View style={{width: '85%'}}>
                                 <Text numberOfLines={1} ellipsizeMode='tail'
-                                style={styles.text}>{Moment(info.birthday).format('DD/MM/YYYY')}</Text>
+                                style={styles.text}>{ (!info.birthday)?   ''  :   Moment(info.birthday).format('DD/MM/YYYY')}</Text>
                             </View>
                         </View>
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between'
                         }}>
+
                             <View style={{
                                 padding: 8,
                                 flexDirection: 'row'
@@ -245,13 +244,15 @@ function Profile({navigation}) {
                             </View>
                             <View style={[styles.container, {paddingEnd: 28}]}>
                                 <Text style={styles.label}>Weight:</Text>
-                                <Text style={styles.text}>{info.weight} kg</Text>
+                                <Text style={styles.text}>{(!info.weight)?  '' : info.weight } kg</Text>
                             </View>
+
                         </View>
                         <View style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between'
                         }}>
+
                             <View style={{
                                 padding: 8,
                                 flexDirection: 'row'
@@ -262,19 +263,20 @@ function Profile({navigation}) {
                             </View>
                             <View style={[styles.container, {paddingEnd: 28}]}>
                                 <Text style={styles.label}>Mobile:</Text>
-                                <Text style={styles.text}>{info.phone}</Text>
+                                <Text style={styles.text}>{(!info.phone)?   ''  :info.phone}</Text>
                             </View>
                         </View>
                         <View style={styles.container}>
                             <Text style={styles.label}>Job:</Text>
-                            <Text style={styles.text}>{info.job}</Text>
+                            <Text style={styles.text}>{(!info.job)?   ''  :info.job}</Text>
                         </View>
                         <View style={styles.container}>
                             <Text style={styles.label}>Live in:</Text>
                             <View style={{width: '85%'}}>
                                 <Text numberOfLines={2} ellipsizeMode='tail'
-                                style={styles.text}>{info.liveIn}</Text>
+                                style={styles.text}>{info.address}</Text>
                             </View>
+
                         </View>
                     </View>
                 </View>

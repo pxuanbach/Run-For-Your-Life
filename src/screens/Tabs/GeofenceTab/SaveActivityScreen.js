@@ -4,6 +4,7 @@ import { MaterialCommunityIcons, MaterialIcons, FontAwesome, } from '@expo/vecto
 import Slider from '@react-native-community/slider';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { StackActions, NavigationActions } from 'react-navigation';
+import GeofenceTab from './GeofenceTab';
 
 const windowWidth = Dimensions.get('window').width;
 const LEVEL = ['Easy', 'Normal', 'Difficult', 'Hard', 'Extreme', 'Insane'];
@@ -87,6 +88,16 @@ export default class SaveActivityScreen extends React.Component {
                 longitudeDelta: maxY - minY,
             }
         }) 
+    }
+
+    onPress_btnDiscard = () => {
+        GeofenceTab.stopLocationUpdates();
+        this.props.navigation.dispatch(resetAction);
+    }
+
+    onPress_btnSave = () => {
+        GeofenceTab.stopLocationUpdates();
+        this.props.navigation.dispatch(resetAction);
     }
 
     render() {        
@@ -255,9 +266,7 @@ export default class SaveActivityScreen extends React.Component {
                         borderColor: 'green',
                         borderWidth: 1.5,
                     }]}
-                    onPress={() => {
-                        navigation.dispatch(resetAction);
-                    }}>
+                    onPress={() => this.onPress_btnDiscard}>
                         <Text style={[styles.buttonTitle, {color: 'green'}]}>
                             DISCARD
                         </Text>
@@ -267,9 +276,7 @@ export default class SaveActivityScreen extends React.Component {
                     {
                         backgroundColor: 'green',
                     }]}
-                    onPress={() => {
-                        navigation.dispatch(resetAction);
-                    }}>
+                    onPress={() => this.onPress_btnSave}>
                         <Text style={[styles.buttonTitle, {color: 'white'}]}>
                             SAVE
                         </Text>
