@@ -43,7 +43,6 @@ function ProfileTab({navigation}) {
           const value = await AsyncStorage.getItem("username");
           if (value !== null) {
             setUsername(value);
-            console.log(value);
           }
         } catch (error) {
           // Error retrieving data

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
+import {SafeAreaView, Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity, AsyncStorage} from 'react-native';
 import ViewShowData from '../../components/ViewShowData';
 import ViewShowToday from '../ViewShowToday';
 import ViewShowChart from '../ViewShowChart';
@@ -15,17 +15,18 @@ import {
 import { flexDirection } from 'styled-system';
 import { FontAwesome5 } from '@expo/vector-icons';
 import moment from 'moment';
+import { set } from 'react-native-reanimated';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 function Progress({navigation}) {
-    /***************************************************************************** */
-    //api this month, last month
+    /******************************************************************************/
+    //tính tháng này, tháng trước yyyy-mm
         var month= moment().format();
         var m=month.split('-')
         var this_month=m[0]+"-"+m[1]
-        console.log("this month: ",this_month)
+
         var last_month=""
         if(Number.parseInt(m[1])===1){
             var last_year = (Number.parseInt(m[0])-1).toString()
@@ -40,15 +41,49 @@ function Progress({navigation}) {
                 last_month= m[0]+"-"+ int_last_month.toString()
             }
         }
-        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/userID/60c5ce6f6b3a9f002255b930/month/"+this_month
-        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/userID/60c5ce6f6b3a9f002255b930/month/"+last_month
+    //get userID
+    const [username, setUsername]=useState()
+    const [userid, setUserid] = useState()
+    const  _retrieveData = async () => {
+        try {
+          const value = await AsyncStorage.getItem("username");
+          if (value !== null) {
+            setUsername(value);
+          }
+        } catch (error) {
+            console.log(error)
+        }
+      };
+        useEffect(() => {
+            let isMounted = true;
+            _retrieveData();
+            return () => { isMounted = false };
+        }, [])
+
+        console.log('username:'+username)
+
+        useEffect(()=>{
+            fetch("https://my-app-de.herokuapp.com/api/users/getID/"+username)
+            .then((res)=>res.text())
+            .then((text)=>{
+                var u=text.split('"')
+                setUserid(u[1])
+            })
+            .catch((err)=>console.log(err))
+        })
+
+        console.log("userid:"+userid)
+        //api this last month
+        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month;
+        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month;
+        
+        console.log(api_get_data_this_month)
+        console.log(api_get_data_last_month)
         //api today
         var today= moment().format();
         var t = today.split('T');
         today=t[0];
-        console.log(today)
-
-        var api_get_data_today = "https://my-app-de.herokuapp.com/api/activities/userID/60c5ce6f6b3a9f002255b930/date/"+today;
+        var api_get_data_today = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today;
 
         /// fecth data về từ api lưu vào các state
         const [isLoading, setIsLoading] = useState(true)
@@ -58,10 +93,10 @@ function Progress({navigation}) {
         var listDataThisMonth=[]
         var listDataLastMonth=[]
         var listDataToday=[]
-        console.log("reset state");
 
+        console.log("state");
         useEffect(()=>{
-            //fecth data this month
+            let isMounted = true;
             try {
                 //this month
                 fetch(api_get_data_this_month)
@@ -73,6 +108,16 @@ function Progress({navigation}) {
                     setDataThisMonth(listDataThisMonth);
                 })
                 .catch((err)=>console.log(err))
+            } catch (error) {
+                console.log('fecth this month err:'+error)
+            }
+            return () => { isMounted = false };
+            console.log("useEffect this month")
+        },[])
+
+        useEffect(()=>{
+            let isMounted = true;
+            try {
                 //last month
                 fetch(api_get_data_last_month)
                 .then((res)=>res.json())
@@ -83,7 +128,17 @@ function Progress({navigation}) {
                     setDataLastMonth(listDataLastMonth);
                 })
                 .catch((err)=>console.log(err))
-                //fecth today
+            } catch (error) {
+                console.log('fecth last month err:'+ error)
+            }
+            return () => { isMounted = false };
+            console.log("useEffect last month")
+        },[])
+
+        useEffect(()=>{
+            let isMounted = true;
+            try {
+                 //fecth today
                 fetch(api_get_data_today)
                 .then((res)=>res.json())
                 .then((json)=>{
@@ -94,13 +149,53 @@ function Progress({navigation}) {
                 })
                 .catch((err)=>console.log(err))
             } catch (error) {
-                console.log('Error: ',error.message);
+                console.log('fecth today err:'+error)
             }
-            console.log("useEffect")
-        },[]);
+            return () => { isMounted = false };
+            console.log("useEffect today")
+        },[])
+
+
+
+        // useEffect(()=>{
+        //     //fecth data this month
+        //     try {
+        //         //this month
+        //         fetch(api_get_data_this_month)
+        //         .then((res)=>res.json())
+        //         .then((json)=>{
+        //             json.map((data)=>{
+        //                 listDataThisMonth.push(data)
+        //             });
+        //             setDataThisMonth(listDataThisMonth);
+        //         })
+        //         .catch((err)=>console.log(err))
+        //         //last month
+        //         fetch(api_get_data_last_month)
+        //         .then((res)=>res.json())
+        //         .then((json)=>{
+        //             json.map((data)=>{
+        //                 listDataLastMonth.push(data)
+        //             });
+        //             setDataLastMonth(listDataLastMonth);
+        //         })
+        //         .catch((err)=>console.log(err))
+        //         //fecth today
+        //         fetch(api_get_data_today)
+        //         .then((res)=>res.json())
+        //         .then((json)=>{
+        //             json.map((data)=>{
+        //                 listDataToday.push(data)
+        //             });
+        //             setDataToday(listDataToday);
+        //         })
+        //         .catch((err)=>console.log(err))
+        //     } catch (error) {
+        //         console.log('Error: ',error.message);
+        //     }
+        //     console.log("useEffect")
+        // },[]);
     /***************************************************************************** */
-
-
     return (
         <SafeAreaView>
             <StatusBar style="auto"/>
@@ -136,7 +231,7 @@ function Progress({navigation}) {
                 timeStatus= 'month'
                 dataThisMonth = {dataThisMonth}
                 dataLastMonth ={dataLastMonth}
-                />
+                />           
             </ScrollView>
         </SafeAreaView>
     )
