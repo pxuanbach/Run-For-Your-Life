@@ -145,7 +145,7 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
     )
 }
 
-const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, gender, weight, height, birthday}) => {
+const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTested, gender, weight, height, birthday}) => {
     const calculateDailyCalorie = (R) => {
         let bmr = 0;
         var currentDay = new Date();
@@ -206,6 +206,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, gender, we
                             onPress={() => {
                                 setR(1.2);
                                 calculateDailyCalorie(1.2);
+                                setIsTested(true);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -215,6 +216,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, gender, we
                             onPress={() => {
                                 setR(1.375);
                                 calculateDailyCalorie(1.375);
+                                setIsTested(true);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -224,6 +226,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, gender, we
                             onPress={() => {
                                 setR(1.55);
                                 calculateDailyCalorie(1.55);
+                                setIsTested(true);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -233,6 +236,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, gender, we
                             onPress={() => {
                                 setR(1.725);
                                 calculateDailyCalorie(1.725);
+                                setIsTested(true);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}
@@ -242,6 +246,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, gender, we
                             onPress={() => {
                                 setR(1.9);
                                 calculateDailyCalorie(1.9);
+                                setIsTested(true);
                                 setModalVisible(false);
                             }}
                             windowHeight={windowHeight}

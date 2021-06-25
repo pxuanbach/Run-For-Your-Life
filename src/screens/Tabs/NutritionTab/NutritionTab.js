@@ -3,7 +3,7 @@ import {
     Text, View, FlatList, 
     ScrollView, Dimensions, SafeAreaView
 } from 'react-native';
-import {IconButtonDesign} from '../../../components/CustomButton'
+import {IconButtonDesign, PhraseButton} from '../../../components/CustomButton'
 import FoodRecommendCard from '../../../components/FoodRecommendCard';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
@@ -28,6 +28,11 @@ var datas = [
         name: "Animal Origin",
         type: "animalOrigin",
     },
+    {
+        imageUrl: "https://firebasestorage.googleapis.com/v0/b/chatappflutter-b38e5.appspot.com/o/us-news-world-report-best-worst-diets-2021-1440x810.jpg?alt=media&token=d2c78279-bfd4-43d5-ae1d-6776baba7490",
+        name: "Animal",
+        type: "animal",
+    },
 ]
 
 function NutritionTab({navigation}) {
@@ -38,6 +43,8 @@ function NutritionTab({navigation}) {
     const [height, setHeight] = useState(175);
     const [weight, setWeight] = useState(55);
     const [birthday, setbirthday] = useState(new Date("2001-03-30"));
+
+    const [isTested, setIsTested] = useState(false);
 
     const calculateDailyCalorie = () => {
         let bmr = 0;
@@ -68,6 +75,7 @@ function NutritionTab({navigation}) {
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             setCalorie={setCalorie}
+            setIsTested={setIsTested}
             gender={gender}
             weight={weight}
             height={height}
@@ -99,11 +107,11 @@ function NutritionTab({navigation}) {
                 {/* left */}
                 <View style={{
                     height: windowHeight/8,
-                    width: windowWidth/3 + 20,
+                    width: windowWidth/3,
                     alignSelf: 'center',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: Constants.COLOR.white,
+                    backgroundColor: Constants.COLOR.green,
                     borderTopLeftRadius: 15,
                     borderBottomLeftRadius: 15
                 }}>
@@ -111,8 +119,7 @@ function NutritionTab({navigation}) {
                         <Text style={{
                             fontFamily: 'RobotoRegular',
                             fontSize: windowHeight/36,
-                            color: Constants.COLOR.dark_green,
-                            paddingHorizontal: 4,
+                            color: Constants.COLOR.white,
                             textAlignVertical: 'center',
                             textAlign: 'center'
                         }}>
@@ -124,7 +131,7 @@ function NutritionTab({navigation}) {
                 {/* main */}
                 <View style={{
                     height: windowHeight/8,
-                    width: windowWidth/2 + 24,
+                    width: windowWidth/2 + windowWidth/10,
                     backgroundColor: Constants.COLOR.white,
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -136,7 +143,7 @@ function NutritionTab({navigation}) {
                             fontFamily: 'RobotoRegular',
                             fontSize: windowHeight/24,
                             color: Constants.COLOR.dark_green,
-                            paddingHorizontal: 12,
+                            paddingHorizontal: 8,
                             textAlignVertical: 'center'
                         }}>
                             ~ {calorie}
@@ -153,7 +160,7 @@ function NutritionTab({navigation}) {
                 </View>
             </View>
             {/* test */}
-            <View style={{
+            {!isTested && <View style={{
                 padding: 8,
                 alignContent: 'center',
                 flexDirection: 'row'
@@ -175,22 +182,37 @@ function NutritionTab({navigation}) {
                         paddingHorizontal: 8,
                     }}>Complete test to calculate your daily calorie intake.</Text>
                 </View>
-            </View>
+            </View>}
             {/* Tag + list type food */}
             <View style={{
-                height: '64%',
+                height: isTested ? '75%' : '64%',
             }}>
                 <View style={{
                     paddingHorizontal: 12
                 }}>
                     <FontLoader>
-                        <Text style={{
-                            fontFamily: "SemiBold",
-                            fontSize: windowHeight/30,
-                            color: Constants.COLOR.dark_green
+                        <View style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
                         }}>
-                            Food Categories
-                        </Text>
+                            <Text style={{
+                                fontFamily: "SemiBold",
+                                fontSize: windowHeight/30,
+                                color: Constants.COLOR.dark_green
+                            }}>
+                                Food Categories
+                            </Text>
+                            
+                            {isTested && <PhraseButton
+                            onPress={() => {setModalVisible(!modalVisible)}}
+                            iconName="assignment-turned-in"
+                            iconSize={windowHeight/30}
+                            color={Constants.COLOR.second_green}
+                            phrase="Re-Test"
+                            windowHeight={windowHeight}/>}
+                        </View>
+                        
                         <Text style={{
                             fontFamily: 'RobotoRegular',
                             fontSize: windowHeight/40,

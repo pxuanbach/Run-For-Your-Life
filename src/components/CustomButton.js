@@ -60,14 +60,14 @@ const IconButtonDesign = ({onPress, width, height, text, fontSize=30,
     )
 }
 
-const PhraseButton = ({phrase, onPress, windowHeight}) => {
+const PhraseButton = ({phrase, onPress, windowHeight, iconName="arrow-right", iconSize=30, color=Constants.COLOR.dark_green}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
             flexDirection: 'row',
             paddingVertical: windowHeight/90
         }}>
-            <MaterialIcons name="arrow-right" size={30} color={Constants.COLOR.dark_green} />
+            <MaterialIcons name={iconName} size={iconSize} color={color} />
             <Text style={{
                 fontFamily: 'RobotoRegular',
                 fontSize: windowHeight/40,
