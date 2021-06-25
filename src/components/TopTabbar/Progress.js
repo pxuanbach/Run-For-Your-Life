@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { SafeAreaView } from 'react-native';
-import {Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
+import {SafeAreaView, Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
 import ViewShowData from '../../components/ViewShowData';
+import ViewShowToday from '../ViewShowToday';
 import { StatusBar } from 'expo-status-bar';
 import {
     LineChart,
@@ -33,7 +33,7 @@ function Progress({navigation}) {
     const [unit, setUnit] = useState('km')
 
     /***************************************************************************** */
-    //xát định string api lấy dữ lấy api đúng với tháng này, tháng rồi
+    //api this month, last month
         var month= moment().format();
         var m=month.split('-')
         var this_month=m[0]+"-"+m[1]
@@ -52,19 +52,23 @@ function Progress({navigation}) {
                 last_month= m[0]+"-"+ int_last_month.toString()
             }
         }
-        console.log("last month: ",last_month)
-
         var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/month/"+this_month
         var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/month/"+last_month
-        console.log(api_get_data_this_month)
-        console.log(api_get_data_last_month)
+        //api today
+        var today= moment().format();
+        var t = today.split('T');
+        today=t[0];
 
-        /// fecth data this month về từ api lưu vào dataThisMonth , dataLastMonth
+        var api_get_data_today = "https://my-app-de.herokuapp.com/api/activities/date/"+today;
+
+        /// fecth data về từ api lưu vào các state
         const [isLoading, setIsLoading] = useState(true)
         const [dataThisMonth, setDataThisMonth]=useState([])
         const [dataLastMonth,setDataLastMonth] = useState([])
+        const [dataToday, setDataToday]= useState([])
         var listDataThisMonth=[]
         var listDataLastMonth=[]
+        var listDataToday=[]
 
         useEffect(()=>{
             //fecth data this month
@@ -91,6 +95,19 @@ function Progress({navigation}) {
                 })
                 .catch((err)=>console.log(err))
                 .finally(setIsLoading(false));
+                //fecth today
+                fetch(api_get_data_today)
+                .then((res)=>res.json())
+                .then((json)=>{
+                    json.map((data)=>{
+                        listDataToday.push(data)
+                    });
+                    setDataToday(listDataToday);
+                })
+                .catch((err)=>console.log(err))
+                .finally(setIsLoading(false));
+
+
             } catch (error) {
                 console.log('Error: ',error.message);
             }
@@ -122,53 +139,9 @@ function Progress({navigation}) {
                 </View>
 
                 <Text style={styles.titleToday}>Today</Text>
-
-                <View 
-                style={{
-                    flexDirection:'row', 
-                    alignSelf:'center', 
-                    marginTop:-10
-                    }}>
-                    <View style={styles.blockData}>
-                        <Text 
-                        style={styles.textDataToday}
-                        >{(Math.random()*1000).toFixed(0)}
-                        </Text>
-                        <Text>Distance (m)</Text>
-                    </View>
-
-                    <View style={styles.blockData}>
-                        <Text 
-                            style={styles.textDataToday}
-                            >{(Math.random()*1000).toFixed(0)}
-                            </Text>
-                        <Text>Avg Pace (min/km)</Text>
-                    </View>
-                    </View>
-
-                <View 
-                style={{
-                    flexDirection:'row', 
-                    alignSelf:'center'
-                    }}>
-                    <View style={styles.blockData}>
-                        <Text 
-                            style={styles.textDataToday}
-                            >{(Math.random()*1000).toFixed(0)}
-                            </Text>
-                            <Text>Time Spent (min)</Text>
-                    </View>
-                    <View style={styles.blockData}>
-                        <Text 
-                            style={styles.textDataToday}
-                            >
-                            {(Math.random()*1000).toFixed(0)}
-                            </Text>
-                            <Text>Calories Burned</Text>
-                    </View>
-                </View>
+                <ViewShowToday
+                data={dataToday}/>
                 
-
                 <View>
                 <Text style={styles.titleToday}>This week</Text>
 
@@ -247,12 +220,16 @@ function Progress({navigation}) {
                         }
                     </View>
                 </ScrollView>
+
+
                 <Text style={styles.titleToday}>Monthly</Text>
                 <ViewShowData 
                 timeStatus= 'month'
                 dataThisMonth = {dataThisMonth}
                 dataLastMonth ={dataLastMonth}
-                ></ViewShowData>
+                />
+
+
             </ScrollView>
         </SafeAreaView>
     )
@@ -330,6 +307,7 @@ const styles=StyleSheet.create({
     titleToday:{
         marginLeft:10,
         marginTop:15,
+        marginBottom:5,
         fontSize:20, 
         fontWeight:'bold'
     }
