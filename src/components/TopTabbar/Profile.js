@@ -7,9 +7,9 @@ import FontLoader from '../../utilities/Font';
 import Moment from 'moment';
 import { Foundation } from '@expo/vector-icons';
 import { IconButtonDesign } from '../CustomButton';
-import ButtonSheetModal from '../CustomModal';
+import {ButtonSheetModal} from '../CustomModal';
 import jwt_decode from "jwt-decode";
- import Axios from 'axios';
+import Axios from 'axios';
 
 
 const windowHeight = Dimensions.get('window').height;
@@ -60,16 +60,10 @@ function Profile({navigation}) {
           // Error retrieving data
         }
       };
-
-
       
-
-
-     
 
     //run when navigate to this screen
     useEffect( () => {
-     
         console.log("get details")
         AsyncStorage.getItem("authToken")
         .then( async (token) => { 
