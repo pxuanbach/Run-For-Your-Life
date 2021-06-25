@@ -41,9 +41,11 @@ function Progress({navigation}) {
                 last_month= m[0]+"-"+ int_last_month.toString()
             }
         }
+        console.log('this month: '+this_month)
+        console.log('last month: '+last_month)
     //get userID
     const [username, setUsername]=useState()
-    const [userid, setUserid] = useState('60c5ce6f6b3a9f002255b930')
+    const [userid, setUserid] = useState()
     const  _retrieveData = async () => {
         try {
           const value = await AsyncStorage.getItem("username");
@@ -57,20 +59,20 @@ function Progress({navigation}) {
         useEffect(() => {
             let isMounted = true;
             _retrieveData();
+            console.log(username)
             return () => { isMounted = false };
         }, [])
         
-        console.log('username:'+username)
+        // console.log('username:'+username)
         useEffect(()=>{
-            fetch("https://my-app-de.herokuapp.com/api/users/getID/"+username)
-            .then((res)=>res.text())
-            .then((text)=>{
-                var u=text.split('"')
+            (async()=>{
+                const res= await fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
+                var u = await res.text();
                 setUserid(u[1])
-                console.log(u[1])
-            })
-            .catch((err)=>console.log(err))
+            })()
         },[])
+
+
         console.log("userid:"+userid)
         //api this last month
         var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month;
