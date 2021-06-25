@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import { View, Dimensions, Text, TextInput,
-    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView
+    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView,AsyncStorage
 } from 'react-native';
 import {CustomButton, IconButtonDesign} from '../../../components/CustomButton';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
 import {TextFieldInput, DateFieldInput, PickerFieldInput, BoxTextFieldInput} 
     from '../../../components/InputFieldDesign';
+import axios from 'axios';
+import jwt_decode from "jwt-decode";
+import { concatLimit } from 'async';
+
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -31,6 +35,52 @@ function EditScreen({navigation}) {
     }
     const hideMenu = () => {
         _menu.hide();
+    }
+
+
+    HandleSave =  () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+        var vl = jwt_decode(token)
+        console.log('Token decode',vl._id)
+        let UserID = vl._id;
+        console.log(UserID)
+
+        console.log('name:',name)
+        console.log('mail:',mail)
+        console.log('descrpttion:',description)
+        console.log('job:',job)
+        console.log('phone:',phone)
+        console.log('gender:',gender)
+        console.log('Date:',date)
+        console.log('height:',height)
+        console.log('weight',weight)
+        let fullname = name;
+        let birthday = date;
+
+        await axios.post('https://runapp1108.herokuapp.com/api/users/Infov2',{UserID,fullname,mail,description,job,phone,gender,address,birthday,height,weight})
+        .then((res)=>{
+            console.log(res.data)
+            navigation.navigate("Profile", {  
+            name: name, 
+            mail: mail,
+            description: description,
+            job: job,
+            phone: phone,
+            gender: gender,
+            address: address,
+            birthday: date,
+            height: height,
+            weight: weight,
+        })
+        })
+        .catch((err)=> {
+            console.log(err)
+        })
+    })
+
+        
+
     }
 
     const showMenu = () => {
@@ -65,21 +115,7 @@ function EditScreen({navigation}) {
                     alignItems: 'flex-end',
                 }}>
                     <IconButtonDesign
-                    onPress={() => {
-                        navigation.navigate("Profile", 
-                        {
-                            name: name, 
-                            mail: mail,
-                            description: description,
-                            job: job,
-                            phone: phone,
-                            gender: gender,
-                            address: address,
-                            birthday: date,
-                            height: height,
-                            weight: weight
-                        })
-                    }}
+                    onPress={HandleSave}
                     width={80}
                     height={36}
                     text="Save"

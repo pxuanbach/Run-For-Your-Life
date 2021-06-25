@@ -33,7 +33,7 @@ function Profile({navigation}) {
             address: navigation.getParam("address") == null 
                 ? 'Loading...' : navigation.getParam("address"),
             birthday: navigation.getParam("birthday") == null 
-                ? 'Loading...' : navigation.getParam("birthday"),
+                ? '' : navigation.getParam("birthday"),
             height: navigation.getParam("height") == null 
                 ? 'Loading...' : navigation.getParam("height"),
             weight: navigation.getParam("weight") == null 
@@ -43,7 +43,7 @@ function Profile({navigation}) {
     }
     const [username, setUsername] = useState([]);
     const [info, setInfo] = useState({});
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState('https://i.postimg.cc/prCqJnSB/Screen-Shot-2021-06-25-at-17-26-19.png');
     const [modalVisible, setModalVisible] = useState(false);
 
 
@@ -76,12 +76,14 @@ function Profile({navigation}) {
             
             var vl = jwt_decode(token)
             console.log('Token decode',vl._id)
+            console.log(image)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then( (res)=>{
-                setInfo(res.data)
+                setInfo(res.data);
+                (res.data.image)? setImage(res.data.image) : {} ;
             })
             .catch((error)=>{
-                console.log(error.response.data)
+                console.log(error.message)
             })
             
         }) 
@@ -96,6 +98,8 @@ function Profile({navigation}) {
             <ScrollView>
                 <SafeAreaView>
                     <ButtonSheetModal
+                    info={info}
+                    setInfo={setInfo}
                     image={image}
                     setImage={setImage}
                     modalVisible={modalVisible}

@@ -24,7 +24,7 @@ const useComponentDidMount = func => useEffect(func, []);
 
 function ProfileTab({navigation}) {
     const [_menu, setMenu] = useState();
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState('https://i.postimg.cc/prCqJnSB/Screen-Shot-2021-06-25-at-17-26-19.png');
     const [username, setUsername] = useState();
 
     const setMenuRef = ref => {
