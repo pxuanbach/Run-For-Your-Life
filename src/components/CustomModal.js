@@ -7,11 +7,17 @@ import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 import { IconButtonDesign, PhraseButton } from './CustomButton';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
+import { set } from 'react-native-reanimated';
+
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
+const ButtonSheetModal = ({info,setInfo ,image, setImage, modalVisible, setModalVisible}) => {
+
+    const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
+
 
     const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jamesnguyen/upload';
     const CLOUDINARY_UPLOAD_PRESET = 'nub4abmm';
@@ -30,11 +36,34 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
             'content-type': 'application/json'
           },
           method: 'POST',
-        }).then(async r => {
-          let data = await r.json()
-          setImage(data.url);
-          console.log(data.url) //
-        }).catch(err => console.log(err))
+        }).then( r => {
+        r.json()
+        .then( async (data) =>{
+        axios.post('https://runapp1108.herokuapp.com/api/users/Infov2', {   
+        UserID: info.user,
+        fullname:info.fullname, 
+        address: info.address,
+        birthday: info.birthday,
+        description: info.description,
+        gender: info.gender,
+        height: info.height,
+        weight: info.weight,
+        job: info.job,
+        phone: info.phone,
+        note: info.note,
+        image: data.url,      
+        }).then(async (res) =>{
+            console.log('Sucess: ',res.data)
+            setInfo(res.data)
+            setImage(res.data.image)
+          })
+          .catch( (err)=> {
+              console.log('Lỗi axios',err); 
+          }
+          )
+        }).catch(()=>{ console.log('Lỗi Json') })
+
+        }).catch((err) => console.log('Lỗi upfile'))        
       };
 
     const pickImage = async () => {
@@ -48,11 +77,10 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
                 base64: true
               });
           
-              console.log(result);
+             // console.log(result);
               if (result.cancelled === true) {
                   return;
               }
-              //setImage(result.uri);
               uploadHandle(result);
         }
         else {
@@ -74,8 +102,7 @@ const ButtonSheetModal = ({image, setImage, modalVisible, setModalVisible}) => {
               })
               if (!result.cancelled) {
                   console.log(result);
-                  //setImage(result.uri);
-                uploadHandle(result);
+                  uploadHandle(result);
               }
         }else{
            Alert.alert("you need to give up permission to work")
