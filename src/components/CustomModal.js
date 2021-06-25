@@ -160,6 +160,14 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
         console.log(R*bmr);
         setCalorie((R*bmr).toFixed(2));
     }
+
+    const infoValid = () => {
+        var currentDay = new Date();
+        if (gender === "" || weight === 0 || height === 0 || birthday.getFullYear() === currentDay.getFullYear())
+            return false;
+        return true;
+    }
+
     return (
         <View>
             <Modal
@@ -178,7 +186,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                     borderWidth: 2,
                     borderColor: Constants.COLOR.second_green
                 }}>
-                    <View style={{
+                    {infoValid() ? <View style={{
                         padding: 4,
                         width: '93%'
                     }}>
@@ -253,7 +261,31 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                             phrase="Very heavy exercisers (exercise 2 times/day, manual labor)"
                             />
                         </View>
-                    </View>
+                    </View> : <View style={{
+                        padding: 4,
+                        width: '93%',
+                        height: '80%'
+                    }}>
+                        <FontLoader>
+                            <Text style={{
+                                fontFamily: 'RobotoRegular',
+                                fontSize: windowHeight/36,
+                                color: Constants.COLOR.second_green,
+                                paddingHorizontal: 12,
+                                paddingTop: windowHeight/30, 
+                            }}>
+                                Your infomation is invalid.
+                            </Text>
+                            <Text style={{
+                                fontFamily: 'RobotoRegular',
+                                fontSize: windowHeight/36,
+                                color: Constants.COLOR.second_green,
+                                paddingHorizontal: 12,
+                            }}>
+                                Please! update your infomation.
+                            </Text>
+                        </FontLoader>
+                    </View>}
                     <View style={{
                         alignSelf: 'center',
                         padding: windowHeight/120

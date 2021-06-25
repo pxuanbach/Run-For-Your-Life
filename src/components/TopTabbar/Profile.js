@@ -45,11 +45,7 @@ function Profile({navigation}) {
     const [info, setInfo] = useState({});
     const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-
-
-
     
-
     const  _retrieveData = async () => {
         try {
           const value = await AsyncStorage.getItem("username");

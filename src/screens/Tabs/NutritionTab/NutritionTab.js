@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
-    Text, View, FlatList, 
+    Text, View, FlatList, AsyncStorage,
     ScrollView, Dimensions, SafeAreaView
 } from 'react-native';
 import {IconButtonDesign, PhraseButton} from '../../../components/CustomButton'
@@ -8,6 +8,9 @@ import FoodRecommendCard from '../../../components/FoodRecommendCard';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
 import { TestRModal } from '../../../components/CustomModal';
+import jwt_decode from "jwt-decode";
+import Axios from 'axios';
+import Moment from 'moment';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -40,9 +43,9 @@ function NutritionTab({navigation}) {
     const [calorie, setCalorie] = useState(0);
     const [R, setR] = useState(0)
     const [gender, setGender] = useState("");
-    const [height, setHeight] = useState(175);
-    const [weight, setWeight] = useState(55);
-    const [birthday, setbirthday] = useState(new Date("2001-03-30"));
+    const [height, setHeight] = useState(0);
+    const [weight, setWeight] = useState(0);
+    const [birthday, setBirthday] = useState(new Date());
 
     const [isTested, setIsTested] = useState(false);
 
@@ -57,11 +60,39 @@ function NutritionTab({navigation}) {
             bmr = (9.247 * weight) + (3.098 * height) 
                 - (4.33 * (currentDay.getFullYear() - birthday.getFullYear())) + 447.593;
         }
-        console.log((R*bmr).toFixed(2));
+        //console.log((R*bmr).toFixed(2));
         setCalorie((R*bmr).toFixed(2));
     }
 
+    const checkNullUndefined = (data) => {
+        if (data === undefined || data === null || data === "")
+            return false;
+        return true;
+    }
+
+    const fetchData = () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
+            .then((res)=>{
+                if (checkNullUndefined(res.data.weight))
+                    setWeight(res.data.weight);
+                if (checkNullUndefined(res.data.gender))
+                    setGender(res.data.gender);
+                if (checkNullUndefined(res.data.height))
+                    setHeight(res.data.height);
+            })
+            .catch((error)=>{
+                console.log(error.response.data)
+            })
+            
+        }) 
+    }
+
     useEffect(() => {
+        fetchData();
         calculateDailyCalorie();
     }, []);
 
