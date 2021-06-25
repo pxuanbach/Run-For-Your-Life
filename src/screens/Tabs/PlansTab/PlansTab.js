@@ -74,7 +74,6 @@ function PlansTab() {
                     </View>
                     <View style={{
                         width: '100%',
-                        paddingLeft: 4
                     }}>
                         <FlatList
                         horizontal
@@ -96,7 +95,7 @@ function PlansTab() {
                         }}
                         ItemSeparatorComponent={() => <View style={{margin: 4}}/>}
                         contentContainerStyle={{
-                            paddingEnd: 8,
+                            paddingHorizontal: 8,
                             paddingBottom: 8
                         }}/>
                         
