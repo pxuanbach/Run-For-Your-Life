@@ -4,7 +4,6 @@ import { MaterialCommunityIcons, MaterialIcons, FontAwesome, } from '@expo/vecto
 import Slider from '@react-native-community/slider';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { StackActions, NavigationActions } from 'react-navigation';
-import GeofenceTab from './GeofenceTab';
 
 const windowWidth = Dimensions.get('window').width;
 const LEVEL = ['Easy', 'Normal', 'Difficult', 'Hard', 'Extreme', 'Insane'];
@@ -27,6 +26,7 @@ export default class SaveActivityScreen extends React.Component {
         super(props);
 
         this.state = {
+            selectedActivity: this.props.navigation.getParam('selectedActivity'),
             time: this.props.navigation.getParam('time'),
             distance: this.props.navigation.getParam('distance'),
             avgPace: this.props.navigation.getParam('avgPace'),
@@ -47,10 +47,29 @@ export default class SaveActivityScreen extends React.Component {
         this.findCenterCoordinate();
     }
 
+    calcMETs = () => {
+        const { selectedActivity, avgPace } = this.state;
+        let METs = 0;
+
+        if (selectedActivity == 'running') {
+            METs = 488.241 - 464.259 * Math.pow(2.7183, 0.0029 * avgPace);
+        }
+        if (selectedActivity == 'bicycling') {
+            if (avgPace >= 3.729) METs = 4;
+            if (avgPace >= 3.107 && avgPace < 3.729) METs = 6;
+            if (avgPace >= 2.663 && avgPace < 3.107) METs = 8;
+            if (avgPace >= 2.33 && avgPace < 2.663) METs = 10;
+            if (avgPace >= 1.864 && avgPace < 2.33) METs = 12;
+            if (avgPace < 1.864) METs = 15.8;
+        }
+
+        return METs;
+    }
+
     calcBurnedCalories = () => {
-        const { time, avgPace, weight } = this.state;
+        const { time, weight } = this.state;
         this.setState({
-            calo: time * (488.241 - 464.259 * Math.pow(2.7183, 0.0029 * avgPace)) * 3.5 * weight / 200,
+            calo: time * this.calcMETs() * 3.5 * weight / 200,
         }) 
     }
 
@@ -95,7 +114,25 @@ export default class SaveActivityScreen extends React.Component {
         return (
             <ScrollView 
             style={{width: '100%'}}
-            contentContainerStyle={styles.container}>               
+            contentContainerStyle={styles.container}>    
+                <View style={styles.containerTxtInput}>
+                    <TextInput 
+                        style={styles.txtInput} 
+                        placeholder={'Title your run'}
+                        multiline={true} />
+                </View>
+                
+                <View style={styles.containerTxtInput}>
+                    <TextInput 
+                        style={styles.txtInput} 
+                        placeholder={'Add a description'}
+                        multiline={true} />
+                </View>
+
+                <Text style={styles.title}>
+                    Your achievement
+                </Text>
+
                 <Text style={{
                     color: 'green',
                     fontSize: 120,
@@ -233,20 +270,6 @@ export default class SaveActivityScreen extends React.Component {
                     thumbTintColor={'green'}
                     value={this.state.level}
                     onValueChange={value => this.setState({level: value})}/>
-
-                <View style={styles.containerTxtInput}>
-                    <TextInput 
-                        style={styles.txtInput} 
-                        placeholder={'Title your run'}
-                        multiline={true} />
-                </View>
-                
-                <View style={styles.containerTxtInput}>
-                    <TextInput 
-                        style={styles.txtInput} 
-                        placeholder={'Add a description'}
-                        multiline={true} />
-                </View>
                 
                 <View style={styles.buttonRow}>
                     <TouchableOpacity style={[styles.button, 
