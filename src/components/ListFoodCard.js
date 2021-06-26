@@ -127,7 +127,7 @@ const ListFoodCard = ({data, type}) => {
                         {curItem.type == "animalOrigin" 
                         ? <Text style={styles.normal}>Type: animal origin.</Text>
                         : <Text style={styles.normal}>
-                            Type: {curItem.type}.</Text>}
+                            Type: {type}.</Text>}
                         <Text style={styles.normal}>
                             Calories: {curItem.calories}</Text>
                         <Text style={styles.normal}>

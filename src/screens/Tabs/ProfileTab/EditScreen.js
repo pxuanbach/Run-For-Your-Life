@@ -67,9 +67,12 @@ function EditScreen({navigation}) {
             console.log('Date:',date)
             let birthday = Moment(date).format('YYYY-MM-DD')
             //console.log('height:',height)
-            //console.log('weight',weight)
+            console.log('address', address)
 
-            await axios.post('https://runapp1108.herokuapp.com/api/users/Infov2',{UserID,fullname,mail,description,job,phone,gender,address,birthday,height,weight,image,note})
+            await axios.post('https://runapp1108.herokuapp.com/api/users/Infov2',{
+                UserID,fullname,mail,description,job,phone,gender,
+                address,birthday,height,weight,image,note
+            })
             .then((res)=>{
                 console.log(res.data)
                 navigation.dispatch(resetProfile);
@@ -175,7 +178,9 @@ function EditScreen({navigation}) {
                     text={weight}
                     unit="kg"/>
                     <BoxTextFieldInput
-                    onChangeText={(text) => setAddress(text)}
+                    onChangeText={(text) => {
+                        console.log(text);
+                        setAddress(text)}}
                     onFocus={() => setenableShift(false)}
                     title="Live In"
                     text={address}/>
