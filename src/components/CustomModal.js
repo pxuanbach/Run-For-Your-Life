@@ -37,6 +37,7 @@ const ButtonSheetModal = ({info, setInfo, modalVisible, setModalVisible}) => {
                 axios.post('https://runapp1108.herokuapp.com/api/users/Infov2', {   
                     UserID: info.user,
                     fullname: info.fullname, 
+                    mail: info.mail,
                     address: info.address,
                     birthday: info.birthday,
                     description: info.description,
