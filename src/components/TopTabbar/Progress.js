@@ -44,9 +44,20 @@ function Progress({navigation}) {
         var today= moment().format();
         var t = today.split('T');
         today=t[0];
-    //get userID
+    //state
+    const [isLoading, setIsLoading] = useState(true)
+    const [dataThisMonth, setDataThisMonth]=useState([])
+    const [dataLastMonth,setDataLastMonth] = useState([])
+    const [dataToday, setDataToday]= useState([])
+    const [dataThisWeek, setDataThisWeek]=useState([])
+    var listDataThisMonth=[]
+    var listDataLastMonth=[]
+    var listDataToday=[]
+    var listDataThisWeek=[]
+
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
+    //get user id 
     const _getuserid=async()=>{
         try {
             const username= await AsyncStorage.getItem("username")
@@ -62,6 +73,7 @@ function Progress({navigation}) {
             console.log(error)
         }    
     }
+    //fecth data
     useEffect(()=>{
         let isMounted = true;
         _getuserid();
@@ -69,15 +81,6 @@ function Progress({navigation}) {
     },[])
     console.log('userid: '+userid)
         /// fecth data về từ api lưu vào các state
-        const [isLoading, setIsLoading] = useState(true)
-        const [dataThisMonth, setDataThisMonth]=useState([])
-        const [dataLastMonth,setDataLastMonth] = useState([])
-        const [dataToday, setDataToday]= useState([])
-        const [dataThisWeek, setDataThisWeek]=useState([])
-        var listDataThisMonth=[]
-        var listDataLastMonth=[]
-        var listDataToday=[]
-        var listDataThisWeek=[]
 
         setTimeout(()=>{
                 //this month
@@ -121,7 +124,7 @@ function Progress({navigation}) {
                 })
                 .catch((err)=>console.log(err))
 
-                console.log("timeout")
+                console.log("end timeout")
         },5000)
         
 
