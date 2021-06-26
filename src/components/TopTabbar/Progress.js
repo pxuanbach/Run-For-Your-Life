@@ -67,7 +67,6 @@ function Progress({navigation}) {
         return () => { isMounted = false };
     },[])
     console.log('userid: '+userid)
-
         /// fecth data về từ api lưu vào các state
         const [isLoading, setIsLoading] = useState(true)
         const [dataThisMonth, setDataThisMonth]=useState([])
@@ -76,10 +75,8 @@ function Progress({navigation}) {
         var listDataThisMonth=[]
         var listDataLastMonth=[]
         var listDataToday=[]
-        useEffect(()=>{
-            let isMounted = true;
-            try {
-                //this month
+
+        setTimeout(()=>{
                 fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month)
                 .then((res)=>res.json())
                 .then((json)=>{
@@ -89,51 +86,31 @@ function Progress({navigation}) {
                     setDataThisMonth(listDataThisMonth);
                 })
                 .catch((err)=>console.log(err))
-            } catch (error) {
-                console.log('fecth this month err:'+error)
-            }
-            console.log("useEffect this month")
-            return () => { isMounted = false };
-        },[])
-        useEffect(()=>{
-            let isMounted = true;
-            try {
-                //last month
-                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month)
-                .then((res)=>res.json())
-                .then((json)=>{
-                    json.map((data)=>{
-                        listDataLastMonth.push(data)
-                    });
-                    setDataLastMonth(listDataLastMonth);
-                })
-                .catch((err)=>console.log(err))
-            } catch (error) {
-                console.log('fecth last month err:'+ error)
-            }
-            console.log("useEffect last month")
-            return () => { isMounted = false };            
-        },[])
+        },5000)
+        
+        setTimeout(()=>{
+            fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month)
+            .then((res)=>res.json())
+            .then((json)=>{
+                json.map((data)=>{
+                    listDataLastMonth.push(data)
+                });
+                setDataLastMonth(listDataLastMonth);
+            })
+            .catch((err)=>console.log(err))
+        },5000)
 
-        useEffect(()=>{
-            let isMounted = true;
-            try {
-                 //fecth today
-                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
-                .then((res)=>res.json())
-                .then((json)=>{
-                    json.map((data)=>{
-                        listDataToday.push(data)
-                    });
-                    setDataToday(listDataToday);
-                })
-                .catch((err)=>console.log(err))
-            } catch (error) {
-                console.log('fecth today err:'+error)
-            }
-            console.log("useEffect today")
-            return () => { isMounted = false };
-        },[])
+        setTimeout(()=>{
+            fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
+            .then((res)=>res.json())
+            .then((json)=>{
+                json.map((data)=>{
+                    listDataToday.push(data)
+                });
+                setDataToday(listDataToday);
+            })
+            .catch((err)=>console.log(err))
+        },5000)
 
     return (
         <SafeAreaView>
