@@ -44,9 +44,12 @@ function NutritionTab({navigation}) {
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0);
     const [birthday, setBirthday] = useState(new Date());
-    const [isLoading, SetIsLoading] = useState(true);
+    const [isInfoUserLoading, setIsInfoUserLoading] = useState(true);
+    const [isTypeFoodLoading, setIsTypeFoodLoading] = useState(true);
     const [info, setInfo] = useState({});
     const [isTested, setIsTested] = useState(false);
+    const [listType, setListType] = useState([]);
+    let postApi = 'https://runapp1108.herokuapp.com/api/food/foodtype';
 
     const checkNullUndefined = (data) => {
         if (data === undefined || data === null || data === "")
@@ -54,7 +57,17 @@ function NutritionTab({navigation}) {
         return true;
     }
 
-    const fetchData = () => {
+    const fetchTypeFood = () => {
+        fetch(postApi)
+          .then((response) => response.json())
+          .then((json) => {
+              setListType(json);
+          })
+          .catch((error) => console.error(error))
+          .finally(() => setIsTypeFoodLoading(false));
+    }
+
+    const fetchDataUser = () => {
         AsyncStorage.getItem("authToken")
         .then( async (token) => { 
             var vl = jwt_decode(token)
@@ -76,11 +89,11 @@ function NutritionTab({navigation}) {
                 console.log(res.data.gender)
                 if (checkNullUndefined(res.data.height))
                     setHeight(res.data.height);
-                SetIsLoading(false);
+                setIsInfoUserLoading(false);
             })
             .catch((error)=>{
                 console.log(error.response.data)
-                SetIsLoading(false);
+                setIsInfoUserLoading(false);
             })
             
         }) 
@@ -121,7 +134,8 @@ function NutritionTab({navigation}) {
     }
 
     useEffect(() => {
-        fetchData();
+        fetchTypeFood();
+        fetchDataUser();
     }, [])
 
     return (
@@ -222,7 +236,7 @@ function NutritionTab({navigation}) {
                 </View>
             </View>
             {/* test */}
-            {!isTested ? isLoading ? <View style={{
+            {!isTested ? isInfoUserLoading ? <View style={{
                 flex: 1,
                 padding: 8,
                 paddingHorizontal: 12,
@@ -238,7 +252,7 @@ function NutritionTab({navigation}) {
             }}>
                 <IconButtonDesign
                 onPress={() => {
-                    fetchData();
+                    fetchDataUser();
                     setModalVisible(!modalVisible);
                 }}
                 iconName="assignment"
@@ -280,7 +294,7 @@ function NutritionTab({navigation}) {
                             
                             {isTested && <PhraseButton
                             onPress={() => {
-                                fetchData();
+                                fetchDataUser();
                                 setModalVisible(!modalVisible);
                             }}
                             iconName="assignment-turned-in"
@@ -300,25 +314,33 @@ function NutritionTab({navigation}) {
                         </Text>
                     </FontLoader>
                 </View>
-                <View style={{
+                {isTypeFoodLoading ? <View style={{
+                    flex: 1,
+                    padding: 8,
+                    paddingHorizontal: 12,
+                    justifyContent: 'center',
+                }}>
+                    <ActivityIndicator color={Constants.COLOR.green}/>
+                </View> 
+                : <View style={{
                     height: '90%'
                 }}>
-                    <FlatList data={datas}
+                    <FlatList data={listType}
                     showsVerticalScrollIndicator={true}
-                    keyExtractor={item => item.type}
+                    keyExtractor={item => item._id}
                     renderItem={({item}) => {
                         return (
-                            <View item={item} key={item.type} style={{
+                            <View item={item} key={item._id} style={{
                                 paddingHorizontal: 12
                             }}>
                                 <FoodRecommendCard
                                 onPress={() => {
                                     navigation.navigate("FoodScreen", {
-                                        name: item.name, type: item.type
+                                        name: item.typeName, type: item.type
                                     })
                                 }}
-                                text={item.name}
-                                image={item.imageUrl}
+                                text={item.typeName}
+                                image={item.image}
                                 />
                             </View>
                         )
@@ -326,7 +348,7 @@ function NutritionTab({navigation}) {
                     contentContainerStyle={{
                         paddingBottom: 20,
                     }}/>
-                </View>
+                </View>}
                 
             </View>
         </SafeAreaView>
