@@ -18,9 +18,9 @@ const windowWidth = Dimensions.get('window').width;
 
 function Profile({navigation}) {
     const [username, setUsername] = useState([]);
-    const [image, setImage] = useState();
     const [info, setInfo] = useState({});
     const [modalVisible, setModalVisible] = useState(false);
+    const [image, setImage] = useState();
     
     const  _retrieveData = async () => {
         try {
@@ -42,13 +42,14 @@ function Profile({navigation}) {
             
             var vl = jwt_decode(token)
             console.log('Token decode',vl._id)
+            console.log(image)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then( (res)=>{
                 setInfo(res.data);
                 (res.data.image)? setImage(res.data.image) : {};
             })
             .catch((error)=>{
-                console.log(error.response.data)
+                console.log(error.message)
             })
         }) 
         return () => {clean = true}

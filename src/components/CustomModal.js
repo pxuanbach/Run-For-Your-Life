@@ -13,6 +13,7 @@ const windowWidth = Dimensions.get('window').width;
 
 const ButtonSheetModal = ({info, setInfo, image, setImage, modalVisible, setModalVisible}) => {
     const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
+
     const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jamesnguyen/upload';
     const CLOUDINARY_UPLOAD_PRESET = 'nub4abmm';
 
@@ -70,11 +71,10 @@ const ButtonSheetModal = ({info, setInfo, image, setImage, modalVisible, setModa
                 base64: true
               });
           
-              console.log(result);
+             // console.log(result);
               if (result.cancelled === true) {
                   return;
               }
-              //setImage(result.uri);
               uploadHandle(result);
         }
         else {
@@ -96,8 +96,7 @@ const ButtonSheetModal = ({info, setInfo, image, setImage, modalVisible, setModa
               })
               if (!result.cancelled) {
                   console.log(result);
-                  //setImage(result.uri);
-                uploadHandle(result);
+                  uploadHandle(result);
               }
         }else{
            Alert.alert("you need to give up permission to work")
