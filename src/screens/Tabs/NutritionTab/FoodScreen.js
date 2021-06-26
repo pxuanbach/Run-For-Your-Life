@@ -101,7 +101,7 @@ function FoodScreen({navigation}) {
                     }}>
                         <ListFoodCard
                         data={foodDatas}
-                        type={navigation.getParam('type')}
+                        type={navigation.getParam('name')}
                         >
                         </ListFoodCard>
                     </View>
