@@ -340,7 +340,7 @@ function NutritionTab({navigation}) {
                                     })
                                 }}
                                 text={item.typeName}
-                                image={item.imageUrl}
+                                image={item.image}
                                 />
                             </View>
                         )
