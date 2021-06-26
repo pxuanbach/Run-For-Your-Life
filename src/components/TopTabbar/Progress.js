@@ -57,19 +57,6 @@ function Progress({navigation}) {
 
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
-    //hàm get username
-    const  _getusername = async (a) => {
-        try {
-          const value = await AsyncStorage.getItem("username");
-          if (value !== null) {
-            setUsername(value);
-            console.log("hàm get username: "+username)
-          }
-        } catch (error) {
-          // Error retrieving data
-        }
-      };
-
     //hàm get user id 
     const _getuserid=async(a)=>{
         try {
@@ -88,7 +75,7 @@ function Progress({navigation}) {
         }    
     }
     // hàm fecth data
-    function fecthdata(){
+    function _fecthdata(){
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month)
         .then((res)=>res.json())
         .then((json)=>{
@@ -131,12 +118,10 @@ function Progress({navigation}) {
         console.log("hàm fecthdata")
     }
 
-    // useeffect fecth data
+    // useeffect 
     useEffect(()=>{
         _getuserid();
-        setTimeout(()=>{
-            fecthdata();
-        },3000);
+        _fecthdata();
     },[isLoading])
 
     return (
