@@ -44,7 +44,6 @@ function Progress({navigation}) {
         var today= moment().format();
         var t = today.split('T');
         today=t[0];
-
     //get userID
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
@@ -60,7 +59,7 @@ function Progress({navigation}) {
             .catch((err)=>console.log(err))     
             console.log("hàm _getuserid")  
         } catch (error) {
-            
+            console.log(error)
         }    
     }
     useEffect(()=>{
@@ -152,9 +151,8 @@ function Progress({navigation}) {
                 data={dataToday}/>
             
                 <Text style={styles.titleToday}>This week</Text>
-                <ViewShowChart>
-
-                </ViewShowChart>
+                <ViewShowChart
+                data={dataThisWeek}/>
              
                 <Text style={styles.titleToday}>Monthly</Text>
                 <ViewShowData 
