@@ -36,7 +36,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         if(count!=0){
             _avg= _total_avg/count;
         }
-        return _avg;
+        return _avg.toFixed(2);
     }
     function get_time(data){
         var _time =0;

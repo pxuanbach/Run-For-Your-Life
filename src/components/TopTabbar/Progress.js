@@ -22,10 +22,11 @@ const windowWidth = Dimensions.get('window').width;
 
 function Progress({navigation}) {
     //tính ngày, tháng này, tháng trước yyyy-mm
+        //tháng này
         var month= moment().format();
         var m=month.split('-')
         var this_month=m[0]+"-"+m[1]
-
+        //tháng trước
         var last_month=""
         if(Number.parseInt(m[1])===1){
             var last_year = (Number.parseInt(m[0])-1).toString()
@@ -40,9 +41,45 @@ function Progress({navigation}) {
                 last_month= m[0]+"-"+ int_last_month.toString()
             }
         }
-        var today= moment().format();
-        var t = today.split('T');
-        today=t[0];
+        //hôm nay
+        var today= ((moment().format()).split('"'))[0]
+
+        // các ngày trong tuần này
+        var _thu_hom_nay=moment().format('dddd') //Saturday
+        var mon = ""
+        var tue=""
+        var wed=""
+        var thu=""
+        var fri=""
+        var sat=""
+        var sun=""
+        switch(_thu_hom_nay){
+            case "Monday":
+                mon=moment().format()
+                break;
+            case "Tuesday":
+                mon=moment().subtract(1, 'days').format().
+                break;
+            case "Wednesday":
+                mon=moment().subtract(2, 'days').format()
+                break;
+            case "Thurday":
+                mon=moment().subtract(3, 'days').format()
+                break;
+            case "Friday":
+                mon=moment().subtract(4, 'days').format()
+                break;
+            case "Saturday":
+                mon=moment().subtract(5, 'days').format()
+                break;
+            case "Sunday":
+                mon=moment().subtract(6, 'days').format()
+                break;
+            default: _thu_hai=moment().format()
+        }
+
+
+
     //state
     const [isLoading, setIsLoading] = useState(true)
 
