@@ -2,22 +2,17 @@ import React, {useState, useEffect} from 'react';
 import {
     View, Modal, Dimensions, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
-
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
 import { IconButtonDesign, PhraseButton } from './CustomButton';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
-import { set } from 'react-native-reanimated';
-
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const ButtonSheetModal = ({info,setInfo ,image, setImage, modalVisible, setModalVisible}) => {
-
+const ButtonSheetModal = ({info, setInfo, image, setImage, modalVisible, setModalVisible}) => {
     const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
-
 
     const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jamesnguyen/upload';
     const CLOUDINARY_UPLOAD_PRESET = 'nub4abmm';
@@ -31,40 +26,39 @@ const ButtonSheetModal = ({info,setInfo ,image, setImage, modalVisible, setModal
         }
     
         fetch(CLOUDINARY_URL, {
-          body: JSON.stringify(data),
-          headers: {
-            'content-type': 'application/json'
-          },
-          method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+              'content-type': 'application/json'
+            },
+            method: 'POST',
         }).then( r => {
-        r.json()
-        .then( async (data) =>{
-        axios.post('https://runapp1108.herokuapp.com/api/users/Infov2', {   
-        UserID: info.user,
-        fullname:info.fullname, 
-        address: info.address,
-        birthday: info.birthday,
-        description: info.description,
-        gender: info.gender,
-        height: info.height,
-        weight: info.weight,
-        job: info.job,
-        phone: info.phone,
-        note: info.note,
-        image: data.url,      
-        }).then(async (res) =>{
-            console.log('Sucess: ',res.data)
-            setInfo(res.data)
-            setImage(res.data.image)
-          })
-          .catch( (err)=> {
-              console.log('Lỗi axios',err); 
-          }
-          )
-        }).catch(()=>{ console.log('Lỗi Json') })
-
+            r.json()
+            .then( async (data) => {
+                axios.post('https://runapp1108.herokuapp.com/api/users/Infov2', {   
+                    UserID: info.user,
+                    fullname: info.fullname, 
+                    address: info.address,
+                    birthday: info.birthday,
+                    description: info.description,
+                    gender: info.gender,
+                    height: info.height,
+                    weight: info.weight,
+                    job: info.job,
+                    phone: info.phone,
+                    note: info.note,
+                    image: data.url,      
+                }).then(async (res) =>{
+                    //console.log('Sucess: ',res.data)
+                    setInfo(res.data)
+                    setImage(res.data.image)
+                })
+                .catch( (err)=> {
+                    console.log('Lỗi axios',err); 
+                })
+            }).catch(()=>{ console.log('Lỗi Json') })
+  
         }).catch((err) => console.log('Lỗi upfile'))        
-      };
+    };
 
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -172,7 +166,8 @@ const ButtonSheetModal = ({info,setInfo ,image, setImage, modalVisible, setModal
     )
 }
 
-const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTested, gender, weight, height, birthday}) => {
+const TestRModal = ({modalVisible, setModalVisible, setCalorie, setIsTested,
+    saveCalorie, gender, weight, height, birthday}) => {
     const calculateDailyCalorie = (R) => {
         let bmr = 0;
         var currentDay = new Date();
@@ -187,6 +182,14 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
         console.log(R*bmr);
         setCalorie((R*bmr).toFixed(2));
     }
+
+    const infoValid = () => {
+        var currentDay = new Date();
+        if (gender === "" || weight === 0 || height === 0 || birthday.getFullYear() === currentDay.getFullYear())
+            return false;
+        return true;
+    }
+
     return (
         <View>
             <Modal
@@ -205,7 +208,7 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                     borderWidth: 2,
                     borderColor: Constants.COLOR.second_green
                 }}>
-                    <View style={{
+                    {infoValid() ? <View style={{
                         padding: 4,
                         width: '93%'
                     }}>
@@ -231,8 +234,8 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                         <View>
                             <PhraseButton
                             onPress={() => {
-                                setR(1.2);
                                 calculateDailyCalorie(1.2);
+                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -241,8 +244,8 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                             />
                             <PhraseButton
                             onPress={() => {
-                                setR(1.375);
                                 calculateDailyCalorie(1.375);
+                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -251,8 +254,8 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                             />
                             <PhraseButton
                             onPress={() => {
-                                setR(1.55);
                                 calculateDailyCalorie(1.55);
+                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -261,8 +264,8 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                             />
                             <PhraseButton
                             onPress={() => {
-                                setR(1.725);
                                 calculateDailyCalorie(1.725);
+                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -271,8 +274,8 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                             />
                             <PhraseButton
                             onPress={() => {
-                                setR(1.9);
                                 calculateDailyCalorie(1.9);
+                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -280,7 +283,31 @@ const TestRModal = ({setR, modalVisible, setModalVisible, setCalorie, setIsTeste
                             phrase="Very heavy exercisers (exercise 2 times/day, manual labor)"
                             />
                         </View>
-                    </View>
+                    </View> : <View style={{
+                        padding: 4,
+                        width: '93%',
+                        height: '80%'
+                    }}>
+                        <FontLoader>
+                            <Text style={{
+                                fontFamily: 'RobotoRegular',
+                                fontSize: windowHeight/36,
+                                color: Constants.COLOR.second_green,
+                                paddingHorizontal: 12,
+                                paddingTop: windowHeight/30, 
+                            }}>
+                                Your infomation is invalid.
+                            </Text>
+                            <Text style={{
+                                fontFamily: 'RobotoRegular',
+                                fontSize: windowHeight/36,
+                                color: Constants.COLOR.second_green,
+                                paddingHorizontal: 12,
+                            }}>
+                                Please! update your infomation.
+                            </Text>
+                        </FontLoader>
+                    </View>}
                     <View style={{
                         alignSelf: 'center',
                         padding: windowHeight/120

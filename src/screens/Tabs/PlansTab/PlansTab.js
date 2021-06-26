@@ -36,6 +36,7 @@ function PlansTab() {
                     backgroundColor: Constants.COLOR.white,
                     borderRadius: 16,
                     marginTop: windowHeight/24,
+                    elevation: 6
                 }}>
                     <FontLoader>
                         <Text style={{
