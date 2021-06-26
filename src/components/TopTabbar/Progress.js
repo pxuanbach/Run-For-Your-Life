@@ -72,11 +72,14 @@ function Progress({navigation}) {
         const [dataThisMonth, setDataThisMonth]=useState([])
         const [dataLastMonth,setDataLastMonth] = useState([])
         const [dataToday, setDataToday]= useState([])
+        const [dataThisWeek, setDataThisWeek]=useState([])
         var listDataThisMonth=[]
         var listDataLastMonth=[]
         var listDataToday=[]
+        var listDataThisWeek=[]
 
         setTimeout(()=>{
+                //this month
                 fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month)
                 .then((res)=>res.json())
                 .then((json)=>{
@@ -86,31 +89,40 @@ function Progress({navigation}) {
                     setDataThisMonth(listDataThisMonth);
                 })
                 .catch((err)=>console.log(err))
+                //last month
+                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month)
+                .then((res)=>res.json())
+                .then((json)=>{
+                    json.map((data)=>{
+                        listDataLastMonth.push(data)
+                    });
+                    setDataLastMonth(listDataLastMonth);
+                })
+                .catch((err)=>console.log(err))
+                //today
+                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
+                .then((res)=>res.json())
+                .then((json)=>{
+                    json.map((data)=>{
+                        listDataToday.push(data)
+                    });
+                    setDataToday(listDataToday);
+                })
+                .catch((err)=>console.log(err))
+                //this week
+                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/thisweek")
+                .then((res)=>res.json())
+                .then((json)=>{
+                    json.map((data)=>{
+                        listDataThisWeek.push(data)
+                    });
+                    setDataThisWeek(listDataThisWeek);
+                })
+                .catch((err)=>console.log(err))
+
+                console.log("timeout")
         },5000)
         
-        setTimeout(()=>{
-            fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month)
-            .then((res)=>res.json())
-            .then((json)=>{
-                json.map((data)=>{
-                    listDataLastMonth.push(data)
-                });
-                setDataLastMonth(listDataLastMonth);
-            })
-            .catch((err)=>console.log(err))
-        },5000)
-
-        setTimeout(()=>{
-            fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
-            .then((res)=>res.json())
-            .then((json)=>{
-                json.map((data)=>{
-                    listDataToday.push(data)
-                });
-                setDataToday(listDataToday);
-            })
-            .catch((err)=>console.log(err))
-        },5000)
 
     return (
         <SafeAreaView>
