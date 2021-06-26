@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Text, TextInput, AsyncStorage,
+import { View, Dimensions, Text, TextInput, AsyncStorage,Alert,
     SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView
 } from 'react-native';
 import {CustomButton, IconButtonDesign} from '../../../components/CustomButton';
@@ -50,7 +50,24 @@ function EditScreen({navigation}) {
         _menu.show();
     }
 
+    function ValidateEmail(mail) 
+{
+ if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
+  {
+    return (true)
+  }
+    return (false)
+}
+
     const HandleSave = () => {
+        
+        if (!ValidateEmail(mail)) {
+            Alert.alert(
+                "Oops!",
+                "Email không hợp lệ",
+              )
+            return 0
+        }
         AsyncStorage.getItem("authToken")
         .then( async (token) => { 
             var vl = jwt_decode(token)
@@ -66,6 +83,7 @@ function EditScreen({navigation}) {
             //console.log('gender:',gender)
             console.log('Date:',date)
             let birthday = Moment(date).format('YYYY-MM-DD')
+            console.log('mail',mail)
             //console.log('height:',height)
             //console.log('weight',weight)
 
