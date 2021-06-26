@@ -33,6 +33,7 @@ function EditScreen({navigation}) {
     const [address, setAddress] = useState(navigation.getParam('address'));
     const [height, setHeight] = useState(navigation.getParam('height'));
     const [weight, setWeight] = useState(navigation.getParam('weight'));
+
     let image = navigation.getParam('image');
     let note = navigation.getParam('note');
 
@@ -51,13 +52,13 @@ function EditScreen({navigation}) {
     }
 
     function ValidateEmail(mail) 
-{
- if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
-  {
-    return (true)
-  }
-    return (false)
-}
+    {
+        if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
+        {
+            return (true)
+        }
+            return (false)
+    }
 
     const HandleSave = () => {
         
