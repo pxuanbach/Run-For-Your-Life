@@ -66,38 +66,7 @@ function Progress({navigation}) {
         _getuserid();
         return () => { isMounted = false };
     },[])
-    // const  _retrieveData = async () => {
-    //     try {
-    //       const value = await AsyncStorage.getItem("username");
-    //       if (value !== null) {
-    //         setUsername(value);
-    //       }
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    //   };
-    //     useEffect(() => {
-    //         let isMounted = true;
-    //         _retrieveData();
-    //         console.log('useeffect username'+username)
-    //         return () => { isMounted = false };
-    //     }, [])
-    //     console.log('set username:'+username)    
-
-    //     useEffect(()=>{
-    //         try {
-    //             fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
-    //         .then((res)=>res.text())
-    //         .then((text)=>{
-    //             var u = text.split('"')
-    //             setUserid(u[1])
-    //             console.log('useeffect userid: ' + userid)
-    //         })
-    //         } catch (error) {
-    //             console.log(error)
-    //         }
-    //     })
-    //     console.log("set userid:"+userid)
+    console.log('userid: '+userid)
 
         /// fecth data về từ api lưu vào các state
         const [isLoading, setIsLoading] = useState(true)
@@ -107,8 +76,6 @@ function Progress({navigation}) {
         var listDataThisMonth=[]
         var listDataLastMonth=[]
         var listDataToday=[]
-
-        console.log("end state");
         useEffect(()=>{
             let isMounted = true;
             try {
@@ -125,8 +92,8 @@ function Progress({navigation}) {
             } catch (error) {
                 console.log('fecth this month err:'+error)
             }
-            return () => { isMounted = false };
             console.log("useEffect this month")
+            return () => { isMounted = false };
         },[])
         useEffect(()=>{
             let isMounted = true;
@@ -144,8 +111,8 @@ function Progress({navigation}) {
             } catch (error) {
                 console.log('fecth last month err:'+ error)
             }
-            return () => { isMounted = false };
             console.log("useEffect last month")
+            return () => { isMounted = false };            
         },[])
 
         useEffect(()=>{
@@ -164,8 +131,8 @@ function Progress({navigation}) {
             } catch (error) {
                 console.log('fecth today err:'+error)
             }
-            return () => { isMounted = false };
             console.log("useEffect today")
+            return () => { isMounted = false };
         },[])
 
     return (
