@@ -56,10 +56,12 @@ function Progress({navigation}) {
             .then((text)=>{
                 var u = text.split('"')
                 setUserid(u[1])
-            })          
+            })   
+            .catch((err)=>console.log(err))     
+            console.log("hàm _getuserid")  
         } catch (error) {
             
-        }
+        }    
     }
     useEffect(()=>{
         let isMounted = true;
