@@ -299,7 +299,7 @@ function NutritionTab({navigation}) {
                             }}
                             iconName="assignment-turned-in"
                             iconSize={windowHeight/30}
-                            color={Constants.COLOR.second_green}
+                            color={Constants.COLOR.green}
                             phrase="Re-Test"
                             windowHeight={windowHeight}/>}
                         </View>

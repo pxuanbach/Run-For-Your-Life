@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    View, AsyncStorage, ActivityIndicator
+    View, AsyncStorage, ActivityIndicator, Alert
 } from 'react-native';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
@@ -23,7 +23,6 @@ function AppLoading({navigation}) {
         } catch (error) {
         }
       };
-    
     //Dang xu ly
     const tokenValid = async () => {
         try {
@@ -35,7 +34,8 @@ function AppLoading({navigation}) {
                     'auth-token': token,
                 }
                 Axios.get("https://runapp1108.herokuapp.com/api/users/", {
-                    headers: hearders
+                    headers: hearders,
+                    timeout: 3000,
                 })
                 .then((res)=>{
                     console.log(res.status);

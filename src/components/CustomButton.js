@@ -71,7 +71,7 @@ const PhraseButton = ({phrase, onPress, windowHeight, iconName="arrow-right", ic
             <Text style={{
                 fontFamily: 'RobotoRegular',
                 fontSize: windowHeight/40,
-                color: Constants.COLOR.second_green,
+                color: Constants.COLOR.green,
                 paddingHorizontal: 8, 
             }}>
                 {phrase}.

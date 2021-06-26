@@ -20,9 +20,9 @@ const TopTabbar = createMaterialTopTabNavigator({
             tabBarLabel: 
                 (<FontLoader>
                     <Text style={{
-                        color: Constants.COLOR.second_green,
+                        color: Constants.COLOR.white,
                         fontSize: windowHeight/36,
-                        fontFamily: 'SemiRegular',
+                        fontFamily: 'SemiBold',
                         alignSelf: 'center',
                     }}>Progress</Text>
                 </FontLoader>),
@@ -34,9 +34,9 @@ const TopTabbar = createMaterialTopTabNavigator({
             tabBarLabel: 
                 (<FontLoader>
                     <Text style={{
-                        color: Constants.COLOR.second_green,
+                        color: Constants.COLOR.white,
                         fontSize: windowHeight/36,
-                        fontFamily: 'SemiRegular',
+                        fontFamily: 'SemiBold',
                         alignSelf: 'center',
                     }}>Activities</Text>
                 </FontLoader>),
@@ -48,9 +48,9 @@ const TopTabbar = createMaterialTopTabNavigator({
             tabBarLabel: 
                 (<FontLoader>
                     <Text style={{
-                        color: Constants.COLOR.second_green,
+                        color: Constants.COLOR.white,
                         fontSize: windowHeight/36,
-                        fontFamily: 'SemiRegular',
+                        fontFamily: 'SemiBold',
                         alignSelf: 'center',
                     }}>Profile</Text>
                 </FontLoader>),
@@ -61,7 +61,7 @@ const TopTabbar = createMaterialTopTabNavigator({
     initialRouteName: "Progress",
     tabBarOptions: {
         style: {
-            backgroundColor: Constants.COLOR.white
+            backgroundColor: Constants.COLOR.green
         }
     }
 })

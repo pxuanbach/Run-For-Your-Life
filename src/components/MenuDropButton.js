@@ -39,8 +39,8 @@ const MenuDropdownButton = ({setMenuRef, hideMenu, showMenu,
                 height={windowHeight/20}
                 iconName='more-vert'
                 iconSize={28}
-                color={Constants.COLOR.dark_green}
-                backgroundColor={Constants.COLOR.white}/>}
+                color={Constants.COLOR.white}
+                backgroundColor={Constants.COLOR.green}/>}
             >
                 <FontLoader>
                     <MenuItem style={{width: '100%'}}

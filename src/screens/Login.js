@@ -35,7 +35,7 @@ function Login({navigation}) {
     //run when navigate to this screen
     const unsubscribe = navigation.addListener('didFocus', () => {
         setTimeout(() => {
-            console.log("time out")
+            console.log("apploading")
             setIsLoading(false);
           }, 1000);
         console.log("get details")
