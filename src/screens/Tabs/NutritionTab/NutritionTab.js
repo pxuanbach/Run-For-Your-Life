@@ -10,7 +10,6 @@ import FontLoader from '../../../utilities/Font';
 import { TestRModal } from '../../../components/CustomModal';
 import jwt_decode from "jwt-decode";
 import Axios from 'axios';
-import Moment from 'moment';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -77,17 +76,17 @@ function NutritionTab({navigation}) {
                 console.log(res.data.gender)
                 if (checkNullUndefined(res.data.height))
                     setHeight(res.data.height);
-                console.log(res.data)
                 SetIsLoading(false);
             })
             .catch((error)=>{
                 console.log(error.response.data)
+                SetIsLoading(false);
             })
             
         }) 
     }
 
-    const HandleSaveCalorie = () => {
+    const HandleSaveCalorie = (calo) => {
         AsyncStorage.getItem("authToken")
         .then( async (token) => { 
             var vl = jwt_decode(token)
@@ -109,10 +108,10 @@ function NutritionTab({navigation}) {
                 weight: info.weight,
                 job: info.job,
                 phone: info.phone,
-                note: calorie,
+                note: calo,
                 image: info.image,
             })
-            .then((res)=>{
+            .then((res) => {
 
             })
             .catch((err)=> {
@@ -123,7 +122,7 @@ function NutritionTab({navigation}) {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [])
 
     return (
         <SafeAreaView style={{
@@ -239,6 +238,7 @@ function NutritionTab({navigation}) {
             }}>
                 <IconButtonDesign
                 onPress={() => {
+                    fetchData();
                     setModalVisible(!modalVisible);
                 }}
                 iconName="assignment"
@@ -279,7 +279,10 @@ function NutritionTab({navigation}) {
                             </Text>
                             
                             {isTested && <PhraseButton
-                            onPress={() => {setModalVisible(!modalVisible)}}
+                            onPress={() => {
+                                fetchData();
+                                setModalVisible(!modalVisible);
+                            }}
                             iconName="assignment-turned-in"
                             iconSize={windowHeight/30}
                             color={Constants.COLOR.second_green}

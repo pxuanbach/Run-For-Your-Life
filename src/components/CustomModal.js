@@ -11,7 +11,7 @@ import axios from 'axios';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const ButtonSheetModal = ({info, setInfo, image, setImage, modalVisible, setModalVisible}) => {
+const ButtonSheetModal = ({info, setInfo, modalVisible, setModalVisible}) => {
     const setValue = (fieldName, value) => setInfo({...info, [fieldName]: value});
 
     const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/jamesnguyen/upload';
@@ -50,7 +50,6 @@ const ButtonSheetModal = ({info, setInfo, image, setImage, modalVisible, setModa
                 }).then(async (res) =>{
                     //console.log('Sucess: ',res.data)
                     setInfo(res.data)
-                    setImage(res.data.image)
                 })
                 .catch( (err)=> {
                     console.log('Lỗi axios',err); 
@@ -181,11 +180,12 @@ const TestRModal = ({modalVisible, setModalVisible, setCalorie, setIsTested,
         }
         console.log(R*bmr);
         setCalorie((R*bmr).toFixed(2));
+        saveCalorie((R*bmr).toFixed(2));
     }
 
     const infoValid = () => {
         var currentDay = new Date();
-        if (gender === "" || weight === 0 || height === 0 || birthday.getFullYear() === currentDay.getFullYear())
+        if (gender === "" || gender === "Unknown" || weight === 0 || height === 0 || birthday.getFullYear() === currentDay.getFullYear())
             return false;
         return true;
     }
@@ -235,7 +235,6 @@ const TestRModal = ({modalVisible, setModalVisible, setCalorie, setIsTested,
                             <PhraseButton
                             onPress={() => {
                                 calculateDailyCalorie(1.2);
-                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -245,7 +244,6 @@ const TestRModal = ({modalVisible, setModalVisible, setCalorie, setIsTested,
                             <PhraseButton
                             onPress={() => {
                                 calculateDailyCalorie(1.375);
-                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -255,7 +253,6 @@ const TestRModal = ({modalVisible, setModalVisible, setCalorie, setIsTested,
                             <PhraseButton
                             onPress={() => {
                                 calculateDailyCalorie(1.55);
-                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -265,7 +262,6 @@ const TestRModal = ({modalVisible, setModalVisible, setCalorie, setIsTested,
                             <PhraseButton
                             onPress={() => {
                                 calculateDailyCalorie(1.725);
-                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}
@@ -275,7 +271,6 @@ const TestRModal = ({modalVisible, setModalVisible, setCalorie, setIsTested,
                             <PhraseButton
                             onPress={() => {
                                 calculateDailyCalorie(1.9);
-                                saveCalorie();
                                 setIsTested(true);
                                 setModalVisible(false);
                             }}

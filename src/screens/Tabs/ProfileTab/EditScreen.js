@@ -16,13 +16,14 @@ import Moment from 'moment';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const resetAction = StackActions.reset({
+const resetProfile = StackActions.reset({
     index: 0,
     actions: [NavigationActions.navigate({ routeName: 'Profile' })],
-  });
+});
 
 function EditScreen({navigation}) {
-    const [date, setDate] = useState(new Date(navigation.getParam('birthday')));
+    const [date, setDate] = useState(navigation.getParam('birthday') ?
+        new Date(navigation.getParam('birthday')) : new Date());
     const [fullname, setName] = useState(navigation.getParam('fullname'));
     const [mail, setMail] = useState(navigation.getParam('mail'));
     const [description, setDescription] = useState(navigation.getParam('description'));
@@ -43,52 +44,6 @@ function EditScreen({navigation}) {
     }
     const hideMenu = () => {
         _menu.hide();
-    }
-
-
-    HandleSave =  () => {
-        AsyncStorage.getItem("authToken")
-        .then( async (token) => { 
-        var vl = jwt_decode(token)
-        console.log('Token decode',vl._id)
-        let UserID = vl._id;
-        console.log(UserID)
-
-        console.log('name:',name)
-        console.log('mail:',mail)
-        console.log('descrpttion:',description)
-        console.log('job:',job)
-        console.log('phone:',phone)
-        console.log('gender:',gender)
-        console.log('Date:',date)
-        console.log('height:',height)
-        console.log('weight',weight)
-        let fullname = name;
-        let birthday = date;
-
-        await axios.post('https://runapp1108.herokuapp.com/api/users/Infov2',{UserID,fullname,mail,description,job,phone,gender,address,birthday,height,weight})
-        .then((res)=>{
-            console.log(res.data)
-            navigation.navigate("Profile", {  
-            name: name, 
-            mail: mail,
-            description: description,
-            job: job,
-            phone: phone,
-            gender: gender,
-            address: address,
-            birthday: date,
-            height: height,
-            weight: weight,
-        })
-        })
-        .catch((err)=> {
-            console.log(err)
-        })
-    })
-
-        
-
     }
 
     const showMenu = () => {
@@ -117,7 +72,7 @@ function EditScreen({navigation}) {
             await axios.post('https://runapp1108.herokuapp.com/api/users/Infov2',{UserID,fullname,mail,description,job,phone,gender,address,birthday,height,weight,image,note})
             .then((res)=>{
                 console.log(res.data)
-                navigation.dispatch(resetAction);
+                navigation.dispatch(resetProfile);
                 navigation.navigate("Profile");
             })
             .catch((err)=> {

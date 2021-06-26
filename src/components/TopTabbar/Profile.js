@@ -20,8 +20,13 @@ function Profile({navigation}) {
     const [username, setUsername] = useState([]);
     const [info, setInfo] = useState({});
     const [modalVisible, setModalVisible] = useState(false);
-    const [image, setImage] = useState();
     
+    const checkNullUndefined = (data) => {
+        if (data === undefined || data === null || data === "")
+            return false;
+        return true;
+    }
+
     const  _retrieveData = async () => {
         try {
           const value = await AsyncStorage.getItem("username");
@@ -32,7 +37,9 @@ function Profile({navigation}) {
           // Error retrieving data
         }
     };
+
     
+
     //run when navigate to this screen
     useEffect( () => {
         let clean = false;
@@ -42,16 +49,15 @@ function Profile({navigation}) {
             
             var vl = jwt_decode(token)
             console.log('Token decode',vl._id)
-            console.log(image)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then( (res)=>{
                 setInfo(res.data);
-                (res.data.image)? setImage(res.data.image) : {};
             })
             .catch((error)=>{
                 console.log(error.message)
             })
         }) 
+        _retrieveData();
         return () => {clean = true}
     },[])
        
@@ -62,8 +68,6 @@ function Profile({navigation}) {
                 <ButtonSheetModal
                 info={info}
                 setInfo={setInfo}
-                image={info.image}
-                setImage={setImage}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}/>
                 {/* Photo + Name, Email */}
@@ -80,8 +84,8 @@ function Profile({navigation}) {
                         height: windowWidth/3,
                         width: windowWidth/3
                     }}>
-                        {image != null ?
-                        <Image source={{ uri: image }}
+                        {!checkNullUndefined(info.image) ?
+                        <Image source={require('../../images/back.png')}
                         style={{ 
                             height: windowWidth/3,
                             width: windowWidth/3,
@@ -127,7 +131,7 @@ function Profile({navigation}) {
                                     fontSize: windowHeight/30,
                                     color: Constants.COLOR.green,
                                 }}>
-                                    {info.fullname}
+                                    {checkNullUndefined(info.fullname) ? info.fullname : username}
                                 </Text>
                                 <Text numberOfLines={1} ellipsizeMode='tail'
                                 style={{
