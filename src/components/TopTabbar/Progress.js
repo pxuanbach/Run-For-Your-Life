@@ -57,8 +57,21 @@ function Progress({navigation}) {
 
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
+    //hàm get username
+    const  _getusername = async (a) => {
+        try {
+          const value = await AsyncStorage.getItem("username");
+          if (value !== null) {
+            setUsername(value);
+            console.log("hàm get username: "+username)
+          }
+        } catch (error) {
+          // Error retrieving data
+        }
+      };
+
     //hàm get user id 
-    const _getuserid=async()=>{
+    const _getuserid=async(a)=>{
         try {
             const username= await AsyncStorage.getItem("username")
             var res = await fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
@@ -66,6 +79,7 @@ function Progress({navigation}) {
             .then((text)=>{
                 var u = text.split('"')
                 setUserid(u[1])
+                setIsLoading(false)
             })   
             .catch((err)=>console.log(err))     
             console.log("hàm _getuserid: "+userid)  
@@ -119,16 +133,11 @@ function Progress({navigation}) {
 
     // useeffect fecth data
     useEffect(()=>{
-        async function fecthAll(){
-            let u = await _getuserid()
-            let i = await fecthdata()
-        }
-        fecthAll();
-        // let isMounted = true;
-        // _getuserid();
-        // fecthdata();
-        // return () => { isMounted = false };
-    },[])
+        _getuserid();
+        setTimeout(()=>{
+            fecthdata();
+        },3000);
+    },[isLoading])
 
     return (
         <SafeAreaView>
