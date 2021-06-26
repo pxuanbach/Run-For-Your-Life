@@ -22,7 +22,7 @@ const windowWidth = Dimensions.get('window').width;
 
 function Progress({navigation}) {
     /******************************************************************************/
-    //tính tháng này, tháng trước yyyy-mm
+    //tính ngày, tháng này, tháng trước yyyy-mm
         var month= moment().format();
         var m=month.split('-')
         var this_month=m[0]+"-"+m[1]
@@ -41,50 +41,63 @@ function Progress({navigation}) {
                 last_month= m[0]+"-"+ int_last_month.toString()
             }
         }
-        console.log('this month: '+this_month)
-        console.log('last month: '+last_month)
-    //get userID
-    const [username, setUsername]=useState()
-    const [userid, setUserid] = useState()
-    const  _retrieveData = async () => {
-        try {
-          const value = await AsyncStorage.getItem("username");
-          if (value !== null) {
-            setUsername(value);
-          }
-        } catch (error) {
-            console.log(error)
-        }
-      };
-        useEffect(() => {
-            let isMounted = true;
-            _retrieveData();
-            console.log(username)
-            return () => { isMounted = false };
-        }, [])
-        
-        // console.log('username:'+username)
-        useEffect(()=>{
-            (async()=>{
-                const res= await fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
-                var u = await res.text();
-                setUserid(u[1])
-            })()
-        },[])
-
-
-        console.log("userid:"+userid)
-        //api this last month
-        var api_get_data_this_month = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month;
-        var api_get_data_last_month = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month;
-        
-        console.log(api_get_data_this_month)
-        console.log(api_get_data_last_month)
-        //api today
         var today= moment().format();
         var t = today.split('T');
         today=t[0];
-        var api_get_data_today = "https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today;
+
+    //get userID
+    const [username, setUsername]=useState()
+    const [userid, setUserid] = useState()
+    const _getuserid=async()=>{
+        try {
+            const username= await AsyncStorage.getItem("username")
+            fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
+            .then((res)=>res.text())
+            .then((text)=>{
+                var u = text.split('"')
+                setUserid(u[1])
+            })          
+        } catch (error) {
+            
+        }
+    }
+    useEffect(()=>{
+        let isMounted = true;
+        _getuserid();
+        return () => { isMounted = false };
+    },[])
+    // const  _retrieveData = async () => {
+    //     try {
+    //       const value = await AsyncStorage.getItem("username");
+    //       if (value !== null) {
+    //         setUsername(value);
+    //       }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    //   };
+    //     useEffect(() => {
+    //         let isMounted = true;
+    //         _retrieveData();
+    //         console.log('useeffect username'+username)
+    //         return () => { isMounted = false };
+    //     }, [])
+    //     console.log('set username:'+username)    
+
+    //     useEffect(()=>{
+    //         try {
+    //             fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
+    //         .then((res)=>res.text())
+    //         .then((text)=>{
+    //             var u = text.split('"')
+    //             setUserid(u[1])
+    //             console.log('useeffect userid: ' + userid)
+    //         })
+    //         } catch (error) {
+    //             console.log(error)
+    //         }
+    //     })
+    //     console.log("set userid:"+userid)
 
         /// fecth data về từ api lưu vào các state
         const [isLoading, setIsLoading] = useState(true)
@@ -100,7 +113,7 @@ function Progress({navigation}) {
             let isMounted = true;
             try {
                 //this month
-                fetch(api_get_data_this_month)
+                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month)
                 .then((res)=>res.json())
                 .then((json)=>{
                     json.map((data)=>{
@@ -119,7 +132,7 @@ function Progress({navigation}) {
             let isMounted = true;
             try {
                 //last month
-                fetch(api_get_data_last_month)
+                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month)
                 .then((res)=>res.json())
                 .then((json)=>{
                     json.map((data)=>{
@@ -139,7 +152,7 @@ function Progress({navigation}) {
             let isMounted = true;
             try {
                  //fecth today
-                fetch(api_get_data_today)
+                fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
                 .then((res)=>res.json())
                 .then((json)=>{
                     json.map((data)=>{
@@ -154,7 +167,6 @@ function Progress({navigation}) {
             return () => { isMounted = false };
             console.log("useEffect today")
         },[])
-        console.log("end useEffect")
 
     return (
         <SafeAreaView>
