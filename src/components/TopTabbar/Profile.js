@@ -15,35 +15,11 @@ import Axios from 'axios';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
+
 function Profile({navigation}) {
-    const getDetails = () => {
-        let data = {
-            fullname: navigation.getParam("name") == null 
-                ? 'Loading...' : navigation.getParam("name"),
-            mail: navigation.getParam("mail") == null 
-                ? 'Loading...' : navigation.getParam("mail"),
-            description: navigation.getParam("description") == null 
-                ? 'Loading...' : navigation.getParam("description"),
-            job: navigation.getParam("job") == null 
-                ? 'Loading...' : navigation.getParam("job"),
-            phone: navigation.getParam("phone") == null 
-                ? 'Loading...' : navigation.getParam("phone"),
-            gender: navigation.getParam("gender") == null 
-                ? 'Loading...' : navigation.getParam("gender"),
-            address: navigation.getParam("address") == null 
-                ? 'Loading...' : navigation.getParam("address"),
-            birthday: navigation.getParam("birthday") == null 
-                ? 'Loading...' : navigation.getParam("birthday"),
-            height: navigation.getParam("height") == null 
-                ? 'Loading...' : navigation.getParam("height"),
-            weight: navigation.getParam("weight") == null 
-                ? 'Loading...' : navigation.getParam("weight"),
-        };
-        return data;
-    }
     const [username, setUsername] = useState([]);
+    const [image, setImage] = useState();
     const [info, setInfo] = useState({});
-    const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     
     const  _retrieveData = async () => {
@@ -55,9 +31,8 @@ function Profile({navigation}) {
         } catch (error) {
           // Error retrieving data
         }
-      };
-      
-
+    };
+    
     //run when navigate to this screen
     useEffect( () => {
         let clean = false;
@@ -69,7 +44,8 @@ function Profile({navigation}) {
             console.log('Token decode',vl._id)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then( (res)=>{
-                setInfo(res.data)
+                setInfo(res.data);
+                (res.data.image)? setImage(res.data.image) : {};
             })
             .catch((error)=>{
                 console.log(error.response.data)
@@ -83,7 +59,9 @@ function Profile({navigation}) {
         <SafeAreaView style={{height: '100%'}}>
             <SafeAreaView>
                 <ButtonSheetModal
-                image={image}
+                info={info}
+                setInfo={setInfo}
+                image={info.image}
                 setImage={setImage}
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}/>
@@ -109,7 +87,7 @@ function Profile({navigation}) {
                             borderRadius: 100,
                             marginHorizontal: 4
                         }}/>
-                        : <Image source={require('../../images/back.png')}
+                        : <Image source={{uri: info.image}}
                         style={{
                             height: windowWidth/3,
                             width: windowWidth/3,
@@ -172,9 +150,10 @@ function Profile({navigation}) {
                         }}>
                             <IconButtonDesign
                             onPress={() => {
+                                navigation.pop()
                                 navigation.navigate('EditScreen', 
                                 {   
-                                    name: info.fullname, 
+                                    fullname: info.fullname, 
                                     mail: info.mail,
                                     description: info.description,
                                     job: info.job,
@@ -183,7 +162,9 @@ function Profile({navigation}) {
                                     address: info.address,
                                     birthday: info.birthday,
                                     height: info.height,
-                                    weight: info.weight
+                                    weight: info.weight,
+                                    image: info.image,
+                                    note: info.note
                                 });
                             }}
                             height={windowHeight/20}

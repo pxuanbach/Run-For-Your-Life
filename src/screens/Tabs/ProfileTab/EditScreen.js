@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Text, TextInput,
+import { View, Dimensions, Text, TextInput, AsyncStorage,
     SafeAreaView, StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView
 } from 'react-native';
 import {CustomButton, IconButtonDesign} from '../../../components/CustomButton';
@@ -7,13 +7,22 @@ import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
 import {TextFieldInput, DateFieldInput, PickerFieldInput, BoxTextFieldInput} 
     from '../../../components/InputFieldDesign';
+import axios from 'axios';
+import jwt_decode from "jwt-decode";
+import { StackActions, NavigationActions } from 'react-navigation';
+import Moment from 'moment';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
+const resetAction = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'Profile' })],
+  });
+
 function EditScreen({navigation}) {
     const [date, setDate] = useState(new Date(navigation.getParam('birthday')));
-    const [name, setName] = useState(navigation.getParam('name'));
+    const [fullname, setName] = useState(navigation.getParam('fullname'));
     const [mail, setMail] = useState(navigation.getParam('mail'));
     const [description, setDescription] = useState(navigation.getParam('description'));
     const [job, setJob] = useState(navigation.getParam('job'));
@@ -22,6 +31,8 @@ function EditScreen({navigation}) {
     const [address, setAddress] = useState(navigation.getParam('address'));
     const [height, setHeight] = useState(navigation.getParam('height'));
     const [weight, setWeight] = useState(navigation.getParam('weight'));
+    let image = navigation.getParam('image');
+    let note = navigation.getParam('note');
 
     const [_menu, setMenu] = useState();
     const [enableshift,setenableShift] = useState(false);
@@ -36,6 +47,38 @@ function EditScreen({navigation}) {
     const showMenu = () => {
         _menu.show();
     }
+
+    const HandleSave = () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            let UserID = vl._id;
+            console.log(UserID)
+
+            //console.log('name:',fullname)
+            //console.log('mail:',mail)
+            //console.log('descrpttion:',description)
+            //console.log('job:',job)
+            //console.log('phone:',phone)
+            //console.log('gender:',gender)
+            console.log('Date:',date)
+            let birthday = Moment(date).format('YYYY-MM-DD')
+            //console.log('height:',height)
+            //console.log('weight',weight)
+
+            await axios.post('https://runapp1108.herokuapp.com/api/users/Infov2',{UserID,fullname,mail,description,job,phone,gender,address,birthday,height,weight,image,note})
+            .then((res)=>{
+                console.log(res.data)
+                navigation.dispatch(resetAction);
+                navigation.navigate("Profile");
+            })
+            .catch((err)=> {
+                console.log(err)
+            })
+        })
+    }
+
     return (
         <SafeAreaView style={{backgroundColor: Constants.COLOR.light_gray}}>
             {/* header: tittle + Save button */}
@@ -66,19 +109,7 @@ function EditScreen({navigation}) {
                 }}>
                     <IconButtonDesign
                     onPress={() => {
-                        navigation.navigate("Profile", 
-                        {
-                            name: name, 
-                            mail: mail,
-                            description: description,
-                            job: job,
-                            phone: phone,
-                            gender: gender,
-                            address: address,
-                            birthday: date,
-                            height: height,
-                            weight: weight
-                        })
+                        HandleSave();
                     }}
                     width={80}
                     height={36}
@@ -96,7 +127,7 @@ function EditScreen({navigation}) {
                     onFocus={() => setenableShift(false)}
                     title="Name"
                     placeholder="name"
-                    text={name}/>
+                    text={fullname}/>
                     <PickerFieldInput
                     title="Gender"
                     gender={gender}

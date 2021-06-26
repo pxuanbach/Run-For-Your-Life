@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
     Text, View, FlatList, AsyncStorage,
-    ScrollView, Dimensions, SafeAreaView
+    ScrollView, Dimensions, SafeAreaView, ActivityIndicator
 } from 'react-native';
 import {IconButtonDesign, PhraseButton} from '../../../components/CustomButton'
 import FoodRecommendCard from '../../../components/FoodRecommendCard';
@@ -41,28 +41,13 @@ var datas = [
 function NutritionTab({navigation}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [calorie, setCalorie] = useState(0);
-    const [R, setR] = useState(0)
     const [gender, setGender] = useState("");
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0);
     const [birthday, setBirthday] = useState(new Date());
-
+    const [isLoading, SetIsLoading] = useState(true);
+    const [info, setInfo] = useState({});
     const [isTested, setIsTested] = useState(false);
-
-    const calculateDailyCalorie = () => {
-        let bmr = 0;
-        var currentDay = new Date();
-        if (gender === "Male") {
-            bmr = (13.397 * weight) + (4.799 * height) 
-                - (5.677 * (currentDay.getFullYear() - birthday.getFullYear())) + 88.362;
-        }
-        else {
-            bmr = (9.247 * weight) + (3.098 * height) 
-                - (4.33 * (currentDay.getFullYear() - birthday.getFullYear())) + 447.593;
-        }
-        //console.log((R*bmr).toFixed(2));
-        setCalorie((R*bmr).toFixed(2));
-    }
 
     const checkNullUndefined = (data) => {
         if (data === undefined || data === null || data === "")
@@ -77,6 +62,11 @@ function NutritionTab({navigation}) {
             console.log('Token decode',vl._id)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then((res)=>{
+                setInfo(res.data);
+                if (checkNullUndefined(res.data.note)) {
+                    setCalorie(res.data.note);
+                    setIsTested(true);
+                }
                 if (checkNullUndefined(res.data.birthday))
                     setBirthday(new Date(res.data.birthday));
                 if (checkNullUndefined(res.data.weight))
@@ -87,7 +77,8 @@ function NutritionTab({navigation}) {
                 console.log(res.data.gender)
                 if (checkNullUndefined(res.data.height))
                     setHeight(res.data.height);
-                console.log(res.data.height)
+                console.log(res.data)
+                SetIsLoading(false);
             })
             .catch((error)=>{
                 console.log(error.response.data)
@@ -96,9 +87,42 @@ function NutritionTab({navigation}) {
         }) 
     }
 
+    const HandleSaveCalorie = () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            let UserID = vl._id;
+            console.log(UserID)
+
+            //console.log('height:',height)
+            //console.log('weight',weight)
+
+            await Axios.post('https://runapp1108.herokuapp.com/api/users/Infov2',{
+                UserID: info.user,
+                fullname: info.fullname, 
+                address: info.address,
+                birthday: info.birthday,
+                description: info.description,
+                gender: info.gender,
+                height: info.height,
+                weight: info.weight,
+                job: info.job,
+                phone: info.phone,
+                note: calorie,
+                image: info.image,
+            })
+            .then((res)=>{
+
+            })
+            .catch((err)=> {
+                console.log(err)
+            })
+        })
+    }
+
     useEffect(() => {
         fetchData();
-        calculateDailyCalorie();
     }, []);
 
     return (
@@ -107,11 +131,11 @@ function NutritionTab({navigation}) {
             height: '100%',
         }}>
             <TestRModal
-            setR={setR}
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             setCalorie={setCalorie}
             setIsTested={setIsTested}
+            saveCalorie={HandleSaveCalorie}
             gender={gender}
             weight={weight}
             height={height}
@@ -199,14 +223,24 @@ function NutritionTab({navigation}) {
                 </View>
             </View>
             {/* test */}
-            {!isTested && <View style={{
+            {!isTested ? isLoading ? <View style={{
+                flex: 1,
+                padding: 8,
+                paddingHorizontal: 12,
+                justifyContent: 'center',
+            }}>
+                <ActivityIndicator color={Constants.COLOR.green}/>
+            </View>
+            : <View style={{
                 padding: 8,
                 paddingHorizontal: 12,
                 alignContent: 'center',
                 flexDirection: 'row'
             }}>
                 <IconButtonDesign
-                onPress={() => setModalVisible(!modalVisible)}
+                onPress={() => {
+                    setModalVisible(!modalVisible);
+                }}
                 iconName="assignment"
                 iconSize={32}
                 height={windowWidth/8}
@@ -222,7 +256,7 @@ function NutritionTab({navigation}) {
                         paddingHorizontal: 8,
                     }}>Complete test to calculate your daily calorie intake.</Text>
                 </View>
-            </View>}
+            </View> : null}
             {/* Tag + list type food */}
             <View style={{
                 height: isTested ? '75%' : '64%',
