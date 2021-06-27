@@ -21,7 +21,7 @@ const listButtonChart=[
     {status:'Calories',unit:'calo'},
 ]
 
-function ViewShowChart({data}){
+function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, dataSun}){
     const [status, setStatus] = useState('Distance')
     const setStatusFilter = status=>{
         setStatus(status)

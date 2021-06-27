@@ -42,42 +42,97 @@ function Progress({navigation}) {
             }
         }
         //hôm nay
-        var today= ((moment().format()).split('"'))[0]
+        var today= ((moment().format()).split('T'))[0]
 
         // các ngày trong tuần này
         var _thu_hom_nay=moment().format('dddd') //Saturday
-        var mon = ""
-        var tue=""
-        var wed=""
-        var thu=""
-        var fri=""
-        var sat=""
-        var sun=""
+        var mon = (moment().format().split('T'))[0]
+        var tue=(moment().add(1, 'days').format().split('T'))[0]
+        var wed=(moment().add(2, 'days').format().split('T'))[0]
+        var thu=(moment().add(3, 'days').format().split('T'))[0]
+        var fri=(moment().add(4, 'days').format().split('T'))[0]
+        var sat=(moment().add(5, 'days').format().split('T'))[0]
+        var sun=(moment().add(6, 'days').format().split('T'))[0]
         switch(_thu_hom_nay){
-            case "Monday":
-                mon=moment().format()
+            case "Monday":{
+                mon=(moment().format().split('"'))[0]
+                tue=(moment().add(1, 'days').format().split('T'))[0]
+                wed=(moment().add(2, 'days').format().split('T'))[0]
+                thu=(moment().add(3, 'days').format().split('T'))[0]
+                fri=(moment().add(4, 'days').format().split('T'))[0]
+                sat=(moment().add(5, 'days').format().split('T'))[0]
+                sun=(moment().add(6, 'days').format().split('T'))[0]
                 break;
-            case "Tuesday":
-                mon=moment().subtract(1, 'days').format().
+            }
+            case "Tuesday":{
+                mon=(moment().subtract(1, 'days').format().split('T'))[0]
+                tue=(moment().format().split('T'))[0]
+                wed=(moment().add(1, 'days').format().split('T'))[0]
+                thu=(moment().add(2, 'days').format().split('T'))[0]
+                fri=(moment().add(3, 'days').format().split('T'))[0]
+                sat=(moment().add(4, 'days').format().split('T'))[0]
+                sun=(moment().add(5, 'days').format().split('T'))[0]
                 break;
-            case "Wednesday":
-                mon=moment().subtract(2, 'days').format()
+            }
+            case "Wednesday":{
+                mon=(moment().subtract(2, 'days').format().split('T'))[0]
+                tue=(moment().subtract(1,'days').format().split('T'))[0]
+                wed=(moment().format().split('T'))[0]
+                thu=(moment().add(1, 'days').format().split('T'))[0]
+                fri=(moment().add(2, 'days').format().split('T'))[0]
+                sat=(moment().add(3, 'days').format().split('T'))[0]
+                sun=(moment().add(4, 'days').format().split('T'))[0]
                 break;
-            case "Thurday":
-                mon=moment().subtract(3, 'days').format()
+            }
+            case "Thurday":{
+                mon=(moment().subtract(3, 'days').format().split('T'))[0]
+                tue=(moment().subtract(2,'days').format().split('T'))[0]
+                wed=(moment().subtract(1,'days').format().split('T'))[0]
+                thu=(moment().format().split('T'))[0]
+                fri=(moment().add(1, 'days').format().split('T'))[0]
+                sat=(moment().add(2, 'days').format().split('T'))[0]
+                sun=(moment().add(3, 'days').format().split('T'))[0]
                 break;
-            case "Friday":
-                mon=moment().subtract(4, 'days').format()
+            }
+            case "Friday":{
+                mon=(moment().subtract(4, 'days').format().split('T'))[0]
+                tue=(moment().subtract(3,'days').format().split('T'))[0]
+                wed=(moment().subtract(2,'days').format().split('T'))[0]
+                thu=(moment().subtract(1,'days').format().split('T'))[0]
+                fri=(moment().format().split('T'))[0]
+                sat=(moment().add(1, 'days').format().split('T'))[0]
+                sun=(moment().add(2, 'days').format().split('T'))[0]
                 break;
-            case "Saturday":
-                mon=moment().subtract(5, 'days').format()
+            }
+            case "Saturday":{
+                mon=(moment().subtract(5, 'days').format().split('T'))[0]
+                tue=(moment().subtract(4,'days').format().split('T'))[0]
+                wed=(moment().subtract(3,'days').format().split('T'))[0]
+                thu=(moment().subtract(2,'days').format().split('T'))[0]
+                fri=(moment().subtract(1,'days').format().split('T'))[0]
+                sat=(moment().format().split('T'))[0]
+                sun=(moment().add(1, 'days').format().split('T'))[0]
                 break;
-            case "Sunday":
-                mon=moment().subtract(6, 'days').format()
+            }
+            case "Sunday":{
+                mon=(moment().subtract(6, 'days').format().split('T'))[0]
+                tue=(moment().subtract(5,'days').format().split('T'))[0]
+                wed=(moment().subtract(4,'days').format().split('T'))[0]
+                thu=(moment().subtract(3,'days').format().split('T'))[0]
+                fri=(moment().subtract(2,'days').format().split('T'))[0]
+                sat=(moment().subtract(1,'days').format().split('T'))[0]
+                sun=(moment().format().split('T'))[0]
                 break;
-            default: _thu_hai=moment().format()
+            }
+            default: _thu_hai=(moment().format().split('T'))[0]
         }
-
+        // console.log(mon)
+        // console.log(tue)
+        // console.log(wed)
+        // console.log(thu)
+        // console.log(fri)
+        // console.log(sat)
+        // console.log(sun)
 
 
     //state
@@ -87,10 +142,25 @@ function Progress({navigation}) {
     const [dataLastMonth,setDataLastMonth] = useState([])
     const [dataToday, setDataToday]= useState([])
     const [dataThisWeek, setDataThisWeek]=useState([])
+    const [dataMon, setDataMon]=useState([])
+    const [dataTue, setDataTue]=useState([])
+    const [dataWed, setDataWed]=useState([])
+    const [dataThu, setDataThu]=useState([])
+    const [dataFri, setDataFri]=useState([])
+    const [dataSat, setDataSat]=useState([])
+    const [dataSun, setDataSun]=useState([])
+
     var listDataThisMonth=[]
     var listDataLastMonth=[]
     var listDataToday=[]
     var listDataThisWeek=[]
+    var listDataMon=[]
+    var listDataTue=[]
+    var listDataWed=[]
+    var listDataThu=[]
+    var listDataFri=[]
+    var listDataSat=[]
+    var listDataSun=[]
 
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
@@ -113,6 +183,97 @@ function Progress({navigation}) {
     }
     // hàm fecth data
     function _fecthdata(){
+        //today
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataToday.push(data)
+            });
+            setDataToday(listDataToday);
+        })
+        .catch((err)=>console.log(err))
+        //monday
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+mon)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataMon.push(data)
+            });
+            setDataMon(listDataMon);
+        })
+        .catch((err)=>console.log(err))
+        //tuesday
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+tue)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataTue.push(data)
+            });
+            setDataTue(listDataTue);
+        })
+        .catch((err)=>console.log(err))
+        //wednesday
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+wed)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataWed.push(data)
+            });
+            setDataWed(listDataWed);
+        })
+        .catch((err)=>console.log(err))
+        //thurday
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+thu)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataThu.push(data)
+            });
+            setDataThu(listDataThu);
+        })
+        .catch((err)=>console.log(err))
+        //friday
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+fri)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataFri.push(data)
+            });
+            setDataFri(listDataFri);
+        })
+        .catch((err)=>console.log(err))
+        //saturday
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+sat)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataSat.push(data)
+            });
+            setDataSat(listDataSat);
+        })
+        .catch((err)=>console.log(err))
+        //sunday
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+sun)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataSun.push(data)
+            });
+            setDataSun(listDataSun);
+        })
+        .catch((err)=>console.log(err))
+        //this week
+        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/thisweek")
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listDataThisWeek.push(data)
+            });
+            setDataThisWeek(listDataThisWeek);
+        })
+        .catch((err)=>console.log(err))
+        //this month
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month)
         .then((res)=>res.json())
         .then((json)=>{
@@ -132,33 +293,16 @@ function Progress({navigation}) {
             setDataLastMonth(listDataLastMonth);
         })
         .catch((err)=>console.log(err))
-        //today
-        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
-        .then((res)=>res.json())
-        .then((json)=>{
-            json.map((data)=>{
-                listDataToday.push(data)
-            });
-            setDataToday(listDataToday);
-        })
-        .catch((err)=>console.log(err))
-        //this week
-        fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/thisweek")
-        .then((res)=>res.json())
-        .then((json)=>{
-            json.map((data)=>{
-                listDataThisWeek.push(data)
-            });
-            setDataThisWeek(listDataThisWeek);
-        })
-        .catch((err)=>console.log(err))
+
         console.log("hàm fecthdata")
     }
 
     // useeffect 
     useEffect(()=>{
         _getuserid();
-        _fecthdata();
+        setTimeout(() => {
+            _fecthdata();
+        }, 1000);
     },[isLoading])
 
     return (
@@ -188,14 +332,20 @@ function Progress({navigation}) {
             
                 <Text style={styles.titleToday}>This week</Text>
                 <ViewShowChart
-                data={dataThisWeek}/>
+                dataMon={dataMon}
+                dataTue={dataTue}
+                dataWed={dataWed}
+                dataThu={dataThu}
+                dataFri={dataFri}
+                dataSat={dataSat}
+                dataSun={dataSun}/>
              
                 <Text style={styles.titleToday}>Monthly</Text>
                 <ViewShowData 
                 timeStatus= 'month'
                 dataThisMonth = {dataThisMonth}
-                dataLastMonth ={dataLastMonth}
-                />           
+                dataLastMonth ={dataLastMonth}/>    
+
             </ScrollView>
         </SafeAreaView>
     )
