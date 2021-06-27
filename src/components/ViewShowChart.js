@@ -22,6 +22,7 @@ const listButtonChart=[
 ]
 
 function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, dataSun}){
+    const [isloading, setIsloading]=useState(true)
     const [status, setStatus] = useState('Distance')
     const setStatusFilter = status=>{
         setStatus(status)
@@ -29,7 +30,6 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
     const [unit, setUnit] = useState('km')
     console.log("set lại status !")
     //state giá trị các cột trên biểu đồ
-    const [isloading, setIsLoading]=useState(true)
 
     const [chartmon, setChartmon]= useState(0)
     const [charttue, setCharttue]= useState(0)
@@ -77,12 +77,13 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
             await setChartsun(get_calories(dataSun))
         }
         console.log("hàm set lại giá trị các cột bểu đồ")
-        setIsLoading(false)
     }
+    setTimeout(()=>{
+        setIsloading(false)
+    },4000)
     useEffect(()=>{
         setChartValue()
-        console.log("đã chạy useeffect")
-        setChartValue()
+        console.log("chạy use effect")
     },[status,isloading])
     //hàm tính toán 
     function get_distance(data){
@@ -153,7 +154,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                                 backgroundColor: "#e26a00",
                                 backgroundGradientFrom: "#ffcad4",
                                 backgroundGradientTo: "#ffe5d8",
-                                decimalPlaces: 0, // làm chữ số thập phân, defaults to 2dp
+                                decimalPlaces: 0, // làm chữ số thập phân
                                 color: (opacity = 1) => `rgba(255, 55, 255, ${opacity})`,
                                 labelColor: (opacity = 1) => `rgba(225, 255, 255, ${opacity})`,
                             style: {

@@ -34,7 +34,7 @@ function ViewShowToday({data}){
         data.forEach(element=>{
             _time+=element.time;
         })
-        return _time.toFixed(2);
+        return _time;
     }
     function get_calories(data){
         var _calories=0;
@@ -79,7 +79,7 @@ function ViewShowToday({data}){
                             style={styles.textDataToday}
                             >{get_time(data)}
                             </Text>
-                            <Text>Time Spent (min)</Text>
+                            <Text>Time (min)</Text>
                     </View>
                     <View style={styles.blockData}>
                         <Text 
