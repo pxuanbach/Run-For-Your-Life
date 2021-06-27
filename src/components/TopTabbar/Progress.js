@@ -300,9 +300,7 @@ function Progress({navigation}) {
     // useeffect 
     useEffect(()=>{
         _getuserid();
-        setTimeout(() => {
-            _fecthdata();
-        }, 1000);
+        _fecthdata();
     },[isLoading])
 
     return (

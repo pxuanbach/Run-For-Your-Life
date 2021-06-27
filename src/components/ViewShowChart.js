@@ -17,7 +17,7 @@ const windowWidth = Dimensions.get('window').width;
 const listButtonChart=[
     {status:'Distance',unit:'km'},
     {status:'Time',unit:'min'},
-    {status:'Avg Pace',unit:'/km'},
+    {status:'AvgPace',unit:'/km'},
     {status:'Calories',unit:'calo'},
 ]
 
@@ -27,6 +27,103 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         setStatus(status)
     }
     const [unit, setUnit] = useState('km')
+    console.log("set lại status !")
+    //state giá trị các cột trên biểu đồ
+    const [isloading, setIsLoading]=useState(true)
+
+    const [chartmon, setChartmon]= useState(0)
+    const [charttue, setCharttue]= useState(0)
+    const [chartwed, setChartwed]= useState(0)
+    const [chartthu, setChartthu]= useState(0)
+    const [chartfri, setChartfri]= useState(0)
+    const [chartsat, setChartsat]= useState(0)
+    const [chartsun, setChartsun]= useState(0)
+    // hàm set lại cái giá trị các cột trên biểu đồ khi đổi status ( distnce/ time/ avg pace/ calories)
+    async function setChartValue(){
+        if(status=="Distance"){
+            await setChartmon(get_distance(dataMon))
+            await setCharttue(get_distance(dataTue))
+            await setChartwed(get_distance(dataWed))
+            await setChartthu(get_distance(dataThu))
+            await setChartfri(get_distance(dataFri))
+            await setChartsat(get_distance(dataSat))
+            await setChartsun(get_distance(dataSun))
+        }
+        if(status=="Time"){
+            await setChartmon(get_time(dataMon))
+            await setCharttue(get_time(dataTue))
+            await setChartwed(get_time(dataWed))
+            await setChartthu(get_time(dataThu))
+            await setChartfri(get_time(dataFri))
+            await setChartsat(get_time(dataSat))
+            await setChartsun(get_time(dataSun))
+        }
+        if(status=="AvgPace"){
+            await setChartmon(get_avg_pace(dataMon))
+            await setCharttue(get_avg_pace(dataTue))
+            await setChartwed(get_avg_pace(dataWed))
+            await setChartthu(get_avg_pace(dataThu))
+            await setChartfri(get_avg_pace(dataFri))
+            await setChartsat(get_avg_pace(dataSat))
+            await setChartsun(get_avg_pace(dataSun))
+        }
+        if(status=="Calories"){
+            await setChartmon(get_calories(dataMon))
+            await setCharttue(get_calories(dataTue))
+            await setChartwed(get_calories(dataWed))
+            await  setChartthu(get_calories(dataThu))
+            await setChartfri(get_calories(dataFri))
+            await setChartsat(get_calories(dataSat))
+            await setChartsun(get_calories(dataSun))
+        }
+        console.log("hàm set lại giá trị các cột bểu đồ")
+        setIsLoading(false)
+    }
+    useEffect(()=>{
+        setChartValue()
+        console.log("đã chạy useeffect")
+        setChartValue()
+    },[status,isloading])
+    //hàm tính toán 
+    function get_distance(data){
+        if(data==[]) return 0;
+        var _distance=0;
+        data.forEach(element => {
+            _distance+=element.distance
+        });
+        return _distance;
+    }
+    function get_avg_pace(data){
+        if(data==[]) return 0;
+        var _avg = 0;
+        var _total_avg = 0;
+        var count = 0;
+        data.forEach(element=>{
+            _total_avg+= element.avgPace;
+            count++;
+        });
+        if(count!=0){
+            _avg= _total_avg/count;
+        }
+        return _avg.toFixed(2);
+    }
+    function get_time(data){
+        if(data==[]) return 0;
+        var _time =0;
+        data.forEach(element=>{
+            _time+=element.time;
+        })
+        return _time;
+    }
+    function get_calories(data){
+        if(data==[]) return 0;
+        var _calories=0;
+        data.forEach(element=>{
+            _calories+=element.calories;
+        })
+        return _calories;
+    }
+
     return(
         <SafeAreaView>
             <View style={{alignItems:'center'}}>
@@ -36,13 +133,13 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                             datasets: [
                                 {
                                 data: [
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
-                                    Math.random()*100,
+                                    {chartmon}.chartmon,
+                                    {charttue}.charttue,
+                                    {chartwed}.chartwed,
+                                    {chartthu}.chartthu,
+                                    {chartfri}.chartfri,
+                                    {chartsat}.chartsat,
+                                    {chartsun}.chartsun,
                                 ]
                                 }
                             ]
@@ -91,7 +188,10 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                                 <TouchableOpacity
                                 key={c.status} 
                                 style={[styles.btnChart, status == c.status && styles.btnTabActive]}
-                                onPress={()=> {setStatusFilter(c.status) , setUnit(c.unit)}}
+                                onPress={()=> {
+                                    setStatusFilter(c.status) , 
+                                    setUnit(c.unit)
+                                }}
                                 >
                                     <Text
                                     style={styles.textTab}
