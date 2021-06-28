@@ -96,7 +96,8 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
             <View style={{flexDirection:'row',marginBottom:-1}}>
                 <View style={styles.distance}>
                     <MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
-                    <Text> Distance</Text>
+                    <Text> Distance </Text>
+                    <Text style={styles.unit}> (km)</Text>
                 </View>
                 <View style={styles.viewTextData}>
                     <Text style={styles.textData}>{get_distance(dataThisMonth).toFixed(2)}</Text>
@@ -110,6 +111,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                 <View style={styles.distance}>
                     <MaterialCommunityIcons name="speedometer" size={24} color="black" />
                     <Text> Avg Pace</Text>
+                    <Text style={styles.unit}> (min/km)</Text>
                 </View>
                 <View style={styles.viewTextData}>
                     <Text style={styles.textData}>{get_avg_pace(dataThisMonth).toFixed(2)}</Text>
@@ -123,6 +125,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                 <View style={styles.distance}>
                     <Ionicons name="time" size={24} color="black" />
                     <Text> Time</Text>
+                    <Text style={styles.unit}> (min)</Text>
                 </View>
                 <View style={styles.viewTextData}>
                     <Text style={styles.textData}>{get_time(dataThisMonth)}</Text>
@@ -190,5 +193,9 @@ const styles=StyleSheet.create({
         marginTop:-1,
         marginBottom:1,
         marginLeft:-1
+    },
+    unit:{
+        fontSize:12,
+        color:"#999999"
     }
 })

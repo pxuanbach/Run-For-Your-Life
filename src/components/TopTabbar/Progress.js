@@ -314,11 +314,11 @@ function Progress({navigation}) {
                     }}>Để cái gì ở đây ?</Text>
                 </View>
 
-                <Text style={styles.titleToday}>Today</Text>
+                <Text style={styles.titleToday}>TODAY</Text>
                 <ViewShowToday
                 data={dataToday}/>
             
-                <Text style={styles.titleToday}>This week</Text>
+                <Text style={styles.titleToday}>THIS WEEK</Text>
                 <ViewShowChart
                 dataMon={dataMon}
                 dataTue={dataTue}
@@ -328,7 +328,7 @@ function Progress({navigation}) {
                 dataSat={dataSat}
                 dataSun={dataSun}/>
              
-                <Text style={styles.titleToday}>Monthly</Text>
+                <Text style={styles.titleToday}>MONTHLY</Text>
                 <ViewShowData 
                 timeStatus= 'month'
                 dataThisMonth = {dataThisMonth}

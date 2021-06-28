@@ -57,7 +57,7 @@ function ViewShowToday({data}){
                         style={styles.textDataToday}
                         >{get_distance(data).toFixed(2)}
                         </Text>
-                        <Text>Distance (km)</Text>
+                        <Text>km</Text>
                     </View>
 
                     <View style={styles.blockData}>
@@ -65,7 +65,7 @@ function ViewShowToday({data}){
                             style={styles.textDataToday}
                             >{get_avg_pace(data).toFixed(2)}
                             </Text>
-                        <Text>Avg Pace (min/km)</Text>
+                        <Text>min/km</Text>
                     </View>
                     </View>
 
@@ -79,7 +79,7 @@ function ViewShowToday({data}){
                             style={styles.textDataToday}
                             >{get_time(data)}
                             </Text>
-                            <Text>Time (min)</Text>
+                            <Text>min</Text>
                     </View>
                     <View style={styles.blockData}>
                         <Text 
@@ -87,7 +87,7 @@ function ViewShowToday({data}){
                             >
                             {get_calories(data)}
                             </Text>
-                            <Text>Calories Burned</Text>
+                            <Text>Calories</Text>
                     </View>
                 </View>
         </SafeAreaView>
@@ -102,7 +102,7 @@ const styles=StyleSheet.create({
         height:windowWidth*0.3,
         backgroundColor: "#4CD964",
         borderRadius:20,
-        padding:10,
+        paddingTop:20,
         alignItems:'center',
         justifyContent:'center',
         margin:10

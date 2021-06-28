@@ -170,14 +170,14 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                             }}
                         />
                     </View>
-                <ScrollView 
+                <View 
                 style={{
                     flexDirection:'row', 
                     marginHorizontal:15, 
                     borderWidth:2, 
                     borderRadius:22, 
                     borderColor:"#4CD964",
-                    paddingHorizontal:1
+                    paddingHorizontal:0
 
                     }}>
                     <View 
@@ -201,7 +201,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                             ))
                         }
                     </View>
-                </ScrollView>
+                </View>
 
         </SafeAreaView>
 
