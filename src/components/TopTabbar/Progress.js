@@ -15,7 +15,6 @@ import {
 import { flexDirection } from 'styled-system';
 import { FontAwesome5 } from '@expo/vector-icons';
 import moment from 'moment';
-import { set } from 'react-native-reanimated';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -44,7 +43,7 @@ function Progress({navigation}) {
         //hôm nay
         var today= ((moment().format()).split('T'))[0]
 
-        // các ngày trong tuần này
+        // các ngày trong tuần này yyyy-mm-dd
         var _thu_hom_nay=moment().format('dddd') //Saturday
         var mon = (moment().format().split('T'))[0]
         var tue=(moment().add(1, 'days').format().split('T'))[0]
@@ -126,14 +125,6 @@ function Progress({navigation}) {
             }
             default: _thu_hai=(moment().format().split('T'))[0]
         }
-        console.log(mon)
-        console.log(tue)
-        console.log(wed)
-        console.log(thu)
-        console.log(fri)
-        console.log(sat)
-        console.log(sun)
-
 
     //state
     const [isLoading, setIsLoading] = useState(true)
@@ -176,7 +167,6 @@ function Progress({navigation}) {
                 setIsLoading(false)
             })   
             .catch((err)=>console.log(err))     
-            console.log("hàm _getuserid: "+userid)  
         } catch (error) {
             console.log(error)
         }    

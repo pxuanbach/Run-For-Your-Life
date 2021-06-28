@@ -28,7 +28,6 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         setStatus(status)
     }
     const [unit, setUnit] = useState('km')
-    console.log("set lại status !")
     //state giá trị các cột trên biểu đồ
 
     const [chartmon, setChartmon]= useState(0)
@@ -76,16 +75,12 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
             await setChartsat(get_calories(dataSat))
             await setChartsun(get_calories(dataSun))
         }
-        console.log("hàm set lại giá trị các cột bểu đồ")
     }
-    // setTimeout(()=>{
-    //     setIsloading(false)
-    //     console.log("get isloading")
-    // },4000)
+    setTimeout(()=>{
+        setIsloading(false)
+    },5000)
     useEffect(()=>{
         setChartValue()
-        console.log("chạy use effect")
-        console.log("chartmon: "+chartmon)
     },[status,isloading])
     //hàm tính toán 
     function get_distance(data){
@@ -148,24 +143,24 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                             ]
                             }}
                             width= {windowWidth*0.9}
-                            height={220}
+                            height={240}
                             yAxisLabel=""
                             yAxisSuffix={unit}
                             yAxisInterval={1} // optional, defaults to 1
                             chartConfig={{
-                                backgroundColor: "#e26a00",
-                                backgroundGradientFrom: "#ffcad4",
-                                backgroundGradientTo: "#ffe5d8",
+                                backgroundColor: "#4CD964",
+                                backgroundGradientFrom: "#f0f0f0",
+                                backgroundGradientTo: "#FaFaFa",
                                 decimalPlaces: 0, // làm chữ số thập phân
-                                color: (opacity = 1) => `rgba(255, 55, 255, ${opacity})`,
-                                labelColor: (opacity = 1) => `rgba(225, 255, 255, ${opacity})`,
+                                color: (opacity = 1) => `rgba(76, 217, 100, ${opacity})`,
+                                labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
                             style: {
                                 borderRadius: 15
                             },
                             propsForDots: {
                                 r: "5",
-                                strokeWidth: "2",
-                                stroke: "#ffa726"
+                                strokeWidth: "1",
+                                stroke: "#000"
                             }
                             }}
                             bezier
@@ -181,8 +176,9 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                     marginHorizontal:15, 
                     borderWidth:2, 
                     borderRadius:22, 
-                    borderColor:"#ffcad4",
+                    borderColor:"#4CD964",
                     paddingHorizontal:1
+
                     }}>
                     <View 
                     style={styles.listButtonChart}>
@@ -239,7 +235,7 @@ const styles=StyleSheet.create({
         fontSize:15,
     },
     btnTabActive:{
-        backgroundColor: "#ffcad4",
+        backgroundColor: "#4CD964",
         position:'relative'
     },
     textTabActive:{
@@ -253,10 +249,11 @@ const styles=StyleSheet.create({
        alignContent:'center',
        alignSelf:'center',
        alignItems:'center',
-       borderRadius:22
+       borderRadius:22,
+       margin:-1
     },
     btnChart:{
-        width: windowWidth/4.4,
+        width: windowWidth/4.37,
         height:windowHeight*0.06,
         flexDirection:'row',
         borderColor:"black",

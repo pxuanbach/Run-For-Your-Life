@@ -55,7 +55,7 @@ function ViewShowToday({data}){
                     <View style={styles.blockData}>
                         <Text 
                         style={styles.textDataToday}
-                        >{get_distance(data)}
+                        >{get_distance(data).toFixed(2)}
                         </Text>
                         <Text>Distance (km)</Text>
                     </View>
@@ -63,7 +63,7 @@ function ViewShowToday({data}){
                     <View style={styles.blockData}>
                         <Text 
                             style={styles.textDataToday}
-                            >{get_avg_pace(data)}
+                            >{get_avg_pace(data).toFixed(2)}
                             </Text>
                         <Text>Avg Pace (min/km)</Text>
                     </View>
@@ -100,7 +100,7 @@ const styles=StyleSheet.create({
     blockData:{
         width: windowWidth*0.4,
         height:windowWidth*0.3,
-        backgroundColor: "#6ff6ff",
+        backgroundColor: "#4CD964",
         borderRadius:20,
         padding:10,
         alignItems:'center',

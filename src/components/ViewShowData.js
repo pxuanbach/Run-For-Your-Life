@@ -99,10 +99,10 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                     <Text> Distance</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_distance(dataThisMonth)}</Text>
+                    <Text style={styles.textData}>{get_distance(dataThisMonth).toFixed(2)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_distance(dataLastMonth)}</Text>
+                    <Text style={styles.textData}>{get_distance(dataLastMonth).toFixed(2)}</Text>
                 </View>          
             </View>
 
@@ -112,10 +112,10 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                     <Text> Avg Pace</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_avg_pace(dataThisMonth)}</Text>
+                    <Text style={styles.textData}>{get_avg_pace(dataThisMonth).toFixed(2)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_avg_pace(dataLastMonth)}</Text>
+                    <Text style={styles.textData}>{get_avg_pace(dataLastMonth).toFixed(2)}</Text>
                 </View>
                     
             </View>
