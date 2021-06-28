@@ -6,12 +6,13 @@ import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import {PlansTab, GeofenceTab, ProfileTab} from './Tabs';
 import Constants from '../utilities/Constants';
 import NutritionTabNavigator from './Tabs/NutritionTab/Navigator';
+import PlansTabNavigator from './Tabs/PlansTab/Navigator';
 
 const windowHeight = Dimensions.get('window').height;
 
 const BottomTabNavigator = createBottomTabNavigator({
-    PlansTab: {
-        screen: PlansTab,
+    PlansTabNavigator: {
+        screen: PlansTabNavigator,
         navigationOptions: {
             tabBarLabel: 'Plan',
             tabBarIcon: ({ tintColor }) => {
@@ -35,7 +36,7 @@ const BottomTabNavigator = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: 'Nutrition',
             tabBarIcon: ({ tintColor }) => {
-                return <MaterialCommunityIcons name="food-drumstick-outline" 
+                return <MaterialCommunityIcons name="nutrition" 
                 size={28} style={{color: tintColor}} />
             },
         }
@@ -51,7 +52,7 @@ const BottomTabNavigator = createBottomTabNavigator({
         },
     }
 },{
-    initialRouteName: 'PlansTab',
+    initialRouteName: 'PlansTabNavigator',
     backBehavior: 'history',
     tabBarOptions: {
         inactiveTintColor: Constants.COLOR.second_green,
