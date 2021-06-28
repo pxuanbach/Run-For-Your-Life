@@ -55,7 +55,7 @@ function Progress({navigation}) {
         var sun=(moment().add(6, 'days').format().split('T'))[0]
         switch(_thu_hom_nay){
             case "Monday":{
-                mon=(moment().format().split('"'))[0]
+                mon=(moment().format().split('T'))[0]
                 tue=(moment().add(1, 'days').format().split('T'))[0]
                 wed=(moment().add(2, 'days').format().split('T'))[0]
                 thu=(moment().add(3, 'days').format().split('T'))[0]
@@ -126,13 +126,13 @@ function Progress({navigation}) {
             }
             default: _thu_hai=(moment().format().split('T'))[0]
         }
-        // console.log(mon)
-        // console.log(tue)
-        // console.log(wed)
-        // console.log(thu)
-        // console.log(fri)
-        // console.log(sat)
-        // console.log(sun)
+        console.log(mon)
+        console.log(tue)
+        console.log(wed)
+        console.log(thu)
+        console.log(fri)
+        console.log(sat)
+        console.log(sun)
 
 
     //state

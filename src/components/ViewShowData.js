@@ -23,7 +23,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         data.forEach(element => {
             _distance+=element.distance
         });
-        return _distance.toFixed(2);
+        return _distance;
     }
     function get_avg_pace(data){
         var _avg = 0;
@@ -36,7 +36,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         if(count!=0){
             _avg= _total_avg/count;
         }
-        return _avg.toFixed(2);
+        return _avg;
     }
     function get_time(data){
         var _time =0;

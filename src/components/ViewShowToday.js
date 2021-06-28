@@ -14,7 +14,7 @@ function ViewShowToday({data}){
         data.forEach(element => {
             _distance+=element.distance
         });
-        return _distance.toFixed(2);
+        return _distance;
     }
     function get_avg_pace(data){
         var _avg = 0;
@@ -25,7 +25,7 @@ function ViewShowToday({data}){
             count++;
         });
         if(count!=0){
-            _avg= (_total_avg/count).toFixed(2);
+            _avg= (_total_avg/count);
         }
         return _avg;
     }

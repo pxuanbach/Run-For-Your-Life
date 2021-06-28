@@ -78,16 +78,18 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         }
         console.log("hàm set lại giá trị các cột bểu đồ")
     }
-    setTimeout(()=>{
-        setIsloading(false)
-    },4000)
+    // setTimeout(()=>{
+    //     setIsloading(false)
+    //     console.log("get isloading")
+    // },4000)
     useEffect(()=>{
         setChartValue()
         console.log("chạy use effect")
+        console.log("chartmon: "+chartmon)
     },[status,isloading])
     //hàm tính toán 
     function get_distance(data){
-        if(data==[]) return 0;
+        if(data===[]) return 0;
         var _distance=0;
         data.forEach(element => {
             _distance+=element.distance
@@ -95,7 +97,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         return _distance;
     }
     function get_avg_pace(data){
-        if(data==[]) return 0;
+        if(data===[]) return 0;
         var _avg = 0;
         var _total_avg = 0;
         var count = 0;
@@ -106,10 +108,10 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         if(count!=0){
             _avg= _total_avg/count;
         }
-        return _avg.toFixed(2);
+        return _avg;
     }
     function get_time(data){
-        if(data==[]) return 0;
+        if(data===[]) return 0;
         var _time =0;
         data.forEach(element=>{
             _time+=element.time;
@@ -117,7 +119,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         return _time;
     }
     function get_calories(data){
-        if(data==[]) return 0;
+        if(data===[]) return 0;
         var _calories=0;
         data.forEach(element=>{
             _calories+=element.calories;
