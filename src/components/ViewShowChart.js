@@ -71,7 +71,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
             await setChartmon(get_calories(dataMon))
             await setCharttue(get_calories(dataTue))
             await setChartwed(get_calories(dataWed))
-            await  setChartthu(get_calories(dataThu))
+            await setChartthu(get_calories(dataThu))
             await setChartfri(get_calories(dataFri))
             await setChartsat(get_calories(dataSat))
             await setChartsun(get_calories(dataSun))
