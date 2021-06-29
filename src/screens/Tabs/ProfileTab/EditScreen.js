@@ -60,6 +60,10 @@ function EditScreen({navigation}) {
             return (false)
     }
 
+    const ValidNumber = (str) => {
+        return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
+    }
+
     const HandleSave = () => {
         
         if (!ValidateEmail(mail)) {
@@ -67,7 +71,21 @@ function EditScreen({navigation}) {
                 "Oops!",
                 "Email không hợp lệ",
               )
-            return 0
+            return;
+        }
+        if (!ValidNumber(height)) {
+            Alert.alert(
+                "Oops!",
+                "Height only enter numbers",
+              )
+            return;
+        }
+        if (!ValidNumber(weight)) {
+            Alert.alert(
+                "Oops!",
+                "Weight only enter numbers",
+              )
+            return;
         }
         AsyncStorage.getItem("authToken")
         .then( async (token) => { 
