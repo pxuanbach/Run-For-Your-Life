@@ -20,6 +20,7 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 function Progress({navigation}) {
+    
     //tính ngày, tháng này, tháng trước yyyy-mm
         //tháng này
         var month= moment().format();

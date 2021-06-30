@@ -10,13 +10,15 @@ const windowWidth = Dimensions.get('window').width;
 function ViewShowToday({data}){
 
     function get_distance(data){
+        if(data===[]) return 0;
         var _distance=0;
         data.forEach(element => {
-            _distance+=element.record._distance;
+            _distance+=element.record.distance;
         });
         return _distance;
     }
     function get_avg_pace(data){
+        if(data===[]) return 0;
         var _avg = 0;
         var _total_avg = 0;
         var count = 0;
@@ -30,6 +32,7 @@ function ViewShowToday({data}){
         return _avg;
     }
     function get_time(data){
+        if(data===[]) return 0;
         var _time =0;
         data.forEach(element=>{
             _time+=element.record.totalTime;
@@ -37,6 +40,7 @@ function ViewShowToday({data}){
         return _time;
     }
     function get_calories(data){
+        if(data===[]) return 0;
         var _calories=0;
         data.forEach(element=>{
             _calories+=element.record.calo;

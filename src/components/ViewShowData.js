@@ -19,6 +19,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
     const [status, setStatus] = useState('timeStatus')
 
     function get_distance(data){
+        if(data===[]) return 0;
         var _distance=0;
         data.forEach(element => {
             _distance+=element.record.distance;
@@ -26,6 +27,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         return _distance;
     }
     function get_avg_pace(data){
+        if(data===[]) return 0;
         var _avg = 0;
         var _total_avg = 0;
         var count = 0;
@@ -39,6 +41,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         return _avg;
     }
     function get_time(data){
+        if(data===[]) return 0;
         var _time =0;
         data.forEach(element=>{
             _time+=element.record.totalTime;
@@ -46,6 +49,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         return _time;
     }
     function get_calories(data){
+        if(data===[]) return 0;
         var _calories=0;
         data.forEach(element=>{
             _calories+=element.record.calo;
@@ -53,6 +57,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         return _calories;
     }
     function get_count_activities(data){
+        if(data===[]) return 0;
         var _count=0;
         data.forEach(element=>{
             _count++;
