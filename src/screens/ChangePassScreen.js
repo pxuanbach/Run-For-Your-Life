@@ -66,11 +66,11 @@ function ChangePassScreen({navigation}) {
     }, [])
 
     return (
-        <SafeAreaView style={{height: '100%'}}>
+        <SafeAreaView style={{height: '100%', backgroundColor: Constants.COLOR.white}}>
             <View
             style={{
                 height: windowHeight/10,
-                backgroundColor: Constants.COLOR.white,
+                backgroundColor: Constants.COLOR.green,
                 flexDirection: "row",
                 alignItems: "center",
                 paddingHorizontal: 2,
@@ -87,7 +87,7 @@ function ChangePassScreen({navigation}) {
                                 navigation.navigate("ProfileTab")
                             }
                         }
-                        color={Constants.COLOR.dark_green}
+                        color={Constants.COLOR.white}
                         iconName="arrow-back-ios"
                         iconSize={32}>
                     </CustomButton>
@@ -102,7 +102,7 @@ function ChangePassScreen({navigation}) {
                             fontFamily: "SemiBold",
                             fontSize: windowHeight/30,
                             paddingHorizontal: 32,
-                            color: Constants.COLOR.dark_green,
+                            color: Constants.COLOR.white,
                         }}>
                             Change Password
                         </Text>
