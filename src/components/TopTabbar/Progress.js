@@ -15,6 +15,7 @@ import {
 import { flexDirection } from 'styled-system';
 import { FontAwesome5 } from '@expo/vector-icons';
 import moment from 'moment';
+import jwt_decode from "jwt-decode";
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
@@ -155,22 +156,32 @@ function Progress({navigation}) {
 
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
+    const [isLoadingId, setIsLoadingId] = useState(true)
     //hàm get user id 
-    const _getuserid=async()=>{
-        try {
-            const username= await AsyncStorage.getItem("username")
-            var res = await fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
-            .then((res)=>res.text())
-            .then((text)=>{
-                var u = text.split('"')
-                setUserid(u[1])
-                setIsLoading(false)
-            })   
-            .catch((err)=>console.log(err))     
-        } catch (error) {
-            console.log(error)
-        }    
+    const _getuserid=()=>{
+        AsyncStorage.getItem("authToken")
+        .then(async(token)=>{
+            var vl = jwt_decode(token)
+            setUserid(vl._id)
+            setIsLoadingId(false)
+        })
+        .catch((err)=>console.log(err))
     }
+    // const _getuserid=async()=>{
+    //     try {
+    //         const username= await AsyncStorage.getItem("username")
+    //         var res = await fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
+    //         .then((res)=>res.text())
+    //         .then((text)=>{
+    //             var u = text.split('"')
+    //             setUserid(u[1])
+    //             setIsLoading(false)
+    //         })   
+    //         .catch((err)=>console.log(err))     
+    //     } catch (error) {
+    //         console.log(error)
+    //     }    
+    // }
     // hàm fecth data api đổi sau
     function _fecthdata(){
         //today
@@ -291,7 +302,7 @@ function Progress({navigation}) {
     useEffect(()=>{
         _getuserid();
         _fecthdata();
-    },[isLoading])
+    },[isLoading, isLoadingId])
 
     return (
         <SafeAreaView>
