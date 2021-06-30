@@ -42,7 +42,6 @@ function Progress({navigation}) {
         }
         //hôm nay
         var today= ((moment().format()).split('T'))[0]
-
         // các ngày trong tuần này yyyy-mm-dd
         var _thu_hom_nay=moment().format('dddd') //Saturday
         var mon = (moment().format().split('T'))[0]
@@ -156,7 +155,7 @@ function Progress({navigation}) {
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
     //hàm get user id 
-    const _getuserid=async(a)=>{
+    const _getuserid=async()=>{
         try {
             const username= await AsyncStorage.getItem("username")
             var res = await fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
@@ -298,21 +297,7 @@ function Progress({navigation}) {
             <StatusBar style="auto"/>
             <ScrollView
             style={{backgroundColor:'#fff'}}
-            >
-                <View
-                style={{
-                    height:windowHeight/12,
-                    alignItems:'center',
-                    backgroundColor: "#4CD964",
-                    justifyContent:'center'
-                }}>
-                    <Text
-                    style={{
-                        fontSize:25,
-                        fontWeight:'bold',
-                        color:"#fff"
-                    }}>Để cái gì ở đây ?</Text>
-                </View>
+            >   
 
                 <Text style={styles.titleToday}>TODAY</Text>
                 <ViewShowToday

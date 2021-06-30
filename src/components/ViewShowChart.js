@@ -87,7 +87,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         if(data===[]) return 0;
         var _distance=0;
         data.forEach(element => {
-            _distance+=element.distance
+            _distance+=element.record.distance;
         });
         return _distance;
     }
@@ -97,7 +97,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         var _total_avg = 0;
         var count = 0;
         data.forEach(element=>{
-            _total_avg+= element.avgPace;
+            _total_avg+= element.record.avgPace;
             count++;
         });
         if(count!=0){
@@ -109,7 +109,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         if(data===[]) return 0;
         var _time =0;
         data.forEach(element=>{
-            _time+=element.time;
+            _time+=element.record.totalTime;
         })
         return _time;
     }
@@ -117,7 +117,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
         if(data===[]) return 0;
         var _calories=0;
         data.forEach(element=>{
-            _calories+=element.calories;
+            _calories+=element.record.calo;
         })
         return _calories;
     }

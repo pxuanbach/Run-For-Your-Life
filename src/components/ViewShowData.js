@@ -21,7 +21,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
     function get_distance(data){
         var _distance=0;
         data.forEach(element => {
-            _distance+=element.distance
+            _distance+=element.record.distance;
         });
         return _distance;
     }
@@ -30,7 +30,7 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         var _total_avg = 0;
         var count = 0;
         data.forEach(element=>{
-            _total_avg+= element.avgPace;
+            _total_avg+= element.record.avgPace;
             count++;
         });
         if(count!=0){
@@ -41,14 +41,14 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
     function get_time(data){
         var _time =0;
         data.forEach(element=>{
-            _time+=element.time;
+            _time+=element.record.totalTime;
         })
         return _time;
     }
     function get_calories(data){
         var _calories=0;
         data.forEach(element=>{
-            _calories+=element.calories;
+            _calories+=element.record.calo;
         })
         return _calories;
     }
