@@ -10,7 +10,7 @@ var datas = [
         id: '12345',
         title: 'Afternoon Run',
         discription: 'Good job',
-        time: '10/3/2021',
+        date: '10/3/2021',
 
         record: {
             activity: 'running',
@@ -36,7 +36,7 @@ var datas = [
         id: '12346',
         title: 'Morning Bicycling',
         discription: 'De vai lon',
-        time: '11/3/2021',
+        date: '11/3/2021',
 
         record: {
             activity: 'bicycling',
@@ -62,7 +62,7 @@ var datas = [
         id: '12347',
         title: 'Evening Run',
         discription: 'Dep me di',
-        time: '10/3/2021',
+        date: '10/3/2021',
 
         record: {
             activity: 'running',
@@ -117,7 +117,7 @@ function Activities({navigation}) {
                             <ActivityCard
                             title={item.title}
                             discription={item.discription}
-                            time={item.time}
+                            date={item.date}
                             record={item.record}
                             map={item.map}/>
                         </View>

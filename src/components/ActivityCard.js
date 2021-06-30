@@ -4,7 +4,7 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { FontAwesome5, Ionicons } from '@expo/vector-icons';
 import moment from 'moment';
 
-const ActivityCard = ({ title, discription, time, record, map }) => {
+const ActivityCard = ({ title, discription, date, record, map }) => {
     const convertPace = () => {
         var decimalTime = record.avgPace;
         decimalTime = decimalTime * 60;
@@ -66,7 +66,7 @@ const ActivityCard = ({ title, discription, time, record, map }) => {
                 {renderIcon()}
 
                 <Text style={{fontSize: 10, marginLeft: 3,}}>
-                    {time}
+                    {date}
                 </Text>
             </View>
 
@@ -105,12 +105,26 @@ const ActivityCard = ({ title, discription, time, record, map }) => {
                     {convertPace()}                    
                 </View>
 
-                <View style={styles.itemRecord}>  
+                <View style={[styles.itemRecord, 
+                {
+                    borderRightColor: 'gray',
+                    borderRightWidth: 0.5,
+                }]}>  
                     <Text style={styles.itemTitle}>
                         Time
                     </Text>
 
                     {convertTime()}
+                </View>
+
+                <View style={styles.itemRecord}>  
+                    <Text style={styles.itemTitle}>
+                        Calo
+                    </Text>
+
+                    <Text style={styles.itemContent}>
+                        {record.calo} Kcal
+                    </Text>
                 </View>
             </View>
 

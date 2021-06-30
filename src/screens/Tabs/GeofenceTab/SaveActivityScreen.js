@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, ScrollView, TextInput, StyleSheet, Dimensions, TouchableOpacity, } from 'react-native';
+import { View, Text, ScrollView, TextInput, StyleSheet, Dimensions, TouchableOpacity, AsyncStorage, } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, FontAwesome, } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { StackActions, NavigationActions } from 'react-navigation';
+import Axios from 'axios';
+import jwt_decode from "jwt-decode";
 
 const windowWidth = Dimensions.get('window').width;
 const LEVEL = ['Easy', 'Normal', 'Difficult', 'Hard', 'Extreme', 'Insane'];
@@ -36,15 +38,64 @@ export default class SaveActivityScreen extends React.Component {
             calo: 0,
             weight: 60,
 
-            level: 2,
+            valueLevel: 2,
 
+            title: "",
+            discription: "",
             centerCoordinate: null,
         };
     }
 
     componentDidMount() {
+        this.fetchDataUser();
         this.calcBurnedCalories();
         this.findCenterCoordinate();
+    }
+
+    handleSaveActivity = () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            let UserID = vl._id;
+            console.log(UserID)
+
+            await Axios.post('',{
+                
+            })
+            .then((res) => {
+
+            })
+            .catch((err)=> {
+                console.log(err)
+            })
+        })
+    }
+
+    fetchDataUser = () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
+            .then((res)=>{
+                if (checkNullUndefined(res.data.weight)) {
+                    this.setState({weight: res.data.weight});
+                }
+
+                console.log(res.data.weight)
+            })
+            .catch((error)=>{
+                console.log(error.response.data)
+            })
+            
+        }) 
+    }
+
+    checkNullUndefined = (data) => {
+        if (data === undefined || data === null || data === "")
+            return false;
+        return true;
     }
 
     calcMETs = () => {
@@ -119,6 +170,7 @@ export default class SaveActivityScreen extends React.Component {
                     <TextInput 
                         style={styles.txtInput} 
                         placeholder={'Title your run'}
+                        onChangeText={(text) => this.setState({title: text})}
                         multiline={true} />
                 </View>
                 
@@ -126,6 +178,7 @@ export default class SaveActivityScreen extends React.Component {
                     <TextInput 
                         style={styles.txtInput} 
                         placeholder={'Add a description'}
+                        onChangeText={(text) => this.setState({discription: text})}
                         multiline={true} />
                 </View>
 
@@ -258,7 +311,7 @@ export default class SaveActivityScreen extends React.Component {
                     color: 'green',
                     fontSize: 24,
                 }}>
-                    {LEVEL[this.state.level]}
+                    {LEVEL[this.state.valueLevel]}
                 </Text>
                 
                 <Slider
@@ -268,8 +321,8 @@ export default class SaveActivityScreen extends React.Component {
                     step={1}
                     minimumTrackTintColor={'lime'}
                     thumbTintColor={'green'}
-                    value={this.state.level}
-                    onValueChange={value => this.setState({level: value})}/>
+                    value={this.state.valueLevel}
+                    onValueChange={value => this.setState({valueLevel: value})}/>
                 
                 <View style={styles.buttonRow}>
                     <TouchableOpacity style={[styles.button, 
