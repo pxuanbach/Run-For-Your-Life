@@ -66,16 +66,16 @@ function ChangePassScreen({navigation}) {
     }, [])
 
     return (
-        <SafeAreaView style={{height: '100%'}}>
+        <SafeAreaView style={{height: '100%', backgroundColor: Constants.COLOR.white}}>
             <View
             style={{
                 height: windowHeight/10,
-                backgroundColor: Constants.COLOR.white,
+                backgroundColor: Constants.COLOR.green,
                 flexDirection: "row",
                 alignItems: "center",
                 paddingHorizontal: 2,
-                paddingVertical: 4,               
-                paddingTop: windowHeight/24
+                paddingVertical: 4,
+                paddingTop: windowHeight/24             
             }}>
                 <View style={{
                     width: '15%',
@@ -87,7 +87,7 @@ function ChangePassScreen({navigation}) {
                                 navigation.navigate("ProfileTab")
                             }
                         }
-                        color={Constants.COLOR.dark_green}
+                        color={Constants.COLOR.white}
                         iconName="arrow-back-ios"
                         iconSize={32}>
                     </CustomButton>
@@ -102,14 +102,14 @@ function ChangePassScreen({navigation}) {
                             fontFamily: "SemiBold",
                             fontSize: windowHeight/30,
                             paddingHorizontal: 32,
-                            color: Constants.COLOR.dark_green,
+                            color: Constants.COLOR.white,
                         }}>
                             Change Password
                         </Text>
                     </FontLoader>
                 </View>
             </View>
-            <KeyboardAvoidingView behavior="position" enabled={enableshift}>
+            <KeyboardAvoidingView behavior="position" enabled={enableshift} style={{backgroundColor: Constants.COLOR.white}}>
                 <ScrollView>
                     <View style={styles.container}>
                         <View style={{width: "43%"}}>
@@ -120,28 +120,41 @@ function ChangePassScreen({navigation}) {
                             style={styles.text}>{username}</Text>
                         </View>
                     </View>
-                    <TextFieldSecureInput
-                    onChangeText={(text) => setCurrentPassword(text)}
-                    onFocus={() => setenableShift(false)}
-                    title="Cur-Password"
-                    placeholder="current password"/>
-                    <TextFieldSecureInput
-                    onChangeText={(text) => setNewPassword(text)}
-                    onFocus={() => setenableShift(false)}
-                    title="New Password"
-                    placeholder="new password"/>
-                    <TextFieldSecureInput
-                    onChangeText={(text) => setReNewPassword(text)}
-                    onFocus={() => setenableShift(false)}
-                    title="Confirm Password"
-                    placeholder="confirm new password"/>
                     <View style={{
-                        padding: 12,
+                        paddingVertical: 8
+                    }}>
+                        <TextFieldSecureInput
+                        onChangeText={(text) => setCurrentPassword(text)}
+                        onFocus={() => setenableShift(false)}
+                        title="Cur-Password"
+                        placeholder="current password"/>
+                    </View>
+                    <View style={{
+                        paddingVertical: 8
+                    }}>
+                        <TextFieldSecureInput
+                        onChangeText={(text) => setNewPassword(text)}
+                        onFocus={() => setenableShift(false)}
+                        title="New Password"
+                        placeholder="new password"/>
+                    </View>
+                    <View style={{
+                        paddingVertical: 8
+                    }}>
+                        <TextFieldSecureInput
+                        onChangeText={(text) => setReNewPassword(text)}
+                        onFocus={() => setenableShift(false)}
+                        title="Confirm Password"
+                        placeholder="confirm new password"/>
+                    </View>
+                    
+                    <View style={{
+                        padding: 16,
                         alignSelf: 'center',
                     }}>
                         <IconButtonDesign
                         onPress={handleChangePass}
-                        height={windowHeight/18}
+                        height={windowHeight/16}
                         text="Change"
                         iconName="published-with-changes"/>
                     </View>

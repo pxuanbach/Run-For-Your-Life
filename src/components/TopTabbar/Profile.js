@@ -1,54 +1,30 @@
 import React, {useState, useEffect} from 'react';
 import { View, Dimensions, Text, Image, AsyncStorage,
-    SafeAreaView, StyleSheet, ScrollView, TouchableOpacity,Alert
+    SafeAreaView, StyleSheet, ActivityIndicator, TouchableOpacity,Alert
 } from 'react-native';
 import Constants from '../../utilities/Constants';
 import FontLoader from '../../utilities/Font';
 import Moment from 'moment';
 import { Foundation } from '@expo/vector-icons';
 import { IconButtonDesign } from '../CustomButton';
-import ButtonSheetModal from '../CustomModal';
+import {ButtonSheetModal} from '../CustomModal';
 import jwt_decode from "jwt-decode";
- import Axios from 'axios';
-
+import Axios from 'axios';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 function Profile({navigation}) {
-    const getDetails = () => {
-        let data = {
-            fullname: navigation.getParam("name") == null 
-                ? 'Loading...' : navigation.getParam("name"),
-            mail: navigation.getParam("mail") == null 
-                ? 'Loading...' : navigation.getParam("mail"),
-            description: navigation.getParam("description") == null 
-                ? 'Loading...' : navigation.getParam("description"),
-            job: navigation.getParam("job") == null 
-                ? 'Loading...' : navigation.getParam("job"),
-            phone: navigation.getParam("phone") == null 
-                ? 'Loading...' : navigation.getParam("phone"),
-            gender: navigation.getParam("gender") == null 
-                ? 'Loading...' : navigation.getParam("gender"),
-            address: navigation.getParam("address") == null 
-                ? 'Loading...' : navigation.getParam("address"),
-            birthday: navigation.getParam("birthday") == null 
-                ? 'Loading...' : navigation.getParam("birthday"),
-            height: navigation.getParam("height") == null 
-                ? 'Loading...' : navigation.getParam("height"),
-            weight: navigation.getParam("weight") == null 
-                ? 'Loading...' : navigation.getParam("weight"),
-        };
-        return data;
-    }
     const [username, setUsername] = useState([]);
     const [info, setInfo] = useState({});
-    const [image, setImage] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
-
-
-
+    const [isLoading, setIsLoading] = useState(true);
     
+    const checkNullUndefined = (data) => {
+        if (data === undefined || data === null || data === "")
+            return false;
+        return true;
+    }
 
     const  _retrieveData = async () => {
         try {
@@ -59,17 +35,11 @@ function Profile({navigation}) {
         } catch (error) {
           // Error retrieving data
         }
-      };
-
-
-      
-
-
-     
+    };
 
     //run when navigate to this screen
     useEffect( () => {
-     
+        let clean = false;
         console.log("get details")
         AsyncStorage.getItem("authToken")
         .then( async (token) => { 
@@ -78,26 +48,33 @@ function Profile({navigation}) {
             console.log('Token decode',vl._id)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then( (res)=>{
-                setInfo(res.data)
+                setInfo(res.data);
             })
             .catch((error)=>{
-                console.log(error.response.data)
+                console.log(error.message)
             })
-            
         }) 
-                  
+        _retrieveData();
+        setIsLoading(false);
+        return () => {clean = true}
     },[])
        
 
-
-
     return (
         <SafeAreaView style={{height: '100%'}}>
-            <ScrollView>
+            {isLoading ? <View style={{
+                flex: 1,
+                padding: 8,
+                paddingHorizontal: 12,
+                justifyContent: 'center',
+            }}>
+                <ActivityIndicator color={Constants.COLOR.green}/>
+            </View>
+            : <View>
                 <SafeAreaView>
                     <ButtonSheetModal
-                    image={image}
-                    setImage={setImage}
+                    info={info}
+                    setInfo={setInfo}
                     modalVisible={modalVisible}
                     setModalVisible={setModalVisible}/>
                     {/* Photo + Name, Email */}
@@ -107,21 +84,22 @@ function Profile({navigation}) {
                         marginBottom: 8,
                         padding: 4,
                         paddingVertical: 8,
-                        backgroundColor: Constants.COLOR.white
+                        backgroundColor: Constants.COLOR.white,
+                        elevation: 6
                     }}>
                         <View style={{
                             height: windowWidth/3,
                             width: windowWidth/3
                         }}>
-                            {image != null ?
-                            <Image source={{ uri: image }}
+                            {!checkNullUndefined(info.image) ?
+                            <Image source={require('../../images/back.png')}
                             style={{ 
                                 height: windowWidth/3,
                                 width: windowWidth/3,
                                 borderRadius: 100,
                                 marginHorizontal: 4
                             }}/>
-                            : <Image source={require('../../images/back.png')}
+                            : <Image source={{uri: info.image}}
                             style={{
                                 height: windowWidth/3,
                                 width: windowWidth/3,
@@ -160,7 +138,7 @@ function Profile({navigation}) {
                                         fontSize: windowHeight/30,
                                         color: Constants.COLOR.green,
                                     }}>
-                                        {info.fullname}
+                                        {checkNullUndefined(info.fullname) ? info.fullname : username}
                                     </Text>
                                     <Text numberOfLines={1} ellipsizeMode='tail'
                                     style={{
@@ -184,9 +162,10 @@ function Profile({navigation}) {
                             }}>
                                 <IconButtonDesign
                                 onPress={() => {
+                                    navigation.pop()
                                     navigation.navigate('EditScreen', 
                                     {   
-                                        name: info.fullname, 
+                                        fullname: info.fullname, 
                                         mail: info.mail,
                                         description: info.description,
                                         job: info.job,
@@ -195,7 +174,9 @@ function Profile({navigation}) {
                                         address: info.address,
                                         birthday: info.birthday,
                                         height: info.height,
-                                        weight: info.weight
+                                        weight: info.weight,
+                                        image: info.image,
+                                        note: info.note
                                     });
                                 }}
                                 height={windowHeight/20}
@@ -210,11 +191,14 @@ function Profile({navigation}) {
                         </View>
                     </View>
                 </SafeAreaView>
-                <View>     
+                {/* infomation */}
+                <View>   
+                    {/* description */}
                     <View style={{
                         padding: 4, 
                         marginBottom: 4,
                         backgroundColor: Constants.COLOR.white,
+                        elevation: 6
                     }}>
                         <Text style={styles.title}>Description:</Text>
                         <View style={{
@@ -223,11 +207,11 @@ function Profile({navigation}) {
                             <Text style={styles.text}>{(!info.description)?   'I am ...'  :info.description}</Text>
                         </View>
                     </View>
-
-
+                    {/* else */}
                     <View style={{
                         marginVertical: 4,
                         backgroundColor: Constants.COLOR.white,
+                        elevation: 6
                     }}>
                         <View style={styles.container}>
                             <Text style={styles.label}>Your birthday:</Text>
@@ -286,7 +270,7 @@ function Profile({navigation}) {
                         </View>
                     </View>
                 </View>
-            </ScrollView>
+            </View>}
         </SafeAreaView>
     )
 }

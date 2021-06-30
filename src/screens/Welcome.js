@@ -22,6 +22,7 @@ function Welcome({navigation}) {
       
     useEffect(() => {
         let isMounted = true;
+        console.log("welcome")
         _retrieveData();
         return () => { isMounted = false };
     }, []);

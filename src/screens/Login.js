@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Text, View, Image, TouchableOpacity, ActivityIndicator,
-    KeyboardAvoidingView, Dimensions,Alert
+    KeyboardAvoidingView, Dimensions,   Alert, AsyncStorage
 } from 'react-native';
 import FontLoader from '../utilities/Font';
 import TextInputDesign from '../components/TextInputDesign';
@@ -14,13 +14,14 @@ function Login({navigation}) {
     const [username,setUsername] = useState()
     const [password,setPassword] = useState()
     const [isLoading, setIsLoading] = useState(true)
-    const handleLogin =() => {
+    const handleLogin = () => {
         console.log(username,password);    
         Axios.post("https://runapp1108.herokuapp.com/api/users/login",{username,password})
             .then((res)=>{
                 _storeData('authToken',res.data);
                 _storeData('username', username);
                 _storeData('isUsed', '1');
+                console.log(res.data, username, 1);
                 navigation.navigate('BottomTabNavigator');
             })
             .catch((err)=>{
@@ -34,7 +35,7 @@ function Login({navigation}) {
     //run when navigate to this screen
     const unsubscribe = navigation.addListener('didFocus', () => {
         setTimeout(() => {
-            console.log("time out")
+            console.log("login loading")
             setIsLoading(false);
           }, 1000);
         console.log("get details")
@@ -46,7 +47,7 @@ function Login({navigation}) {
             key, data
           );
         } catch (error) {
-          // Error saving data
+          console.log(error)
         }
       };
 

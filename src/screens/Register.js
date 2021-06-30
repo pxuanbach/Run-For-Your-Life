@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 
 function Register({navigation}){
     const [data, setData] = React.useState({
-        email: '',
+        mail: '',
         username: '',
         password: '',
         check_textInputChange: true,
@@ -23,7 +23,7 @@ function Register({navigation}){
 const setValue = (fieldName, value) => setData({...data, [fieldName]: value});
 const [username,setUsername]=useState("")
 const [password,setPassword]=useState()
-const [email,setEmail]= useState()
+const [mail,setMail]= useState()
 const [RePassword,setRePassword]=useState()
 
 function ValidateEmail(mail) 
@@ -55,7 +55,7 @@ function ValidUser(username) {
 
   const handleRegister =() => {
 
-    console.log(username,email,password,RePassword)
+    console.log(username,mail,password,RePassword)
     if (!ValidUser(username)) {
 
         Alert.alert(
@@ -64,7 +64,7 @@ function ValidUser(username) {
           )
         return 0
     }
-    if (!ValidateEmail(email)) {
+    if (!ValidateEmail(mail)) {
         Alert.alert(
             "Oops!",
             "Email không hợp lệ",
@@ -85,7 +85,7 @@ function ValidUser(username) {
         return 0
     }
     
-    Axios.post("https://runapp1108.herokuapp.com/api/users/register",{username,password,email})
+    Axios.post("https://runapp1108.herokuapp.com/api/users/register",{username,password,mail: mail})
     .then((res)=>{
         console.log(res)
         Alert.alert(
@@ -188,8 +188,8 @@ function ValidUser(username) {
                             }
                             
                             <TextInputDesign 
-                                onEndEditing={(text) => {setValue("email",text)}}
-                                onChangeText={(text) => setEmail(text)}
+                                onEndEditing={(text) => {setValue("mail",text)}}
+                                onChangeText={(text) => setMail(text)}
                                 placeholder='Your mail'
                                 iconName='mail-bulk'
                                 isSecured={false}>

@@ -1,17 +1,66 @@
-import React, {useState} from 'react';
-import {Text, Image, TouchableOpacity, FlatList, View, Modal, SafeAreaView, StyleSheet, Dimensions} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Text, Image, TouchableOpacity, FlatList, View, Modal, SafeAreaView, StyleSheet, Dimensions, ActivityIndicator} from 'react-native';
 import { borderBottom, borderRadius } from 'styled-system';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import Moment from 'moment';
+import moment from 'moment';
+import { interpolate } from 'react-native-reanimated';
+import { keyboardDismissHandlerManager } from 'native-base';
+
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 
-const ViewShowData =({timeStatus})=>
+const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
 {
     const [status, setStatus] = useState('timeStatus')
+
+    function get_distance(data){
+        var _distance=0;
+        data.forEach(element => {
+            _distance+=element.distance
+        });
+        return _distance;
+    }
+    function get_avg_pace(data){
+        var _avg = 0;
+        var _total_avg = 0;
+        var count = 0;
+        data.forEach(element=>{
+            _total_avg+= element.avgPace;
+            count++;
+        });
+        if(count!=0){
+            _avg= _total_avg/count;
+        }
+        return _avg;
+    }
+    function get_time(data){
+        var _time =0;
+        data.forEach(element=>{
+            _time+=element.time;
+        })
+        return _time;
+    }
+    function get_calories(data){
+        var _calories=0;
+        data.forEach(element=>{
+            _calories+=element.calories;
+        })
+        return _calories;
+    }
+    function get_count_activities(data){
+        var _count=0;
+        data.forEach(element=>{
+            _count++;
+        })
+        return _count;
+    }
+
+
     return(
         <View
         style={{width: windowWidth,
@@ -33,27 +82,28 @@ const ViewShowData =({timeStatus})=>
                     alignSelf:'center',
                     marginLeft:windowWidth*0.52
                     }}>
-                this {timeStatus}
+                This {timeStatus}
                 </Text>
                 <Text
                 style={{
                     alignSelf:'center',
                     marginLeft:windowWidth*0.075
                     }}>
-                last {timeStatus}
+                Last {timeStatus}
                 </Text>
             </View>
 
-            <View style={{flexDirection:'row'}}>
+            <View style={{flexDirection:'row',marginBottom:-1}}>
                 <View style={styles.distance}>
                     <MaterialCommunityIcons name="map-marker-distance" size={24} color="black" />
-                    <Text> Distance</Text>
+                    <Text> Distance </Text>
+                    <Text style={styles.unit}> (km)</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_distance(dataThisMonth).toFixed(2)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_distance(dataLastMonth).toFixed(2)}</Text>
                 </View>          
             </View>
 
@@ -61,12 +111,13 @@ const ViewShowData =({timeStatus})=>
                 <View style={styles.distance}>
                     <MaterialCommunityIcons name="speedometer" size={24} color="black" />
                     <Text> Avg Pace</Text>
+                    <Text style={styles.unit}> (min/km)</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_avg_pace(dataThisMonth).toFixed(2)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_avg_pace(dataLastMonth).toFixed(2)}</Text>
                 </View>
                     
             </View>
@@ -74,12 +125,13 @@ const ViewShowData =({timeStatus})=>
                 <View style={styles.distance}>
                     <Ionicons name="time" size={24} color="black" />
                     <Text> Time</Text>
+                    <Text style={styles.unit}> (min)</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_time(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_time(dataLastMonth)}</Text>
                 </View>
                     
             </View>
@@ -89,10 +141,10 @@ const ViewShowData =({timeStatus})=>
                     <Text> Calories Burned</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataLastMonth)}</Text>
                 </View>
                     
             </View>
@@ -102,12 +154,11 @@ const ViewShowData =({timeStatus})=>
                     <Text> Activities</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
+                    <Text style={styles.textData}>{get_count_activities(dataThisMonth)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{(Math.random()*1000).toFixed(0)}</Text>
-                </View>
-                    
+                    <Text style={styles.textData}>{get_count_activities(dataLastMonth)}</Text>
+                </View>            
             </View>        
         </View>
     )
@@ -121,7 +172,6 @@ const styles=StyleSheet.create({
         borderColor:"black",
         borderWidth:0.5,
         backgroundColor:"white",
-        //justifyContent:'center',
         alignContent:'center',
         alignItems:'center',
         marginTop:-1,
@@ -143,5 +193,9 @@ const styles=StyleSheet.create({
         marginTop:-1,
         marginBottom:1,
         marginLeft:-1
+    },
+    unit:{
+        fontSize:12,
+        color:"#999999"
     }
 })

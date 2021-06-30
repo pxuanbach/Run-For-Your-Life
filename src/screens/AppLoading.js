@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    View, AsyncStorage, ActivityIndicator
+    View, AsyncStorage, ActivityIndicator, Alert
 } from 'react-native';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
@@ -23,28 +23,34 @@ function AppLoading({navigation}) {
         } catch (error) {
         }
       };
-    
     //Dang xu ly
     const tokenValid = async () => {
         try {
+            const value = await AsyncStorage.getItem("username");
             const token = await AsyncStorage.getItem("authToken");
-            console.log(token);   //username + token
+            console.log("token: " + token);   //username + token
             if (token !== null) {
                 const hearders = {
                     'auth-token': token,
                 }
                 Axios.get("https://runapp1108.herokuapp.com/api/users/", {
-                    headers: hearders
+                    headers: hearders,
+                    timeout: 3000,
                 })
                 .then((res)=>{
                     console.log(res.status);
-                    navigation.navigate('App');
+                    if (value !== null)
+                        navigation.navigate('App');
+                    else
+                        navigation.navigate('Auth');
                 })
                 .catch((err)=>{
                     console.log(err);
                     navigation.navigate('Auth');
                 })
             }
+            else
+                navigation.navigate('Auth');
           } catch (error) {
           }
         
@@ -52,7 +58,8 @@ function AppLoading({navigation}) {
 
     useEffect(() => {
         let isMounted = true;
-        tokenValid()
+        console.log("apploading");
+        tokenValid();
         //_retrieveData();
         return () => { isMounted = false };
     }, []);

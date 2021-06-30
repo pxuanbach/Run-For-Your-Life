@@ -37,7 +37,7 @@ function FoodScreen({navigation}) {
             <View
             style={{
                 height: isLoading ? windowHeight/10 : '10%',
-                backgroundColor: Constants.COLOR.white,
+                backgroundColor: Constants.COLOR.green,
                 flexDirection: "row",
                 alignItems: "center",
                 paddingHorizontal: 2,
@@ -51,7 +51,7 @@ function FoodScreen({navigation}) {
                             navigation.navigate("NutritionTab")
                         }
                     }
-                    color={Constants.COLOR.dark_green}
+                    color={Constants.COLOR.white}
                     iconName="arrow-back-ios"
                     iconSize={32}>
                 </CustomButton>
@@ -60,7 +60,7 @@ function FoodScreen({navigation}) {
                         fontFamily: "SemiBold",
                         fontSize: 28,
                         paddingHorizontal: 32,
-                        color: Constants.COLOR.dark_green,
+                        color: Constants.COLOR.white,
                     }}>
                         {navigation.getParam('name')}
                     </Text>
@@ -101,7 +101,7 @@ function FoodScreen({navigation}) {
                     }}>
                         <ListFoodCard
                         data={foodDatas}
-                        type={navigation.getParam('type')}
+                        type={navigation.getParam('name')}
                         >
                         </ListFoodCard>
                     </View>

@@ -6,7 +6,7 @@ import FontLoader from '../utilities/Font';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const PlanRecommendedCard = ({image, tittle, text, onPress}) => {
+const PlanRecommendedCard = ({image, tittle, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
@@ -22,7 +22,7 @@ const PlanRecommendedCard = ({image, tittle, text, onPress}) => {
                         uri: image
                     }}
                     style={{
-                        height: windowHeight/4, 
+                        height: windowHeight/5, 
                         width: '100%', 
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15,
@@ -30,28 +30,23 @@ const PlanRecommendedCard = ({image, tittle, text, onPress}) => {
                 </Image>
                 <View
                 style={{
-                    height: windowHeight/12,
+                    height: windowHeight/11,
                     backgroundColor: Constants.COLOR.white,
                     borderBottomRightRadius: 15,
                     borderBottomLeftRadius: 15,
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    justifyContent: 'flex-start',
                     elevation: 7
                 }}>
                     <FontLoader>
-                        <Text style={{
-                            fontSize: windowHeight/28,
+                        <Text numberOfLines={2} ellipsizeMode="tail"
+                        style={{
+                            fontSize: windowHeight/32,
                             fontFamily: 'SemiBold',
-                            color: Constants.COLOR.dark_green
+                            color: Constants.COLOR.dark_green,
+                            paddingHorizontal: 8,
+                            textAlignVertical: 'top',
                         }}>
                             {tittle}
-                        </Text>
-                        <Text style={{
-                            fontSize: windowHeight/40,
-                            fontFamily: 'SemiRegular',
-                            color: Constants.COLOR.second_green
-                        }}>
-                            {text}
                         </Text>
                     </FontLoader>
                 </View>
