@@ -81,7 +81,7 @@ function ViewShowToday({data}){
                     <View style={styles.blockData}>
                         <Text 
                             style={styles.textDataToday}
-                            >{get_time(data)}
+                            >{get_time(data).toFixed(2)}
                             </Text>
                             <Text>min</Text>
                     </View>
@@ -89,7 +89,7 @@ function ViewShowToday({data}){
                         <Text 
                             style={styles.textDataToday}
                             >
-                            {get_calories(data)}
+                            {get_calories(data).toFixed(0)}
                             </Text>
                             <Text>Calories</Text>
                     </View>

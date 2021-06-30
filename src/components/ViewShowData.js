@@ -133,10 +133,10 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                     <Text style={styles.unit}> (min)</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_time(dataThisMonth)}</Text>
+                    <Text style={styles.textData}>{get_time(dataThisMonth).toFixed(0)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_time(dataLastMonth)}</Text>
+                    <Text style={styles.textData}>{get_time(dataLastMonth).toFixed(0)}</Text>
                 </View>
                     
             </View>
@@ -146,10 +146,10 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                     <Text> Calories Burned</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_calories(dataThisMonth)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataThisMonth).toFixed(0)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_calories(dataLastMonth)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataLastMonth).toFixed(0)}</Text>
                 </View>
                     
             </View>
