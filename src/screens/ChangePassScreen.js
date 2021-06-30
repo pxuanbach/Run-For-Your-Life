@@ -100,7 +100,7 @@ function ChangePassScreen({navigation}) {
                     <FontLoader>
                         <Text style={{
                             fontFamily: "SemiBold",
-                            fontSize: windowHeight/30,
+                            fontSize: windowHeight/32,
                             paddingHorizontal: 32,
                             color: Constants.COLOR.white,
                         }}>

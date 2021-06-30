@@ -20,7 +20,7 @@ const ListPlanCard = ({title, datas, navigation}) => {
                     <Text numberOfLines={1} ellipsizeMode="tail"
                     style={{
                         fontFamily: 'SemiBold',
-                        fontSize: windowHeight/28,
+                        fontSize: windowHeight/30,
                         color: Constants.COLOR.dark_green,
                         paddingHorizontal: 12, 
                     }}>

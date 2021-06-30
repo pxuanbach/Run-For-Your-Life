@@ -155,28 +155,36 @@ function NutritionTab({navigation}) {
             birthday={birthday}/>
             {/* header */}
             <View style={{
-                height: windowHeight/16,
-                margin: 8,
-                marginHorizontal: 12,
-                backgroundColor: Constants.COLOR.white,
-                borderRadius: 15,
-                marginTop: windowHeight/24,
-                elevation: 7
+                height: windowHeight/10,
+                backgroundColor: Constants.COLOR.green,
+                flexDirection: "row",
+                alignItems: "center",
+                paddingHorizontal: 2,
+                paddingVertical: 4,
+                paddingTop: windowHeight/24             
             }}>
-                <FontLoader>
-                    <Text style={{
-                        fontFamily: 'SemiBold',
-                        fontSize: windowHeight/24,
-                        color: Constants.COLOR.dark_green,
-                        paddingHorizontal: 12, 
-                    }}>
-                        Nutrition
-                    </Text>
-                </FontLoader>
+                <View style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignSelf: 'center'
+                }}>
+                    <FontLoader>
+                        <Text style={{
+                            fontFamily: "SemiBold",
+                            fontSize: windowHeight/30,
+                            paddingHorizontal: 32,
+                            color: Constants.COLOR.white,
+                            textAlign: 'center'
+                        }}>
+                            Nutrition
+                        </Text>
+                    </FontLoader>
+                </View>
             </View>
             <View style={{
                 flexDirection: 'row',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                paddingTop: 4
             }}>
                 {/* left */}
                 <View style={{

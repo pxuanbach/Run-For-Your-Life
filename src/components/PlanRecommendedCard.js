@@ -30,7 +30,7 @@ const PlanRecommendedCard = ({image, tittle, onPress}) => {
                 </Image>
                 <View
                 style={{
-                    height: windowHeight/11,
+                    height: windowHeight/13,
                     backgroundColor: Constants.COLOR.white,
                     borderBottomRightRadius: 15,
                     borderBottomLeftRadius: 15,
@@ -40,7 +40,7 @@ const PlanRecommendedCard = ({image, tittle, onPress}) => {
                     <FontLoader>
                         <Text numberOfLines={2} ellipsizeMode="tail"
                         style={{
-                            fontSize: windowHeight/32,
+                            fontSize: windowHeight/36,
                             fontFamily: 'SemiBold',
                             color: Constants.COLOR.dark_green,
                             paddingHorizontal: 8,

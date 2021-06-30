@@ -129,33 +129,34 @@ function PlansTab({navigation}) {
     return (
         <SafeAreaView style={{height: '100%'}}>
             <ScrollView>
-                {/*  */}
-                <View style={{
+                {/* header */}
+                <View
+                style={{
                     height: windowHeight/10,
-                    margin: 12,
-                    backgroundColor: Constants.COLOR.white,
-                    borderRadius: 16,
-                    marginTop: windowHeight/24,
-                    elevation: 6
+                    backgroundColor: Constants.COLOR.green,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingHorizontal: 2,
+                    paddingVertical: 4,
+                    paddingTop: windowHeight/24             
                 }}>
-                    <FontLoader>
-                        <Text style={{
-                            fontFamily: 'SemiBold',
-                            fontSize: windowHeight/24,
-                            color: Constants.COLOR.dark_green,
-                            paddingHorizontal: 12, 
-                        }}>
-                            All Plans
-                        </Text>
-                        <Text style={{
-                            fontFamily: 'RobotoRegular',
-                            fontSize: windowHeight/38,
-                            color: Constants.COLOR.second_green,
-                            paddingHorizontal: 12, 
-                        }}>
-                            Choose the plan that's fit for you
-                        </Text>
-                    </FontLoader>
+                    <View style={{
+                        width: '100%',
+                        justifyContent: 'center',
+                        alignSelf: 'center'
+                    }}>
+                        <FontLoader>
+                            <Text style={{
+                                fontFamily: "SemiBold",
+                                fontSize: windowHeight/30,
+                                paddingHorizontal: 32,
+                                color: Constants.COLOR.white,
+                                textAlign: 'center'
+                            }}>
+                                All Plans
+                            </Text>
+                        </FontLoader>
+                    </View>
                 </View>
                 {/* Tag + List plan */}
                 <ListPlanCard

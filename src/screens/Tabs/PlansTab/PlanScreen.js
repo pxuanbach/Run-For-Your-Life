@@ -46,7 +46,7 @@ function PlanScreen({navigation}) {
                         <Text numberOfLines={1} ellipsizeMode='tail'
                         style={{
                             fontFamily: "SemiBold",
-                            fontSize: 28,
+                            fontSize: windowHeight/30,
                             paddingHorizontal: 32,
                             color: Constants.COLOR.white,
                         }}>
