@@ -1,10 +1,11 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage, Alert, } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, AsyncStorage, Alert } from "react-native";
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { NavigationEvents } from 'react-navigation';
 import haversine from "haversine";
 import moment from 'moment';
 import { FontAwesome5, FontAwesome, MaterialIcons, Entypo } from '@expo/vector-icons';
+import {Picker} from '@react-native-picker/picker';
 import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 
@@ -20,7 +21,7 @@ const locationEventsEmitter = new EventEmitter();
 
 export default class GeofenceTab extends React.Component {
   static navigationOptions = {
-    title: 'Run',
+    title: 'Activity',
     headerLeft: () => null,
     headerTintColor: 'white',
     headerStyle: {
@@ -50,6 +51,9 @@ export default class GeofenceTab extends React.Component {
       distanceMarker: 0,
       time: 0,
 
+      // Picker
+      selectedActivity: 'running',
+
       // Timer
       start: 0,
       now: 0,
@@ -57,12 +61,14 @@ export default class GeofenceTab extends React.Component {
 
       // Controller
       statement: "isNotActive",
-      opacityRecordBox: 1,
+      showRecordBox: false,
       region: null,
     };
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = async () => {
+    await AsyncStorage.removeItem(STORAGE_KEY);
+    
     if (this.eventSubscription) {
       this.eventSubscription.remove();
     }
@@ -76,6 +82,12 @@ export default class GeofenceTab extends React.Component {
 
   didFocus = async () => {
     this.resetActivity();
+
+    const isTracking = await Location.hasStartedLocationUpdatesAsync(LOCATION_UPDATES_TASK);
+    console.log('Is tracking? ', isTracking);
+    if (isTracking == true) {
+      this.stopLocationUpdates();
+    }
     
     this.startLocationUpdates();
 
@@ -118,9 +130,12 @@ export default class GeofenceTab extends React.Component {
       timeInterval: 1000,
       distanceInterval: 1,
     });
+
+    console.log('[GeofenceTab] Call func startLocationUpdates');
   }
 
   async stopLocationUpdates() {
+    console.log('[GeofenceTab] Call func stopLocationUpdates');
     await Location.stopLocationUpdatesAsync(LOCATION_UPDATES_TASK);
   }
 
@@ -136,6 +151,10 @@ export default class GeofenceTab extends React.Component {
       distance: 0,
       distanceMarker: 0,
       time: 0,
+
+      // Control
+      statement: "isNotActive",
+      showRecordBox: false,
     });
 
     this.resetTimer();
@@ -237,7 +256,10 @@ export default class GeofenceTab extends React.Component {
   // Controller
 
   onPress_btnStart = () => {
-    this.setState({ statement: "isActive" });
+    this.setState({ 
+      statement: "isActive",
+      showRecordBox: true, 
+    });
 
     this.startTimer();
   }
@@ -259,15 +281,15 @@ export default class GeofenceTab extends React.Component {
     await AsyncStorage.removeItem(STORAGE_KEY);
     this.setState({ 
       statement: "isActive",
-
      });
 
     this.resumeTimer();
   }
 
   onPress_btnFinish = () => {
-    if (this.state.routes.length > 0) {
+    if (this.state.distance > 0) {
       this.props.navigation.navigate('SaveActivityScreen', {
+        selectedActivity: this.state.selectedActivity,
         distance: this.state.distance,
         avgPace: this.state.avgPace,
         time: this.state.time,
@@ -283,7 +305,6 @@ export default class GeofenceTab extends React.Component {
           {
             text: "Discard",
             onPress: () => { 
-              this.stopLocationUpdates();
               this.resetActivity();
             },
           },
@@ -308,11 +329,11 @@ export default class GeofenceTab extends React.Component {
   }
 
   onPress_btnShowRecordBox = () => {
-    if (this.state.opacityRecordBox == 0) {
-      this.setState({ opacityRecordBox: 1 });
+    if (this.state.showRecordBox == false) {
+      this.setState({ showRecordBox: true });
     }
     else {
-      this.setState({ opacityRecordBox: 0 });
+      this.setState({ showRecordBox: false });
     }
   }
 
@@ -380,38 +401,55 @@ export default class GeofenceTab extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Map
-          region={this.state.region}
-          routes={this.state.routes}
-          currentRoute={this.state.currentRoute}
-          coordinate={this.state.coordinate}
-          markerOnRoute={this.state.markerOnRoute} />
+        <View style={styles.containerMap}>
+          <Map
+            region={this.state.region}
+            routes={this.state.routes}
+            currentRoute={this.state.currentRoute}
+            coordinate={this.state.coordinate}
+            markerOnRoute={this.state.markerOnRoute} />
 
-        <View style={[styles.recordBox, { opacity: this.state.opacityRecordBox }]}>
-          <View style={{
-            width: '100%',
-            alignItems: "center",
-          }}>
-            <Text style={styles.itemTitle}>TIME</Text>
+          {
+            this.state.showRecordBox ? (
+              <View style={styles.recordBox}>
+                <View style={{
+                  width: '100%',
+                  alignItems: "center",
+                }}>
+                  <Text style={styles.itemTitle}>TIME</Text>
 
-            <Timer
-              interval={laps.reduce((total, curr) => total + curr, 0) + timer}
-              style={styles.itemContent} />
-          </View >
+                  <Timer
+                    interval={laps.reduce((total, curr) => total + curr, 0) + timer}
+                    style={styles.itemContent} />
+                </View >
 
-          <View style={styles.item}>
-            <Text style={styles.itemTitle}>DISTANCE (km)</Text>
-            <Text style={styles.itemContent}>
-              {parseFloat(this.state.distance).toFixed(2)}
-            </Text>
-          </View>
+                <View style={styles.item}>
+                  <Text style={styles.itemTitle}>DISTANCE (km)</Text>
+                  <Text style={styles.itemContent}>
+                    {parseFloat(this.state.distance).toFixed(2)}
+                  </Text>
+                </View>
 
-          <View style={styles.item}>
-            <Text style={styles.itemTitle}>AVG PACE (/km)</Text>
-            <Text style={styles.itemContent}>
-              {parseFloat(this.state.avgPace).toFixed(2)}
-            </Text>
-          </View>
+                <View style={styles.item}>
+                  <Text style={styles.itemTitle}>AVG PACE (/km)</Text>
+                  <Text style={styles.itemContent}>
+                    {parseFloat(this.state.avgPace).toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            ) : null
+          }
+        </View>  
+
+        <View style={{width: '100%', backgroundColor: 'green'}}>
+          <Picker
+          mode={'dropdown'}
+          style={{width:'100%', height: 40, backgroundColor: 'transparent', color: 'white'}}
+          selectedValue={this.state.selectedActivity}
+          onValueChange={(itemValue) => this.setState({selectedActivity: itemValue})}>
+            <Picker.Item label='Running' value='running'/>
+            <Picker.Item label='Bicycling' value='bicycling'/>
+          </Picker>
         </View>
 
         <View style={styles.buttonRow}>
@@ -426,7 +464,7 @@ export default class GeofenceTab extends React.Component {
             }]}
             onPress={this.onPress_btnShowRecordBox}>
             {
-              this.state.opacityRecordBox ? (
+              this.state.showRecordBox ? (
                 <Entypo name="eye-with-line" size={20} color="green" />
               ) : (
                 <Entypo name="eye" size={20} color="green" />
@@ -437,17 +475,16 @@ export default class GeofenceTab extends React.Component {
           {this.renderButton()}
 
           <TouchableOpacity
-                style={[styles.button,
-                {
-                  backgroundColor: "green",
-                  width: 40,
-                  height: 40,
-                }]}
-                onPress={this.onPress_btnLocate}>
+            style={[styles.button,
+            {
+              backgroundColor: "green",
+              width: 40,
+              height: 40,
+            }]}
+            onPress={this.onPress_btnLocate}>
 
-                <MaterialIcons name="my-location" size={20} color="white" />
-              </TouchableOpacity>
-          
+            <MaterialIcons name="my-location" size={20} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -525,8 +562,6 @@ TaskManager.defineTask(LOCATION_UPDATES_TASK, async ({ data: { locations }, erro
     return;
   }
 
-  console.log(locations);
-
   if (locations && locations.length > 0) {
     // do something with the locations captured in the background
 
@@ -546,9 +581,15 @@ TaskManager.defineTask(LOCATION_UPDATES_TASK, async ({ data: { locations }, erro
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     ...StyleSheet.absoluteFillObject,
     justifyContent: "flex-end",
     alignItems: "center",
+  },
+  containerMap: {
+    flex: 1, 
+    alignSelf: 'stretch', 
+    justifyContent: "flex-end",
   },
   map: {
     ...StyleSheet.absoluteFillObject

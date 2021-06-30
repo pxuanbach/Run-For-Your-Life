@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, Text, ScrollView, TextInput, StyleSheet, Dimensions, TouchableOpacity, } from 'react-native';
+import { View, Text, ScrollView, TextInput, StyleSheet, Dimensions, TouchableOpacity, AsyncStorage, } from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, FontAwesome, } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
 import { StackActions, NavigationActions } from 'react-navigation';
-import GeofenceTab from './GeofenceTab';
+import Axios from 'axios';
+import jwt_decode from "jwt-decode";
 
 const windowWidth = Dimensions.get('window').width;
 const LEVEL = ['Easy', 'Normal', 'Difficult', 'Hard', 'Extreme', 'Insane'];
@@ -27,6 +28,7 @@ export default class SaveActivityScreen extends React.Component {
         super(props);
 
         this.state = {
+            selectedActivity: this.props.navigation.getParam('selectedActivity'),
             time: this.props.navigation.getParam('time'),
             distance: this.props.navigation.getParam('distance'),
             avgPace: this.props.navigation.getParam('avgPace'),
@@ -36,26 +38,89 @@ export default class SaveActivityScreen extends React.Component {
             calo: 0,
             weight: 60,
 
-            value: 2,
+            valueLevel: 2,
 
-            centerCoordinate: ({
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0.001,
-                longitudeDelta: 0.001,
-            })
+            title: "",
+            discription: "",
+            centerCoordinate: null,
         };
     }
 
     componentDidMount() {
+        this.fetchDataUser();
         this.calcBurnedCalories();
         this.findCenterCoordinate();
     }
 
+    handleSaveActivity = () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            let UserID = vl._id;
+            console.log(UserID)
+
+            await Axios.post('',{
+                
+            })
+            .then((res) => {
+
+            })
+            .catch((err)=> {
+                console.log(err)
+            })
+        })
+    }
+
+    fetchDataUser = () => {
+        AsyncStorage.getItem("authToken")
+        .then( async (token) => { 
+            var vl = jwt_decode(token)
+            console.log('Token decode',vl._id)
+            Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
+            .then((res)=>{
+                if (checkNullUndefined(res.data.weight)) {
+                    this.setState({weight: res.data.weight});
+                }
+
+                console.log(res.data.weight)
+            })
+            .catch((error)=>{
+                console.log(error.response.data)
+            })
+            
+        }) 
+    }
+
+    checkNullUndefined = (data) => {
+        if (data === undefined || data === null || data === "")
+            return false;
+        return true;
+    }
+
+    calcMETs = () => {
+        const { selectedActivity, avgPace } = this.state;
+        let METs = 0;
+
+        if (selectedActivity == 'running') {
+            METs = 488.241 - 464.259 * Math.pow(2.7183, 0.0029 * avgPace);
+        }
+        if (selectedActivity == 'bicycling') {
+            if (avgPace >= 3.729) METs = 4;
+            if (avgPace >= 3.107 && avgPace < 3.729) METs = 6;
+            if (avgPace >= 2.663 && avgPace < 3.107) METs = 8;
+            if (avgPace >= 2.33 && avgPace < 2.663) METs = 10;
+            if (avgPace >= 1.864 && avgPace < 2.33) METs = 12;
+            if (avgPace < 1.864) METs = 15.8;
+        }
+
+        return METs;
+    }
+
     calcBurnedCalories = () => {
-        const { time, avgPace, weight } = this.state;
+        const { time, weight } = this.state;
         this.setState({
-            calo: time * (488.241 - 464.259 * Math.pow(2.7183, 0.0029 * avgPace)) * 3.5 * weight / 200,
+            calo: time * this.calcMETs() * 3.5 * weight / 200,
         }) 
     }
 
@@ -78,34 +143,49 @@ export default class SaveActivityScreen extends React.Component {
         let minY = Math.min.apply(null, y);
         let maxY = Math.max.apply(null, y);
 
-        // let delta = Math.max(maxX - minX, maxY - minY) * windowHeight / 250;
-
         this.setState({
             centerCoordinate: {    
                 latitude: (minX + maxX) / 2,
                 longitude: (minY + maxY) / 2,
-                latitudeDelta: maxX - minX,
-                longitudeDelta: maxY - minY,
+                latitudeDelta: (maxX - minX) * 2,
+                longitudeDelta: (maxY - minY) * 2,
             }
         }) 
     }
 
     onPress_btnDiscard = () => {
-        GeofenceTab.stopLocationUpdates();
         this.props.navigation.dispatch(resetAction);
     }
 
     onPress_btnSave = () => {
-        GeofenceTab.stopLocationUpdates();
         this.props.navigation.dispatch(resetAction);
     }
 
     render() {        
-        const { navigation } = this.props;
         return (
             <ScrollView 
             style={{width: '100%'}}
-            contentContainerStyle={styles.container}>               
+            contentContainerStyle={styles.container}>    
+                <View style={styles.containerTxtInput}>
+                    <TextInput 
+                        style={styles.txtInput} 
+                        placeholder={'Title your run'}
+                        onChangeText={(text) => this.setState({title: text})}
+                        multiline={true} />
+                </View>
+                
+                <View style={styles.containerTxtInput}>
+                    <TextInput 
+                        style={styles.txtInput} 
+                        placeholder={'Add a description'}
+                        onChangeText={(text) => this.setState({discription: text})}
+                        multiline={true} />
+                </View>
+
+                <Text style={styles.title}>
+                    Your achievement
+                </Text>
+
                 <Text style={{
                     color: 'green',
                     fontSize: 120,
@@ -230,9 +310,8 @@ export default class SaveActivityScreen extends React.Component {
                 <Text style={{
                     color: 'green',
                     fontSize: 24,
-                    marginVertical: 10,
                 }}>
-                    {LEVEL[this.state.value]}
+                    {LEVEL[this.state.valueLevel]}
                 </Text>
                 
                 <Slider
@@ -242,22 +321,8 @@ export default class SaveActivityScreen extends React.Component {
                     step={1}
                     minimumTrackTintColor={'lime'}
                     thumbTintColor={'green'}
-                    value={this.state.value}
-                    onValueChange={value => this.setState({value: value})}/>
-
-                <View style={styles.containerTxtInput}>
-                    <TextInput 
-                        style={styles.txtInput} 
-                        placeholder={'Title your run'}
-                        multiline={true} />
-                </View>
-                
-                <View style={styles.containerTxtInput}>
-                    <TextInput 
-                        style={styles.txtInput} 
-                        placeholder={'Add a description'}
-                        multiline={true} />
-                </View>
+                    value={this.state.valueLevel}
+                    onValueChange={value => this.setState({valueLevel: value})}/>
                 
                 <View style={styles.buttonRow}>
                     <TouchableOpacity style={[styles.button, 
@@ -266,7 +331,7 @@ export default class SaveActivityScreen extends React.Component {
                         borderColor: 'green',
                         borderWidth: 1.5,
                     }]}
-                    onPress={() => this.onPress_btnDiscard}>
+                    onPress={this.onPress_btnDiscard}>
                         <Text style={[styles.buttonTitle, {color: 'green'}]}>
                             DISCARD
                         </Text>
@@ -276,7 +341,7 @@ export default class SaveActivityScreen extends React.Component {
                     {
                         backgroundColor: 'green',
                     }]}
-                    onPress={() => this.onPress_btnSave}>
+                    onPress={this.onPress_btnSave}>
                         <Text style={[styles.buttonTitle, {color: 'white'}]}>
                             SAVE
                         </Text>
@@ -341,8 +406,8 @@ const styles = StyleSheet.create({
         marginVertical: 3,
     },
     map: {
-        width: '85%',
-        height: 250,
+        width: '100%',
+        height: 280,
     },
     buttonRow: {
         width: "100%",
