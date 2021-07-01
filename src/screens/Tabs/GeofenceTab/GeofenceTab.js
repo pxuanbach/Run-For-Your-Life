@@ -10,6 +10,7 @@ import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 
 import { EventEmitter } from 'fbemitter';
+import Constants from "../../../utilities/Constants";
 
 const STORAGE_KEY = 'expo-home-locations';
 const LOCATION_UPDATES_TASK = 'background-location-task';
@@ -23,9 +24,9 @@ export default class GeofenceTab extends React.Component {
   static navigationOptions = {
     title: 'Activity',
     headerLeft: () => null,
-    headerTintColor: 'white',
+    headerTintColor: Constants.COLOR.white,
     headerStyle: {
-      backgroundColor: 'green',
+      backgroundColor: Constants.COLOR.green,
     },
     headerTitleStyle: {
       alignSelf: 'center',

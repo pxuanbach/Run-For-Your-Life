@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, Text, Image, AsyncStorage,
+import { View, Dimensions, Text, Image, AsyncStorage, ScrollView,
     SafeAreaView, StyleSheet, ActivityIndicator, TouchableOpacity,Alert
 } from 'react-native';
 import Constants from '../../utilities/Constants';
@@ -33,7 +33,7 @@ function Profile({navigation}) {
             setUsername(value);
           }
         } catch (error) {
-          // Error retrieving data
+            setIsLoading(false);
         }
     };
 
@@ -48,15 +48,19 @@ function Profile({navigation}) {
             console.log('Token decode',vl._id)
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then( (res)=>{
-                setInfo(res.data);
+                if (!clean) {
+                    console.log(res.data);
+                    setInfo(res.data);
+                    setIsLoading(false);
+                }
             })
             .catch((error)=>{
-                console.log(error.message)
+                if (!clean)
+                    console.log(error.message)
             })
+            _retrieveData();
         }) 
-        _retrieveData();
-        setIsLoading(false);
-        return () => {clean = true}
+        return () => {clean = true; }
     },[])
        
 
@@ -70,8 +74,8 @@ function Profile({navigation}) {
             }}>
                 <ActivityIndicator color={Constants.COLOR.green}/>
             </View>
-            : <View >
-                <SafeAreaView style={{paddingTop: 8}}>
+            : <ScrollView>
+                <SafeAreaView style={{marginTop: windowHeight/80}}>
                     <ButtonSheetModal
                     info={info}
                     setInfo={setInfo}
@@ -81,7 +85,7 @@ function Profile({navigation}) {
                     <View style={{
                         flexDirection: 'row',
                         justifyContent: 'flex-start',
-                        marginBottom: 8,
+                        marginBottom: windowHeight/50,
                         padding: 4,
                         paddingVertical: 8,
                         backgroundColor: Constants.COLOR.white,
@@ -126,7 +130,6 @@ function Profile({navigation}) {
                             justifyContent: 'center',
                         }}>
                             <View style={{
-                                paddingStart: 16,
                                 padding: 4,
                                 alignItems: 'center',
                                 width: 2*windowWidth/3
@@ -196,7 +199,7 @@ function Profile({navigation}) {
                     {/* description */}
                     <View style={{
                         padding: 4, 
-                        marginBottom: 4,
+                        paddingVertical: 8,
                         backgroundColor: Constants.COLOR.white,
                         elevation: 6
                     }}>
@@ -209,7 +212,8 @@ function Profile({navigation}) {
                     </View>
                     {/* else */}
                     <View style={{
-                        marginVertical: 4,
+                        marginVertical: windowHeight/50,
+                        paddingVertical: 8,
                         backgroundColor: Constants.COLOR.white,
                         elevation: 6
                     }}>
@@ -270,7 +274,7 @@ function Profile({navigation}) {
                         </View>
                     </View>
                 </View>
-            </View>}
+            </ScrollView>}
         </SafeAreaView>
     )
 }

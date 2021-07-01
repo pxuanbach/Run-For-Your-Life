@@ -6,13 +6,13 @@ import FontLoader from '../utilities/Font';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const PlanRecommendedCard = ({image, tittle, onPress}) => {
+const PlanRecommendedCard = ({image, tittle, onPress, imageHeight=windowHeight/5}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
             width: '100%',
-            marginTop: 12,
-            elevation: 7
+            marginTop: 4,
+            elevation: 3
         }}>
             <View style={{
                 elevation: 8
@@ -22,7 +22,7 @@ const PlanRecommendedCard = ({image, tittle, onPress}) => {
                         uri: image
                     }}
                     style={{
-                        height: windowHeight/5, 
+                        height: imageHeight, 
                         width: '100%', 
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15,
@@ -35,7 +35,7 @@ const PlanRecommendedCard = ({image, tittle, onPress}) => {
                     borderBottomRightRadius: 15,
                     borderBottomLeftRadius: 15,
                     justifyContent: 'flex-start',
-                    elevation: 7
+                    elevation: 3
                 }}>
                     <FontLoader>
                         <Text numberOfLines={2} ellipsizeMode="tail"
@@ -45,6 +45,7 @@ const PlanRecommendedCard = ({image, tittle, onPress}) => {
                             color: Constants.COLOR.dark_green,
                             paddingHorizontal: 8,
                             textAlignVertical: 'top',
+                            textAlign: 'center',
                         }}>
                             {tittle}
                         </Text>
