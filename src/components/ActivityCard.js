@@ -1,10 +1,26 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons, FontAwesome } from '@expo/vector-icons';
 import moment from 'moment';
 
 const ActivityCard = ({ title, discription, date, record, map }) => {
+    const convertDate = (date) => {
+        const pad = (n) => n < 10 ? '0' + n : n;
+        var created_date = new Date(date);
+
+        var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        var year = created_date.getFullYear();
+        var month = months[created_date.getMonth()];
+        var date = created_date.getDate();
+        var hour = created_date.getHours();
+        var min = created_date.getMinutes();
+        return (
+            <Text style={{fontSize: 12, marginLeft: 3,}}>
+                {month + ' ' + date + ', ' + year + ' at ' + hour + ':' + pad(min)}
+            </Text>
+        )
+    }
     const convertPace = () => {
         var decimalTime = record.avgPace;
         decimalTime = decimalTime * 60;
@@ -47,17 +63,16 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
     const renderIcon = () => {
         switch(record.activity) {
             case 'running':
-                return <FontAwesome5 name="running" size={12} color="black" />;
+                return <FontAwesome5 name="running" size={14} color="black" />;
             case 'bicycling':
-                return <Ionicons name="bicycle-sharp" size={12} color="black" />;
+                return <Ionicons name="bicycle-sharp" size={14} color="black" />;
             default:
                 return;
         }
     }
 
     return (
-        <TouchableOpacity 
-        style={{width: '100%', marginTop: 20, backgroundColor: 'white', underlayColor: 'white'}}>
+        <View style={styles.container}>
             <Text style={{fontSize: 18, marginHorizontal: 10, marginTop: 10, fontWeight: 'bold'}}>
                 {title}
             </Text>
@@ -65,9 +80,7 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
             <View style={{flexDirection: 'row', marginLeft: 10}}>
                 {renderIcon()}
 
-                <Text style={{fontSize: 10, marginLeft: 3,}}>
-                    {date}
-                </Text>
+                {convertDate(date)}
             </View>
 
             <Text style={{fontSize: 14, marginHorizontal: 10, marginVertical: 10,}}>
@@ -119,7 +132,7 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
 
                 <View style={styles.itemRecord}>  
                     <Text style={styles.itemTitle}>
-                        Calo
+                        Caloies
                     </Text>
 
                     <Text style={styles.itemContent}>
@@ -162,19 +175,24 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
                     })
                 }
 
-                {/* {
+                {
                     <Marker 
                     coordinate={map.routes[0][0]}
                     anchor={{x:0, y:1}}>
                         <FontAwesome name="flag" size={24} color="gold" />
                     </Marker>
-                } */}
+                }
             </MapView>
-        </TouchableOpacity>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        width: '100%', 
+        marginTop: 20, 
+        backgroundColor: 'white',
+    },
     map: {
         width: '100%',
         height: 280,
@@ -197,7 +215,7 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     itemTitle: {
-        fontSize: 14,
+        fontSize: 12,
         color: 'gray',
         marginBottom: 2,
     },

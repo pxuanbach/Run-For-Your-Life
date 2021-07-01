@@ -175,9 +175,12 @@ export default class GeofenceTab extends React.Component {
 
       distance: distance + this.calcDistance(locations[locations.length-1]),
       distanceMarker: distanceMarker + this.calcDistance(locations[locations.length-1]),
-      avgPace: this.calcAVGPage(locations[locations.length-1]),
       prevLatLng: locations[locations.length-1],
     });
+
+    if (locations[locations.length-1].speed != 0) {
+      this.setState({avgPace: this.calcAVGPage(locations[locations.length-1])});
+    }
   }
 
   calcDistance = newLatLng => {
@@ -188,6 +191,7 @@ export default class GeofenceTab extends React.Component {
   calcAVGPage = (coord) => {
     const { avgPace } = this.state;
     const currentPace = 1000 / 60 / coord.speed * 1.0438;
+    
     if (avgPace == 0) {
       return currentPace;
     }
