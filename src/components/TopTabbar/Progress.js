@@ -152,22 +152,27 @@ function Progress({navigation}) {
     var listDataSun=[]
 
     const [username, setUsername]=useState()
-    const [userid, setUserid] = useState()
+    //const [userid, setUserid] = useState()
     const [isLoadingId, setIsLoadingId] = useState(true)
     const [isLoading, setIsLoading] = useState(true)
     // get user id 
-    const _getuserid=()=>{
-        AsyncStorage.getItem("authToken")
+    const _getUserIdAndFetchData= async ()=>{
+        await AsyncStorage.getItem("authToken")
         .then(async(token)=>{
-            var vl = jwt_decode(token)
-            setUserid(vl._id)
+            var vl = await jwt_decode(token)
+            var userid =vl._id
+            console.log("user id: "+userid)
+            _fetchdata(userid);
         })
         .catch((err)=>console.log(err))
-        .finally(()=>setIsLoadingId(false))
+        .finally(()=>{
+            setIsLoadingId(false)
+            console.log("finaly setIsLoadingId:" +isLoadingId)
+        })
         console.log("đã chạy get user id của tab progress")
     }
     //function fecth data 
-    const _fecthdata =  ()=>{
+    const _fetchdata =  (userid)=>{
         //today
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
         .then((res)=>res.json())
@@ -284,17 +289,8 @@ function Progress({navigation}) {
 
     // useeffect 
     useEffect(()=>{
-        async function getUserIdAndFecthData(){
-            try {
-                await _getuserid();
-                await _fecthdata();
-            } catch (error) {
-                console.log("lỗi tại async function get and fecth của tab progress")
-            }
-        }
-        getUserIdAndFecthData();
-        
-    },[isLoadingId])
+        _getUserIdAndFetchData();
+    },[])
 
     return (
         <View>

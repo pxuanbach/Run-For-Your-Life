@@ -10,25 +10,30 @@ const windowWidth = Dimensions.get('window').width;
 function Activities({navigation}) {
 
     //const [username, setUsername]=useState()
-    const [userid, setUserid] = useState()
+    //const [userid, setUserid] = useState()
     const [isLoadingid, setIsLoadingId] = useState(true)
     const [isLoading, setIsLoading]=useState(true)
 
     const [datas,setDatas] = useState([])
     var listData=[]
     //hàm get user id
-    const _getuserid=()=>{
-        AsyncStorage.getItem("authToken")
+    const _getUserIdAndFetchData= async ()=>{
+        await AsyncStorage.getItem("authToken")
         .then(async(token)=>{
-            var vl = jwt_decode(token)
-            setUserid(vl._id)
-            setIsLoadingId(false)
+            var vl = await jwt_decode(token)
+            var userid =vl._id
+            console.log("user id: "+userid)
+            _fetchdata(userid);
         })
         .catch((err)=>console.log(err))
+        .finally(()=>{
+            setIsLoadingId(false)
+        })
+        console.log("đã chạy get user id của tab progress")
     }
     //hàm fecth data 
-    async function _fecthdata(){
-        await fetch("http://my-app-de.herokuapp.com/api/activities/userID/"+userid)
+    const _fetchdata=(userid)=>{
+        fetch("http://my-app-de.herokuapp.com/api/activities/userID/"+userid)
         .then((res)=>res.json())
         .then((json)=>{
             json.map((data)=>{
@@ -41,9 +46,8 @@ function Activities({navigation}) {
     }
     //useEffect
     useEffect(()=>{
-        _getuserid();
-        _fecthdata();
-    },[isLoadingid])
+        _getUserIdAndFetchData();
+    },[])
 
     return (
         <View>
