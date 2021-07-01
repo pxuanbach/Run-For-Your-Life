@@ -39,7 +39,7 @@ function Activities({navigation}) {
         .catch((err)=>console.log("load list activities chưa kịp"))
         .finally(()=>setIsLoading(false))
     }
-
+    //useEffect
     useEffect(()=>{
         _getuserid();
         _fecthdata();

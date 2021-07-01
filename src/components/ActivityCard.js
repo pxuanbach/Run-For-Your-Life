@@ -19,6 +19,10 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
         )
     }
 
+    const converDate=()=>{
+        return(moment(date).format('LLLL'))
+    }
+
     const convertTime = () => {
         var decimalTime = record.totalTime;
         decimalTime = decimalTime * 60;
@@ -65,8 +69,8 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
             <View style={{flexDirection: 'row', marginLeft: 10}}>
                 {renderIcon()}
 
-                <Text style={{fontSize: 10, marginLeft: 3,}}>
-                    {date}
+                <Text style={{fontSize: 12, marginLeft: 3,}}>
+                    {converDate()}
                 </Text>
             </View>
 
