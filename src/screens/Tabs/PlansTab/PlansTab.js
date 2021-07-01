@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     Text, View, ScrollView, Dimensions, 
-    StyleSheet, SafeAreaView, FlatList
+    StyleSheet, SafeAreaView, AsyncStorage
 } from 'react-native';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
@@ -126,6 +126,54 @@ var listInjuryRecovery = [
 ]
 
 function PlansTab({navigation}) {
+    const [curTitle, setCurTitle] = useState("");
+    const [curImageUrl, setCurImageUrl] = useState("");
+    const [curWebUrl, setCurWebUrl] = useState("");
+
+    const checkCurPlan = () => {
+        if (curWebUrl === "" || curTitle === "" || curImageUrl === "") {
+            return false;
+        }
+        return true;
+    }
+
+    const _storeData = async (key, data) => {
+        try {
+          await AsyncStorage.setItem(
+            key, data
+          );
+        } catch (error) {
+          console.log(error)
+        }
+    };
+
+    const  _retrieveData = async () => {
+        try {
+          const curTitle = await AsyncStorage.getItem("curTitle");
+          if (curTitle !== null) {
+            setCurTitle(curTitle);
+          }
+
+          const curImageUrl = await AsyncStorage.getItem("curImageUrl");
+          if (curImageUrl !== null) {
+              setCurImageUrl(curImageUrl);
+          }
+
+          const curWebUrl = await AsyncStorage.getItem("curWebUrl");
+          if (curWebUrl !== null) {
+              setCurWebUrl(curWebUrl);
+          }
+        } catch (error) {
+            
+        }
+    };
+
+    useEffect(() => {
+        let isMounted = true;
+        _retrieveData();
+        return () => { isMounted = false };
+    }, []);
+
     return (
         <SafeAreaView style={{height: '100%'}}>
             <ScrollView>
@@ -158,6 +206,37 @@ function PlansTab({navigation}) {
                         </FontLoader>
                     </View>
                 </View>
+                {checkCurPlan() ? 
+                <View style={{
+                    width: '100%',
+                    alignSelf: 'center',
+                    paddingHorizontal: 16
+                }}>
+                    <FontLoader>
+                        <Text numberOfLines={1} ellipsizeMode="tail"
+                        style={{
+                            fontFamily: 'SemiBold',
+                            fontSize: windowHeight/30,
+                            color: Constants.COLOR.dark_green,
+                        }}>
+                            Current Plan
+                        </Text>
+                    </FontLoader>
+                    <PlanRecommendedCard
+                    imageHeight={windowHeight/4}
+                    image={curImageUrl}
+                    tittle={curTitle}
+                    onPress={() => {
+                        _storeData("curTitle", curTitle);
+                        _storeData("curImageUrl", curImageUrl);
+                        _storeData("curWebUrl", curWebUrl);
+                        navigation.navigate('PlanScreen', {
+                            name: "Current Plan",
+                            webUrl: curWebUrl
+                        })
+                    }}/>
+                </View>
+                 : <View/>}
                 {/* Tag + List plan */}
                 <ListPlanCard
                 title="Plans"

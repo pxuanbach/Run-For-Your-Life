@@ -6,7 +6,7 @@ import FontLoader from '../utilities/Font';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const PlanRecommendedCard = ({image, tittle, onPress}) => {
+const PlanRecommendedCard = ({image, tittle, onPress, imageHeight=windowHeight/5}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
@@ -22,7 +22,7 @@ const PlanRecommendedCard = ({image, tittle, onPress}) => {
                         uri: image
                     }}
                     style={{
-                        height: windowHeight/5, 
+                        height: imageHeight, 
                         width: '100%', 
                         borderTopLeftRadius: 15,
                         borderTopRightRadius: 15,

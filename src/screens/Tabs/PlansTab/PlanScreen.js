@@ -4,12 +4,13 @@ import { CustomButton } from '../../../components/CustomButton';
 import Constants from '../../../utilities/Constants';
 import FontLoader from '../../../utilities/Font';
 import { WebView } from 'react-native-webview';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-function PlanScreen({navigation}) {
 
+function PlanScreen({navigation}) {
     return (
         <SafeAreaView>
             {/* header */}
@@ -29,7 +30,6 @@ function PlanScreen({navigation}) {
                     <CustomButton 
                         onPress={
                             () => {
-                                navigation.popToTop()
                                 navigation.navigate("PlansTab")
                             }
                         }

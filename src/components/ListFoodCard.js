@@ -16,10 +16,10 @@ const FoodCard = ({urlImage, name, calories, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress}
         style={{
-            height: h/5 + 12,
-            width: w/2-12, 
+            height: h/5 + 10,
+            width: w/2-10, 
             backgroundColor: Constants.COLOR.white,
-            margin: 6,
+            margin: 5,
             borderRadius: 12,
             flexDirection: "column",
             elevation: 6,
@@ -192,7 +192,7 @@ const ListFoodCard = ({data, type}) => {
                     )
                 }}
                 contentContainerStyle={{
-                    paddingBottom: windowHeight/16 + 2
+                    paddingBottom: windowHeight/16 + 5
                 }}>
             </FlatList>
         </SafeAreaView>

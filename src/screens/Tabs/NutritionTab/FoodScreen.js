@@ -36,7 +36,7 @@ function FoodScreen({navigation}) {
             {/* header: back button + tittle */}
             <View
             style={{
-                height: isLoading ? windowHeight/10 : '10%',
+                height: windowHeight/10,
                 backgroundColor: Constants.COLOR.green,
                 flexDirection: "row",
                 alignItems: "center",
@@ -66,48 +66,48 @@ function FoodScreen({navigation}) {
                     </Text>
                 </FontLoader>
             </View>
-            {isLoading 
-            // Loading screen
-            ? <View style={{   
-                flex: 1,
-                justifyContent: 'center',
-                paddingTop: windowHeight/3 
-            }}>
-                <ActivityIndicator size="large" color={Constants.COLOR.green}/>
-            </View>
-            //Show list food screen
-            : <SafeAreaView style={{
+            {/* show list food */}
+            <SafeAreaView style={{
                 height: "90%",
                 backgroundColor: Constants.COLOR.light_gray
             }}>
-                    <View style={{
-                        paddingHorizontal: 12,
-                        paddingVertical: 8
+                {isLoading 
+                // Loading screen
+                ? <View style={{   
+                    flex: 1,
+                    justifyContent: 'center',
+                }}>
+                    <ActivityIndicator size="large" color={Constants.COLOR.green}/>
+                </View>
+                    : <View style={{
+                        height: '100%'
                     }}>
-                        <FontLoader>
-                            <Text style={{
-                                fontFamily: "SemiBold",
-                                fontSize: 22,
-                                color: Constants.COLOR.dark_green
-                            }}>
-                                Recommended:
-                            </Text>
-                        </FontLoader>
-                    </View>
-                    <View style={{
-                        width: '100%',
-                        flexDirection: "row",
-                        alignContent: "flex-start"
-                    }}>
-                        <ListFoodCard
-                        data={foodDatas}
-                        type={navigation.getParam('name')}
-                        >
-                        </ListFoodCard>
-                    </View>
-                    
+                        <View style={{
+                            paddingHorizontal: 12,
+                            paddingVertical: 8
+                        }}>
+                            <FontLoader>
+                                <Text style={{
+                                    fontFamily: "SemiBold",
+                                    fontSize: 22,
+                                    color: Constants.COLOR.dark_green
+                                }}>
+                                    Recommended:
+                                </Text>
+                            </FontLoader>
+                        </View>
+                        <View style={{
+                            width: '100%',
+                            flexDirection: "row",
+                            alignContent: "flex-start"
+                        }}>
+                            <ListFoodCard
+                            data={foodDatas}
+                            type={navigation.getParam('name')}>
+                            </ListFoodCard>
+                        </View>
+                    </View>}
             </SafeAreaView>
-            }
         </View>
     );
 }

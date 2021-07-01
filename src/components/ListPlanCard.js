@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {Text, Image, StyleSheet,
-    TouchableOpacity, FlatList, Share,
-    View, Modal, SafeAreaView, Dimensions
+import {
+    Text, FlatList, View, Dimensions, AsyncStorage
 } from 'react-native';
 import Constants from '../utilities/Constants';
 import FontLoader from '../utilities/Font';
@@ -11,6 +10,16 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 const ListPlanCard = ({title, datas, navigation}) => {
+    const _storeData = async (key, data) => {
+        try {
+          await AsyncStorage.setItem(
+            key, data
+          );
+        } catch (error) {
+          console.log(error)
+        }
+      };
+
     return (
         <View style={{
             paddingLeft: 4,
@@ -45,6 +54,11 @@ const ListPlanCard = ({title, datas, navigation}) => {
                             <PlanRecommendedCard
                             onPress={() => {
                                 console.log(item.webUrl);
+                                if (title === "Plans") {
+                                    _storeData("curTitle", item.title);
+                                    _storeData("curImageUrl", item.imageUrl);
+                                    _storeData("curWebUrl", item.webUrl);
+                                }
                                 navigation.navigate('PlanScreen', {
                                     name: title,
                                     webUrl: item.webUrl
