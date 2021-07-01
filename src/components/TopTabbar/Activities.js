@@ -46,11 +46,11 @@ function Activities({navigation}) {
                 await _getuserid();
                 await _fecthdata();
             } catch (error) {
-                console.log("lỗi tại async function get and fecth")
+                console.log("lỗi tại async function get and fecth của tab activity")
             }
         }
         getUserIdAndFecthData();
-    },[isLoadingid])
+    },[])
 
     return (
         <View>

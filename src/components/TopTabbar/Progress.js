@@ -171,7 +171,7 @@ function Progress({navigation}) {
         //today
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
         .then((res)=>res.json())
-        .then((json)=>{
+        .then((json)=>{ 
             json.map((data)=>{
                 listDataToday.push(data)
             });
@@ -289,7 +289,7 @@ function Progress({navigation}) {
                 await _getuserid();
                 await _fecthdata();
             } catch (error) {
-                console.log("lỗi tại async function get and fecth")
+                console.log("lỗi tại async function get and fecth của tab progress")
             }
         }
         getUserIdAndFecthData();
@@ -305,7 +305,7 @@ function Progress({navigation}) {
                 justifyContent: 'center',
                 paddingTop: windowHeight/3 
             }}>
-                <ActivityIndicator size="large" color="#4CD964d"/>
+                <ActivityIndicator size="large" color="#4CD964"/>
             </View>
             //Show 
             :<SafeAreaView>
