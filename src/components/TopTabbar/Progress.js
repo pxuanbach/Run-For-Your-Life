@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {SafeAreaView, Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity, AsyncStorage} from 'react-native';
+import {SafeAreaView, Text, View, ScrollView, Dimensions, StyleSheet, TouchableOpacity, AsyncStorage, ActivityIndicator} from 'react-native';
 import ViewShowData from '../../components/ViewShowData';
 import ViewShowToday from '../ViewShowToday';
 import ViewShowChart from '../ViewShowChart';
@@ -84,7 +84,7 @@ function Progress({navigation}) {
                 sun=(moment().add(4, 'days').format().split('T'))[0]
                 break;
             }
-            case "Thurday":{
+            case "Thursday":{
                 mon=(moment().subtract(3, 'days').format().split('T'))[0]
                 tue=(moment().subtract(2,'days').format().split('T'))[0]
                 wed=(moment().subtract(1,'days').format().split('T'))[0]
@@ -124,12 +124,9 @@ function Progress({navigation}) {
                 sun=(moment().format().split('T'))[0]
                 break;
             }
-            default: _thu_hai=(moment().format().split('T'))[0]
         }
 
     //state
-    const [isLoading, setIsLoading] = useState(true)
-
     const [dataThisMonth, setDataThisMonth]=useState([])
     const [dataLastMonth,setDataLastMonth] = useState([])
     const [dataToday, setDataToday]= useState([])
@@ -157,33 +154,20 @@ function Progress({navigation}) {
     const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
     const [isLoadingId, setIsLoadingId] = useState(true)
-    //hàm get user id 
+    const [isLoading, setIsLoading] = useState(true)
+    // get user id 
     const _getuserid=()=>{
         AsyncStorage.getItem("authToken")
         .then(async(token)=>{
             var vl = jwt_decode(token)
             setUserid(vl._id)
-            setIsLoadingId(false)
         })
         .catch((err)=>console.log(err))
+        .finally(()=>setIsLoadingId(false))
+        console.log("đã chạy get user id của tab progress")
     }
-    // const _getuserid=async()=>{
-    //     try {
-    //         const username= await AsyncStorage.getItem("username")
-    //         var res = await fetch("https://my-app-de.herokuapp.com/api/users/getID/" + username)
-    //         .then((res)=>res.text())
-    //         .then((text)=>{
-    //             var u = text.split('"')
-    //             setUserid(u[1])
-    //             setIsLoading(false)
-    //         })   
-    //         .catch((err)=>console.log(err))     
-    //     } catch (error) {
-    //         console.log(error)
-    //     }    
-    // }
-    // hàm fecth data api đổi sau
-    function _fecthdata(){
+    //function fecth data 
+    const _fecthdata =  ()=>{
         //today
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+today)
         .then((res)=>res.json())
@@ -193,7 +177,7 @@ function Progress({navigation}) {
             });
             setDataToday(listDataToday);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong today"))
         //monday
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+mon)
         .then((res)=>res.json())
@@ -203,7 +187,7 @@ function Progress({navigation}) {
             });
             setDataMon(listDataMon);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong mon"))
         //tuesday
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+tue)
         .then((res)=>res.json())
@@ -213,7 +197,7 @@ function Progress({navigation}) {
             });
             setDataTue(listDataTue);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong tue"))
         //wednesday
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+wed)
         .then((res)=>res.json())
@@ -223,7 +207,7 @@ function Progress({navigation}) {
             });
             setDataWed(listDataWed);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong wed"))
         //thurday
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+thu)
         .then((res)=>res.json())
@@ -233,7 +217,7 @@ function Progress({navigation}) {
             });
             setDataThu(listDataThu);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong thu"))
         //friday
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+fri)
         .then((res)=>res.json())
@@ -243,7 +227,7 @@ function Progress({navigation}) {
             });
             setDataFri(listDataFri);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong fri"))
         //saturday
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+sat)
         .then((res)=>res.json())
@@ -253,7 +237,7 @@ function Progress({navigation}) {
             });
             setDataSat(listDataSat);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong sat"))
         //sunday
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/date/"+sun)
         .then((res)=>res.json())
@@ -263,7 +247,7 @@ function Progress({navigation}) {
             });
             setDataSun(listDataSun);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong sun"))
         //this week
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/thisweek")
         .then((res)=>res.json())
@@ -273,7 +257,7 @@ function Progress({navigation}) {
             });
             setDataThisWeek(listDataThisWeek);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong chart"))
         //this month
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+this_month)
         .then((res)=>res.json())
@@ -283,7 +267,7 @@ function Progress({navigation}) {
             });
             setDataThisMonth(listDataThisMonth);
         })
-        .catch((err)=>console.log("load chưa xong"))
+        .catch((err)=>console.log("fecth chưa xong this month"))
         //last month
         fetch("https://my-app-de.herokuapp.com/api/activities/userID/"+userid+"/month/"+last_month)
         .then((res)=>res.json())
@@ -293,46 +277,67 @@ function Progress({navigation}) {
             });
             setDataLastMonth(listDataLastMonth);
         })
-        .catch((err)=>console.log("load chưa xong"))
-
-        console.log("hàm fecthdata")
+        .catch((err)=>console.log("fecth chưa xong last month"))
+        .finally(()=>setIsLoading(false))
+        console.log("hàm fecthdata của tab progress đã chạy")
     }
 
     // useeffect 
     useEffect(()=>{
-        _getuserid();
-        _fecthdata();
-    },[isLoading, isLoadingId])
+        async function getUserIdAndFecthData(){
+            try {
+                await _getuserid();
+                await _fecthdata();
+            } catch (error) {
+                console.log("lỗi tại async function get and fecth")
+            }
+        }
+        getUserIdAndFecthData();
+        
+    },[isLoadingId])
 
     return (
-        <SafeAreaView>
-            <StatusBar style="auto"/>
-            <ScrollView
-            style={{backgroundColor:'#fff'}}
-            >   
+        <View>
+        {isLoading 
+            // Loading screen
+            ? <View style={{   
+                flex: 1,
+                justifyContent: 'center',
+                paddingTop: windowHeight/3 
+            }}>
+                <ActivityIndicator size="large" color="#4CD964d"/>
+            </View>
+            //Show 
+            :<SafeAreaView>
+                <StatusBar style="auto"/>
+                <ScrollView
+                style={{backgroundColor:'#fff'}}
+                >   
 
-                <Text style={styles.titleToday}>TODAY</Text>
-                <ViewShowToday
-                data={dataToday}/>
-            
-                <Text style={styles.titleToday}>THIS WEEK</Text>
-                <ViewShowChart
-                dataMon={dataMon}
-                dataTue={dataTue}
-                dataWed={dataWed}
-                dataThu={dataThu}
-                dataFri={dataFri}
-                dataSat={dataSat}
-                dataSun={dataSun}/>
-             
-                <Text style={styles.titleToday}>MONTHLY</Text>
-                <ViewShowData 
-                timeStatus= 'month'
-                dataThisMonth = {dataThisMonth}
-                dataLastMonth ={dataLastMonth}/>    
+                    <Text style={styles.titleToday}>TODAY</Text>
+                    <ViewShowToday
+                    data={dataToday}/>
+                
+                    <Text style={styles.titleToday}>THIS WEEK</Text>
+                    <ViewShowChart
+                    dataMon={dataMon}
+                    dataTue={dataTue}
+                    dataWed={dataWed}
+                    dataThu={dataThu}
+                    dataFri={dataFri}
+                    dataSat={dataSat}
+                    dataSun={dataSun}/>
+                
+                    <Text style={styles.titleToday}>MONTHLY</Text>
+                    <ViewShowData 
+                    timeStatus= 'month'
+                    dataThisMonth = {dataThisMonth}
+                    dataLastMonth ={dataLastMonth}/>    
 
-            </ScrollView>
-        </SafeAreaView>
+                </ScrollView>
+            </SafeAreaView>
+        }
+        </View>
     )
 }
 

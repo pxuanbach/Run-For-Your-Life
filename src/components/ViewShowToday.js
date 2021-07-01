@@ -50,7 +50,7 @@ function ViewShowToday({data}){
 
     return(
         <SafeAreaView>
-            <View 
+                <View 
                 style={{
                     flexDirection:'row', 
                     alignSelf:'center', 
@@ -71,7 +71,7 @@ function ViewShowToday({data}){
                             </Text>
                         <Text>min/km</Text>
                     </View>
-                    </View>
+                </View>
 
                 <View 
                 style={{

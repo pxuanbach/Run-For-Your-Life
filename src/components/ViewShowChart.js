@@ -38,7 +38,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
     const [chartsat, setChartsat]= useState(0)
     const [chartsun, setChartsun]= useState(0)
     // hàm set lại cái giá trị các cột trên biểu đồ khi đổi status ( distnce/ time/ avg pace/ calories)
-    async function setChartValue(){
+    const setChartValue= async ()=>{
         if(status=="Distance"){
             await setChartmon(get_distance(dataMon))
             await setCharttue(get_distance(dataTue))
@@ -78,10 +78,10 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
     }
     setTimeout(()=>{
         setIsloading(false)
-    },5000)
+    },3000)
     useEffect(()=>{
         setChartValue()
-    },[status,isloading])
+    },[isloading,status])
     //hàm tính toán 
     function get_distance(data){
         if(data===[]) return 0;
@@ -123,7 +123,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
     }
 
     return(
-        <SafeAreaView>
+            <SafeAreaView>
             <View style={{alignItems:'center'}}>
                         <LineChart
                             data={{
@@ -202,9 +202,7 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                         }
                     </View>
                 </View>
-
-        </SafeAreaView>
-
+            </SafeAreaView>
     )
 }
 export default ViewShowChart;
