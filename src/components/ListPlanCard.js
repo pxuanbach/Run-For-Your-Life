@@ -24,18 +24,31 @@ const ListPlanCard = ({title, datas, navigation}) => {
         <View style={{
             paddingLeft: 4,
         }}>
-            <View>
-                <FontLoader>
-                    <Text numberOfLines={1} ellipsizeMode="tail"
-                    style={{
-                        fontFamily: 'SemiBold',
-                        fontSize: windowHeight/30,
-                        color: Constants.COLOR.dark_green,
-                        paddingHorizontal: 12, 
-                    }}>
-                        {title}
-                    </Text>
-                </FontLoader>
+            <View style={{
+                margin: 4,
+                alignSelf: 'flex-start',
+            }}>
+                <View style={{
+                    alignSelf: 'center',
+                    padding: 4,
+                    paddingHorizontal: 8,
+                    backgroundColor: Constants.COLOR.green,
+                    borderRadius: 12,
+                    elevation: 6
+                }}>
+                    <FontLoader>
+                        <Text numberOfLines={1} ellipsizeMode="tail"
+                        style={{
+                            //fontFamily: 'SemiBold',
+                            fontWeight: 'bold',
+                            fontSize: windowHeight/30,
+                            color: Constants.COLOR.white,
+                            paddingHorizontal: 12, 
+                        }}>
+                            {title}
+                        </Text>
+                    </FontLoader>
+                </View>
             </View>
             <View style={{
                 width: '100%',
@@ -54,7 +67,7 @@ const ListPlanCard = ({title, datas, navigation}) => {
                             <PlanRecommendedCard
                             onPress={() => {
                                 console.log(item.webUrl);
-                                if (title === "Plans") {
+                                if (title === "Plan") {
                                     _storeData("curTitle", item.title);
                                     _storeData("curImageUrl", item.imageUrl);
                                     _storeData("curWebUrl", item.webUrl);
@@ -72,7 +85,7 @@ const ListPlanCard = ({title, datas, navigation}) => {
                 ItemSeparatorComponent={() => <View style={{margin: 4}}/>}
                 contentContainerStyle={{
                     paddingHorizontal: 8,
-                    paddingBottom: 8
+                    paddingBottom: 12
                 }}/>
                 
             </View>
