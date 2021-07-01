@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
-import { FontAwesome, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { FontAwesome5, Ionicons, FontAwesome } from '@expo/vector-icons';
 import moment from 'moment';
 
 const ActivityCard = ({ title, discription, date, record, map }) => {
@@ -19,8 +19,8 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
         )
     }
 
-    const converDate=()=>{
-        return(moment(date).format('LLLL'))
+    const convertDate = () => {
+        return (moment(date).format('LLLL'))
     }
 
     const convertTime = () => {
@@ -51,17 +51,16 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
     const renderIcon = () => {
         switch(record.activity) {
             case 'running':
-                return <FontAwesome5 name="running" size={12} color="black" />;
+                return <FontAwesome5 name="running" size={14} color="black" />;
             case 'bicycling':
-                return <Ionicons name="bicycle-sharp" size={12} color="black" />;
+                return <Ionicons name="bicycle-sharp" size={14} color="black" />;
             default:
                 return;
         }
     }
 
     return (
-        <TouchableOpacity 
-        style={{width: '100%', marginTop: 20, backgroundColor: 'white', underlayColor: 'white'}}>
+        <View style={styles.container}>
             <Text style={{fontSize: 18, marginHorizontal: 10, marginTop: 10, fontWeight: 'bold'}}>
                 {title}
             </Text>
@@ -70,7 +69,7 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
                 {renderIcon()}
 
                 <Text style={{fontSize: 12, marginLeft: 3,}}>
-                    {converDate()}
+                    {convertDate()}
                 </Text>
             </View>
 
@@ -123,11 +122,11 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
 
                 <View style={styles.itemRecord}>  
                     <Text style={styles.itemTitle}>
-                        Calo
+                        Caloies
                     </Text>
 
                     <Text style={styles.itemContent}>
-                        {(record.calo).toFixed(0)} Kcal
+                        {record.calo} Kcal
                     </Text>
                 </View>
             </View>
@@ -166,19 +165,24 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
                     })
                 }
 
-                {/* {
+                {
                     <Marker 
                     coordinate={map.routes[0][0]}
                     anchor={{x:0, y:1}}>
-                        <FontAwesome name="flag" size={24} color="gold" /> 
+                        <FontAwesome name="flag" size={24} color="gold" />
                     </Marker>
-                } */}
+                }
             </MapView>
-        </TouchableOpacity>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        width: '100%', 
+        marginTop: 20, 
+        backgroundColor: 'white',
+    },
     map: {
         width: '100%',
         height: 280,
@@ -201,7 +205,7 @@ const styles = StyleSheet.create({
         color: 'black',
     },
     itemTitle: {
-        fontSize: 14,
+        fontSize: 12,
         color: 'gray',
         marginBottom: 2,
     },

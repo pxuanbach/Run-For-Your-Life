@@ -70,8 +70,8 @@ function Profile({navigation}) {
             }}>
                 <ActivityIndicator color={Constants.COLOR.green}/>
             </View>
-            : <View>
-                <SafeAreaView>
+            : <View >
+                <SafeAreaView style={{paddingTop: 8}}>
                     <ButtonSheetModal
                     info={info}
                     setInfo={setInfo}

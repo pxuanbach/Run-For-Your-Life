@@ -6,7 +6,6 @@ import jwt_decode from "jwt-decode";
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-
 function Activities({navigation}) {
 
     //const [username, setUsername]=useState()
