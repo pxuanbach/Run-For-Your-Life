@@ -151,7 +151,7 @@ function PlansTab({navigation}) {
                     }}/>
                 </View>
                 : <View/>}
-            {isLoading ? <View style={{
+                {isLoading ? <View style={{
                     flex: 1,
                     padding: 8,
                     paddingHorizontal: 12,

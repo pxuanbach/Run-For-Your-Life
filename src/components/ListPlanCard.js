@@ -39,8 +39,7 @@ const ListPlanCard = ({title, datas, navigation}) => {
                     <FontLoader>
                         <Text numberOfLines={1} ellipsizeMode="tail"
                         style={{
-                            //fontFamily: 'SemiBold',
-                            fontWeight: 'bold',
+                            fontFamily: 'SemiBold',
                             fontSize: windowHeight/30,
                             color: Constants.COLOR.white,
                             paddingHorizontal: 12, 
