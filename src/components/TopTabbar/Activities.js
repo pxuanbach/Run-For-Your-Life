@@ -1,181 +1,73 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, FlatList, SafeAreaView} from 'react-native';
+import {View, Dimensions, FlatList, SafeAreaView, AsyncStorage, ActivityIndicator} from 'react-native';
 import ActivityCard from '../ActivityCard';
+import jwt_decode from "jwt-decode";
 
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-var datas = [
-    {
-        id: '12345',
-        title: 'Afternoon Run',
-        discription: 'Good job',
-        date: '2021-07-01T19:04:25.232+00:00',
-
-        record: {
-            activity: 'running',
-            level: 'Hard',
-            calo: 100,
-            distance: 1.77,
-            avgPace: 5.75, 
-            totalTime: 61,
-        },
-
-        map: {
-            routes: [
-                [
-                    {
-                        latitude: 11.6003617,
-                        longitude: 109.0359483,
-                    },
-                    {
-                        latitude: 11.60035,
-                        longitude: 109.0360167,
-                    },
-                    {
-                        latitude: 11.60034,
-                        longitude: 109.0360667,
-                    },
-                    {
-                        latitude: 11.60033,
-                        longitude: 109.036115,
-                    },
-                    {
-                        latitude: 11.60035,
-                        longitude: 109.0360167,
-                    },
-                    {
-                        latitude: 11.60034,
-                        longitude: 109.0360667,
-                    },
-                    {
-                        latitude: 11.60033,
-                        longitude: 109.036115,
-                    },
-                ]
-            ],
-            markerOnRoute: [],
-            region: {
-                latitude: 11.60032335,
-                longitude: 109.03613,
-                latitudeDelta: 0.00015340000000207965,
-                longitudeDelta: 0.0007267999999953645,
-            }
-        }
-    },
-    {
-        id: '12346',
-        title: 'Morning Bicycling',
-        discription: 'De vai lon',
-        date: '11/3/2021',
-
-        record: {
-            activity: 'bicycling',
-            level: 'Hard',
-            calo: 100,
-            distance: 1.77,
-            avgPace: 7.25, 
-            totalTime: 93.5,
-        },
-
-        map: {
-            routes: [
-                [
-                    {
-                        latitude: 11.6003617,
-                        longitude: 109.0359483,
-                    },
-                    {
-                        latitude: 11.60035,
-                        longitude: 109.0360167,
-                    },
-                    {
-                        latitude: 11.60034,
-                        longitude: 109.0360667,
-                    },
-                    {
-                        latitude: 11.60033,
-                        longitude: 109.036115,
-                    },
-                    {
-                        latitude: 11.60035,
-                        longitude: 109.0360167,
-                    },
-                    {
-                        latitude: 11.60034,
-                        longitude: 109.0360667,
-                    },
-                    {
-                        latitude: 11.60033,
-                        longitude: 109.036115,
-                    },
-                ]
-            ],
-            markerOnRoute: [],
-            region: {
-                latitude: 11.60032335,
-                longitude: 109.03613,
-                latitudeDelta: 0.00015340000000207965,
-                longitudeDelta: 0.0007267999999953645,
-            }
-        }
-    },
-    {
-        id: '12347',
-        title: 'Evening Run',
-        discription: 'Dep me di',
-        date: '10/3/2021',
-
-        record: {
-            activity: 'running',
-            level: 'Extreme',
-            calo: 100,
-            distance: 1.77,
-            avgPace: 6.5, 
-            totalTime: 11.5,
-        },
-
-        map: {
-            routes: [
-                [
-                    {
-                        latitude: 11.6003757,
-                        longitude: 109.0337126,
-                    },
-                    {
-                        latitude: 11.5989362,
-                        longitude: 109.0298823,
-                    },
-                    {
-                        latitude: 11.5977272,
-                        longitude: 109.0324683,
-                    },
-                    {
-                        latitude: 11.5954462,
-                        longitude: 109.0340243,
-                    },
-                ]
-            ],
-            markerOnRoute: [],
-            region: {
-                latitude: 11.6003757,
-                longitude: 109.0337126,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-            }
-        }
-    },
-]
-
 function Activities({navigation}) {
+
+    //const [username, setUsername]=useState()
+    //const [userid, setUserid] = useState()
+    const [isLoadingid, setIsLoadingId] = useState(true)
+    const [isLoading, setIsLoading]=useState(true)
+
+    const [datas,setDatas] = useState([])
+    var listData=[]
+    //hàm get user id
+    const _getUserIdAndFetchData= async ()=>{
+        await AsyncStorage.getItem("authToken")
+        .then(async(token)=>{
+            var vl = await jwt_decode(token)
+            var userid =vl._id
+            console.log("user id: "+userid)
+            _fetchdata(userid);
+        })
+        .catch((err)=>console.log(err))
+        .finally(()=>{
+            setIsLoadingId(false)
+        })
+        console.log("đã chạy get user id của tab progress")
+    }
+    //hàm fecth data 
+    const _fetchdata=(userid)=>{
+        fetch("http://my-app-de.herokuapp.com/api/activities/userID/"+userid)
+        .then((res)=>res.json())
+        .then((json)=>{
+            json.map((data)=>{
+                listData.push(data)    
+            })
+            setDatas(listData)
+        })
+        .catch((err)=>console.log("load list activities chưa kịp"))
+        .finally(()=>setIsLoading(false))
+    }
+    //useEffect
+    useEffect(()=>{
+        _getUserIdAndFetchData();
+    },[])
+
     return (
+        <View>
+        {isLoading 
+            // Loading screen
+            ? <View style={{   
+                flex: 1,
+                justifyContent: 'center',
+                paddingTop: windowHeight/3 
+            }}>
+                <ActivityIndicator size="large" color="#4CD964"/>
+            </View>
+            //Show 
+            :
         <SafeAreaView style={{height: '100%', backgroundColor: '#ececec'}}>
             <FlatList
                 data={datas}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item._id}
                 renderItem={({item}) => {
                     return (
-                        <View item={item} key={item.id}>
+                        <View item={item} key={item._id}>
                             <ActivityCard
                             title={item.title}
                             discription={item.discription}
@@ -190,6 +82,8 @@ function Activities({navigation}) {
                 }}
             />
         </SafeAreaView>
+    }
+    </View>
     )
 }
 

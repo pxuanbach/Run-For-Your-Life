@@ -5,22 +5,6 @@ import { FontAwesome5, Ionicons, FontAwesome } from '@expo/vector-icons';
 import moment from 'moment';
 
 const ActivityCard = ({ title, discription, date, record, map }) => {
-    const convertDate = (date) => {
-        const pad = (n) => n < 10 ? '0' + n : n;
-        var created_date = new Date(date);
-
-        var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-        var year = created_date.getFullYear();
-        var month = months[created_date.getMonth()];
-        var date = created_date.getDate();
-        var hour = created_date.getHours();
-        var min = created_date.getMinutes();
-        return (
-            <Text style={{fontSize: 12, marginLeft: 3,}}>
-                {month + ' ' + date + ', ' + year + ' at ' + hour + ':' + pad(min)}
-            </Text>
-        )
-    }
     const convertPace = () => {
         var decimalTime = record.avgPace;
         decimalTime = decimalTime * 60;
@@ -33,6 +17,10 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
                 {minutes}:{seconds} /km
             </Text>
         )
+    }
+
+    const convertDate = () => {
+        return (moment(date).format('LLLL'))
     }
 
     const convertTime = () => {
@@ -80,7 +68,9 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
             <View style={{flexDirection: 'row', marginLeft: 10}}>
                 {renderIcon()}
 
-                {convertDate(date)}
+                <Text style={{fontSize: 12, marginLeft: 3,}}>
+                    {convertDate()}
+                </Text>
             </View>
 
             <Text style={{fontSize: 14, marginHorizontal: 10, marginVertical: 10,}}>

@@ -19,18 +19,20 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
     const [status, setStatus] = useState('timeStatus')
 
     function get_distance(data){
+        if(data===[]) return 0;
         var _distance=0;
         data.forEach(element => {
-            _distance+=element.distance
+            _distance+=element.record.distance;
         });
         return _distance;
     }
     function get_avg_pace(data){
+        if(data===[]) return 0;
         var _avg = 0;
         var _total_avg = 0;
         var count = 0;
         data.forEach(element=>{
-            _total_avg+= element.avgPace;
+            _total_avg+= element.record.avgPace;
             count++;
         });
         if(count!=0){
@@ -39,20 +41,23 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
         return _avg;
     }
     function get_time(data){
+        if(data===[]) return 0;
         var _time =0;
         data.forEach(element=>{
-            _time+=element.time;
+            _time+=element.record.totalTime;
         })
         return _time;
     }
     function get_calories(data){
+        if(data===[]) return 0;
         var _calories=0;
         data.forEach(element=>{
-            _calories+=element.calories;
+            _calories+=element.record.calo;
         })
         return _calories;
     }
     function get_count_activities(data){
+        if(data===[]) return 0;
         var _count=0;
         data.forEach(element=>{
             _count++;
@@ -128,10 +133,10 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                     <Text style={styles.unit}> (min)</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_time(dataThisMonth)}</Text>
+                    <Text style={styles.textData}>{get_time(dataThisMonth).toFixed(0)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_time(dataLastMonth)}</Text>
+                    <Text style={styles.textData}>{get_time(dataLastMonth).toFixed(0)}</Text>
                 </View>
                     
             </View>
@@ -141,10 +146,10 @@ const ViewShowData =({timeStatus,dataThisMonth,dataLastMonth})=>
                     <Text> Calories Burned</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_calories(dataThisMonth)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataThisMonth).toFixed(0)}</Text>
                 </View>
                 <View style={styles.viewTextData}>
-                    <Text style={styles.textData}>{get_calories(dataLastMonth)}</Text>
+                    <Text style={styles.textData}>{get_calories(dataLastMonth).toFixed(0)}</Text>
                 </View>
                     
             </View>

@@ -10,18 +10,20 @@ const windowWidth = Dimensions.get('window').width;
 function ViewShowToday({data}){
 
     function get_distance(data){
+        if(data===[]) return 0;
         var _distance=0;
         data.forEach(element => {
-            _distance+=element.distance
+            _distance+=element.record.distance;
         });
         return _distance;
     }
     function get_avg_pace(data){
+        if(data===[]) return 0;
         var _avg = 0;
         var _total_avg = 0;
         var count = 0;
         data.forEach(element=>{
-            _total_avg+= element.avgPace;
+            _total_avg+= element.record.avgPace;
             count++;
         });
         if(count!=0){
@@ -30,23 +32,25 @@ function ViewShowToday({data}){
         return _avg;
     }
     function get_time(data){
+        if(data===[]) return 0;
         var _time =0;
         data.forEach(element=>{
-            _time+=element.time;
+            _time+=element.record.totalTime;
         })
         return _time;
     }
     function get_calories(data){
+        if(data===[]) return 0;
         var _calories=0;
         data.forEach(element=>{
-            _calories+=element.calories;
+            _calories+=element.record.calo;
         })
         return _calories;
     }
 
     return(
         <SafeAreaView>
-            <View 
+                <View 
                 style={{
                     flexDirection:'row', 
                     alignSelf:'center', 
@@ -67,7 +71,7 @@ function ViewShowToday({data}){
                             </Text>
                         <Text>min/km</Text>
                     </View>
-                    </View>
+                </View>
 
                 <View 
                 style={{
@@ -77,7 +81,7 @@ function ViewShowToday({data}){
                     <View style={styles.blockData}>
                         <Text 
                             style={styles.textDataToday}
-                            >{get_time(data)}
+                            >{get_time(data).toFixed(2)}
                             </Text>
                             <Text>min</Text>
                     </View>
@@ -85,7 +89,7 @@ function ViewShowToday({data}){
                         <Text 
                             style={styles.textDataToday}
                             >
-                            {get_calories(data)}
+                            {get_calories(data).toFixed(0)}
                             </Text>
                             <Text>Calories</Text>
                     </View>
