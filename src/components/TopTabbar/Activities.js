@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { View, Dimensions, FlatList, SafeAreaView, AsyncStorage, ScrollView, ActivityIndicator } from 'react-native';
+import {View, Dimensions, FlatList, SafeAreaView, AsyncStorage, ActivityIndicator} from 'react-native';
 import ActivityCard from '../ActivityCard';
 import jwt_decode from "jwt-decode";
 
@@ -8,28 +8,29 @@ const windowWidth = Dimensions.get('window').width;
 
 
 function Activities({navigation}) {
-    //state
+
+    //const [username, setUsername]=useState()
     const [userid, setUserid] = useState()
-    const [isLoading, setIsLoading]=useState(true)
     const [isLoadingid, setIsLoadingId] = useState(true)
+    const [isLoading, setIsLoading]=useState(true)
+
     const [datas,setDatas] = useState([])
     var listData=[]
-    //get user id
+    //hàm get user id
     const _getuserid=()=>{
         AsyncStorage.getItem("authToken")
         .then(async(token)=>{
             var vl = jwt_decode(token)
             setUserid(vl._id)
+            setIsLoadingId(false)
         })
         .catch((err)=>console.log(err))
-        .finally(()=>setIsLoadingId(false))
-        console.log("đã chạy get user id của tab activity")
     }
-    //function fecth data 
-    const  _fecthdata= async()=>{
+    //hàm fecth data 
+    async function _fecthdata(){
         await fetch("http://my-app-de.herokuapp.com/api/activities/userID/"+userid)
         .then((res)=>res.json())
-        .then((json)=> async()=>{
+        .then((json)=>{
             json.map((data)=>{
                 listData.push(data)    
             })
@@ -37,20 +38,12 @@ function Activities({navigation}) {
         })
         .catch((err)=>console.log("load list activities chưa kịp"))
         .finally(()=>setIsLoading(false))
-        console.log("đã chạy fecthdata của tab activity")
     }
-    //useEffect
+
     useEffect(()=>{
-        async function getUserIdAndFecthData(){
-            try {
-                await _getuserid();
-                await _fecthdata();
-            } catch (error) {
-                console.log("lỗi tại async function get and fecth của tab activity")
-            }
-        }
-        getUserIdAndFecthData();
-    },[])
+        _getuserid();
+        _fecthdata();
+    },[isLoadingid])
 
     return (
         <View>
@@ -64,7 +57,8 @@ function Activities({navigation}) {
                 <ActivityIndicator size="large" color="#4CD964"/>
             </View>
             //Show 
-            :<SafeAreaView style={{height: '100%', backgroundColor: '#ececec'}}>
+            :
+        <SafeAreaView style={{height: '100%', backgroundColor: '#ececec'}}>
             <FlatList
                 data={datas}
                 keyExtractor={item => item._id}
@@ -85,8 +79,8 @@ function Activities({navigation}) {
                 }}
             />
         </SafeAreaView>
-        }
-        </View>
+    }
+    </View>
     )
 }
 

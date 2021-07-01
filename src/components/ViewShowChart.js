@@ -38,49 +38,50 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
     const [chartsat, setChartsat]= useState(0)
     const [chartsun, setChartsun]= useState(0)
     // hàm set lại cái giá trị các cột trên biểu đồ khi đổi status ( distnce/ time/ avg pace/ calories)
-    const setChartValue= async ()=>{
-        if(status=="Distance"){
-            await setChartmon(get_distance(dataMon))
-            await setCharttue(get_distance(dataTue))
-            await setChartwed(get_distance(dataWed))
-            await setChartthu(get_distance(dataThu))
-            await setChartfri(get_distance(dataFri))
-            await setChartsat(get_distance(dataSat))
-            await setChartsun(get_distance(dataSun))
+    const setChartValue= ()=>{
+        if(status==="Distance"){
+             setChartmon(get_distance(dataMon))
+             setCharttue(get_distance(dataTue))
+             setChartwed(get_distance(dataWed))
+             setChartthu(get_distance(dataThu))
+             setChartfri(get_distance(dataFri))
+             setChartsat(get_distance(dataSat))
+             setChartsun(get_distance(dataSun))
         }
-        if(status=="Time"){
-            await setChartmon(get_time(dataMon))
-            await setCharttue(get_time(dataTue))
-            await setChartwed(get_time(dataWed))
-            await setChartthu(get_time(dataThu))
-            await setChartfri(get_time(dataFri))
-            await setChartsat(get_time(dataSat))
-            await setChartsun(get_time(dataSun))
+        if(status==="Time"){
+             setChartmon(get_time(dataMon))
+             setCharttue(get_time(dataTue))
+             setChartwed(get_time(dataWed))
+             setChartthu(get_time(dataThu))
+             setChartfri(get_time(dataFri))
+             setChartsat(get_time(dataSat))
+             setChartsun(get_time(dataSun))
         }
-        if(status=="AvgPace"){
-            await setChartmon(get_avg_pace(dataMon))
-            await setCharttue(get_avg_pace(dataTue))
-            await setChartwed(get_avg_pace(dataWed))
-            await setChartthu(get_avg_pace(dataThu))
-            await setChartfri(get_avg_pace(dataFri))
-            await setChartsat(get_avg_pace(dataSat))
-            await setChartsun(get_avg_pace(dataSun))
+        if(status==="AvgPace"){
+             setChartmon(get_avg_pace(dataMon))
+             setCharttue(get_avg_pace(dataTue))
+             setChartwed(get_avg_pace(dataWed))
+             setChartthu(get_avg_pace(dataThu))
+             setChartfri(get_avg_pace(dataFri))
+             setChartsat(get_avg_pace(dataSat))
+             setChartsun(get_avg_pace(dataSun))
         }
-        if(status=="Calories"){
-            await setChartmon(get_calories(dataMon))
-            await setCharttue(get_calories(dataTue))
-            await setChartwed(get_calories(dataWed))
-            await setChartthu(get_calories(dataThu))
-            await setChartfri(get_calories(dataFri))
-            await setChartsat(get_calories(dataSat))
-            await setChartsun(get_calories(dataSun))
+        if(status==="Calories"){
+             setChartmon(get_calories(dataMon))
+             setCharttue(get_calories(dataTue))
+             setChartwed(get_calories(dataWed))
+             setChartthu(get_calories(dataThu))
+             setChartfri(get_calories(dataFri))
+             setChartsat(get_calories(dataSat))
+             setChartsun(get_calories(dataSun))
         }
     }
     setTimeout(()=>{
         setIsloading(false)
-    },3000)
-    useEffect(()=>{
-        setChartValue()
+    },1000)
+    
+    useEffect(()=>{   
+        setChartValue();
     },[isloading,status])
     //hàm tính toán 
     function get_distance(data){
