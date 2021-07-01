@@ -10,7 +10,7 @@ var datas = [
         id: '12345',
         title: 'Afternoon Run',
         discription: 'Good job',
-        date: '10/3/2021',
+        date: '2021-07-01T19:04:25.232+00:00',
 
         record: {
             activity: 'running',
@@ -22,13 +22,44 @@ var datas = [
         },
 
         map: {
-            routes: [],
+            routes: [
+                [
+                    {
+                        latitude: 11.6003617,
+                        longitude: 109.0359483,
+                    },
+                    {
+                        latitude: 11.60035,
+                        longitude: 109.0360167,
+                    },
+                    {
+                        latitude: 11.60034,
+                        longitude: 109.0360667,
+                    },
+                    {
+                        latitude: 11.60033,
+                        longitude: 109.036115,
+                    },
+                    {
+                        latitude: 11.60035,
+                        longitude: 109.0360167,
+                    },
+                    {
+                        latitude: 11.60034,
+                        longitude: 109.0360667,
+                    },
+                    {
+                        latitude: 11.60033,
+                        longitude: 109.036115,
+                    },
+                ]
+            ],
             markerOnRoute: [],
             region: {
-                latitude: 11.6003757,
-                longitude: 109.0337126,
-                latitudeDelta: 0.006,
-                longitudeDelta: 0.006,
+                latitude: 11.60032335,
+                longitude: 109.03613,
+                latitudeDelta: 0.00015340000000207965,
+                longitudeDelta: 0.0007267999999953645,
             }
         }
     },
@@ -48,13 +79,44 @@ var datas = [
         },
 
         map: {
-            routes: [],
+            routes: [
+                [
+                    {
+                        latitude: 11.6003617,
+                        longitude: 109.0359483,
+                    },
+                    {
+                        latitude: 11.60035,
+                        longitude: 109.0360167,
+                    },
+                    {
+                        latitude: 11.60034,
+                        longitude: 109.0360667,
+                    },
+                    {
+                        latitude: 11.60033,
+                        longitude: 109.036115,
+                    },
+                    {
+                        latitude: 11.60035,
+                        longitude: 109.0360167,
+                    },
+                    {
+                        latitude: 11.60034,
+                        longitude: 109.0360667,
+                    },
+                    {
+                        latitude: 11.60033,
+                        longitude: 109.036115,
+                    },
+                ]
+            ],
             markerOnRoute: [],
             region: {
-                latitude: 11.6003757,
-                longitude: 109.0337126,
-                latitudeDelta: 0.006,
-                longitudeDelta: 0.006,
+                latitude: 11.60032335,
+                longitude: 109.03613,
+                latitudeDelta: 0.00015340000000207965,
+                longitudeDelta: 0.0007267999999953645,
             }
         }
     },
