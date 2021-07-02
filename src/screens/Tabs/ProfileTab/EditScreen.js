@@ -61,7 +61,7 @@ function EditScreen({navigation}) {
     }
 
     const ValidNumber = (str) => {
-        return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
+        return !/[~`!# $%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
     }
 
     const HandleSave = () => {
