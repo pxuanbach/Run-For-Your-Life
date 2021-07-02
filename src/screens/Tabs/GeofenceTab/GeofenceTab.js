@@ -291,7 +291,7 @@ export default class GeofenceTab extends React.Component {
   }
 
   onPress_btnFinish = () => {
-    if (this.state.distance > 0) {
+    if (this.state.distance > 0 && this.state.routes.length != 0) {
       this.props.navigation.navigate('SaveActivityScreen', {
         selectedActivity: this.state.selectedActivity,
         distance: this.state.distance,
