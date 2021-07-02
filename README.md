@@ -61,12 +61,13 @@
 
 ## Yêu cầu thiết bị
 - Android:
+  -  Android 6.0 (Marshmallow) SDK or higher
   -  Taget sdk: 41
 - iOS:
-  -
+  - iOS: 9.0
 ## Thư viện và công nghệ
 - Language: Javascript
-- FrameWork: 
+- FrameWork: react-native 0.64
   - react-native-cli 2.0.1
   - expo-cli 4.4.1
 - Database: MongoDB
@@ -90,4 +91,16 @@
 - Nguyễn Ngọc Thịnh – 19522283@gm.uit.edu.vn
 - Võ Quốc Minh – 19521857@gm.uit.edu.vn
 ## Giấy phép
-
+> Copyright 2021
+>
+> Licensed under the Apache License, Version 2.0 (the "License");
+> you may not use this file except in compliance with the License.
+> You may obtain a copy of the License at
+>
+>    http://www.apache.org/licenses/LICENSE-2.0
+>
+> Unless required by applicable law or agreed to in writing, software
+> distributed under the License is distributed on an "AS IS" BASIS,
+> WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+> See the License for the specific language governing permissions and
+> limitations under the License.
