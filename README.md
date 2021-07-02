@@ -37,6 +37,8 @@
 - Theo dõi quá trình chạy bộ
 - Ghi lại số liệu thống kê sau khi chạy bộ
 
+  <img src="https://user-images.githubusercontent.com/55500268/124296565-500b0e80-db84-11eb-9ae9-48c39d8e352e.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124296571-51d4d200-db84-11eb-9555-04fe101ec063.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124296589-5600ef80-db84-11eb-9cd9-2354df7e4201.png" width="300"> 
+
 ### Tham khảo dinh dưỡng
 - Tính lượng calo tiêu thụ hàng ngày
 - Xem danh sách thức ăn tham khảo
@@ -51,9 +53,9 @@
 - Lịch sử Hoạt động
 - Thông tin người dùng
 
-  <img src="https://user-images.githubusercontent.com/55500268/124290233-6497d880-db7d-11eb-8aa2-5460d5bafad3.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124290237-65306f00-db7d-11eb-9d0c-297048ff4b58.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124290241-66fa3280-db7d-11eb-8040-4f2c349fbc05.png" width="300">
-
-  <img src="https://user-images.githubusercontent.com/55500268/124290413-9a3cc180-db7d-11eb-943c-6c3484da8e88.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124290423-9dd04880-db7d-11eb-9242-15f293362182.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124290436-9f9a0c00-db7d-11eb-91a7-052513d7737e.png" width="300">
+  <img src="https://user-images.githubusercontent.com/55500268/124290233-6497d880-db7d-11eb-8aa2-5460d5bafad3.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124290237-65306f00-db7d-11eb-9d0c-297048ff4b58.png" width="300"> 
+  
+  <img src="https://user-images.githubusercontent.com/55500268/124290241-66fa3280-db7d-11eb-8040-4f2c349fbc05.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124290413-9a3cc180-db7d-11eb-943c-6c3484da8e88.png" width="300">   
 
 ## Yêu cầu thiết bị
 - Android:
@@ -77,6 +79,8 @@
 - @react-native-picker/picker - https://github.com/react-native-picker/picker
 - @react-native-community/datetimepicker - https://github.com/react-native-datetimepicker/datetimepicker
 ## Cơ sở dữ liệu
+
+  <img src="https://user-images.githubusercontent.com/55500268/124296963-bee86780-db84-11eb-8171-efd6c099d3ea.png" width="720">
 
 ## Tác giả
 - Trần Nguyên Tiến Nam – 19521871@gm.uit.edu.vn
