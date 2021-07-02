@@ -15,6 +15,9 @@ const MenuDropdownButton = ({setMenuRef, hideMenu, showMenu,
         try {
             await AsyncStorage.removeItem("username");
             await AsyncStorage.removeItem("authToken");
+            await AsyncStorage.removeItem("curTitle");
+            await AsyncStorage.removeItem("curImageUrl");
+            await AsyncStorage.removeItem("curWebUrl");
         } catch (err) {
             alert(err);
         } finally {

@@ -59,7 +59,7 @@ const BottomTabNavigator = createBottomTabNavigator({
         inactiveTintColor: Constants.COLOR.second_green,
         activeTintColor: Constants.COLOR.white,
         style: {
-            height: 58,
+            height: 50,
             backgroundColor: Constants.COLOR.green,
             borderTopWidth: 0,
             elevation: 8

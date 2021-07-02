@@ -94,12 +94,6 @@ function EditScreen({navigation}) {
             let UserID = vl._id;
             console.log(UserID)
 
-            //console.log('name:',fullname)
-            //console.log('mail:',mail)
-            //console.log('descrpttion:',description)
-            //console.log('job:',job)
-            //console.log('phone:',phone)
-            //console.log('gender:',gender)
             console.log('Date:',date)
             let birthday = Moment(date).format('YYYY-MM-DD')
             console.log('mail',mail)

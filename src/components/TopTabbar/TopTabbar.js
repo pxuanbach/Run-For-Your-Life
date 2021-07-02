@@ -59,6 +59,7 @@ const TopTabbar = createMaterialTopTabNavigator({
 },
 {
     initialRouteName: "Progress",
+    lazy: true,
     tabBarOptions: {
         style: {
             backgroundColor: Constants.COLOR.green
