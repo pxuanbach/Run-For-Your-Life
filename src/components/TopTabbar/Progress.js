@@ -151,9 +151,6 @@ function Progress({navigation}) {
     var listDataSat=[]
     var listDataSun=[]
 
-    const [username, setUsername]=useState()
-    //const [userid, setUserid] = useState()
-    const [isLoadingId, setIsLoadingId] = useState(true)
     const [isLoading, setIsLoading] = useState(true)
     // get user id 
     const _getUserIdAndFetchData= async ()=>{
@@ -165,11 +162,8 @@ function Progress({navigation}) {
             _fetchdata(userid);
         })
         .catch((err)=>console.log(err))
-        .finally(()=>{
-            setIsLoadingId(false)
-            console.log("finaly setIsLoadingId:" +isLoadingId)
-        })
-        console.log("đã chạy get user id của tab progress")
+
+        console.log("đã chạy get user id and fetch data của tab progress")
     }
     //function fecth data 
     const _fetchdata =  (userid)=>{

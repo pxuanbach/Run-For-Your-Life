@@ -39,50 +39,62 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
     const [chartsun, setChartsun]= useState(0)
     // hàm set lại cái giá trị các cột trên biểu đồ khi đổi status ( distnce/ time/ avg pace/ calories)
     const setChartValue= ()=>{
-        if(status==="Distance"){
-             setChartmon(get_distance(dataMon))
-             setCharttue(get_distance(dataTue))
-             setChartwed(get_distance(dataWed))
-             setChartthu(get_distance(dataThu))
-             setChartfri(get_distance(dataFri))
-             setChartsat(get_distance(dataSat))
-             setChartsun(get_distance(dataSun))
-        }
-        if(status==="Time"){
-             setChartmon(get_time(dataMon))
-             setCharttue(get_time(dataTue))
-             setChartwed(get_time(dataWed))
-             setChartthu(get_time(dataThu))
-             setChartfri(get_time(dataFri))
-             setChartsat(get_time(dataSat))
-             setChartsun(get_time(dataSun))
-        }
-        if(status==="AvgPace"){
-             setChartmon(get_avg_pace(dataMon))
-             setCharttue(get_avg_pace(dataTue))
-             setChartwed(get_avg_pace(dataWed))
-             setChartthu(get_avg_pace(dataThu))
-             setChartfri(get_avg_pace(dataFri))
-             setChartsat(get_avg_pace(dataSat))
-             setChartsun(get_avg_pace(dataSun))
-        }
-        if(status==="Calories"){
-             setChartmon(get_calories(dataMon))
-             setCharttue(get_calories(dataTue))
-             setChartwed(get_calories(dataWed))
-             setChartthu(get_calories(dataThu))
-             setChartfri(get_calories(dataFri))
-             setChartsat(get_calories(dataSat))
-             setChartsun(get_calories(dataSun))
-        }
+        switch(status){
+            case "Distance":{
+            setChartmon(get_distance(dataMon))
+            setCharttue(get_distance(dataTue))
+            setChartwed(get_distance(dataWed))
+            setChartthu(get_distance(dataThu))
+            setChartfri(get_distance(dataFri))
+            setChartsat(get_distance(dataSat))
+            setChartsun(get_distance(dataSun))
+            break;
+            }
+            case "Time":{
+            setChartmon(get_time(dataMon))
+            setCharttue(get_time(dataTue))
+            setChartwed(get_time(dataWed))
+            setChartthu(get_time(dataThu))
+            setChartfri(get_time(dataFri))
+            setChartsat(get_time(dataSat))
+            setChartsun(get_time(dataSun))
+            break;
+            }
+            case "AvgPace":{
+            setChartmon(get_avg_pace(dataMon))
+            setCharttue(get_avg_pace(dataTue))
+            setChartwed(get_avg_pace(dataWed))
+            setChartthu(get_avg_pace(dataThu))
+            setChartfri(get_avg_pace(dataFri))
+            setChartsat(get_avg_pace(dataSat))
+            setChartsun(get_avg_pace(dataSun))
+            break;
+            }
+            case "Calories":{
+            setChartmon(get_calories(dataMon))
+            setCharttue(get_calories(dataTue))
+            setChartwed(get_calories(dataWed))
+            setChartthu(get_calories(dataThu))
+            setChartfri(get_calories(dataFri))
+            setChartsat(get_calories(dataSat))
+            setChartsun(get_calories(dataSun))
+            break;
+            }
+        default:{
+            setChartmon(get_distance(dataMon))
+            setCharttue(get_distance(dataTue))
+            setChartwed(get_distance(dataWed))
+            setChartthu(get_distance(dataThu))
+            setChartfri(get_distance(dataFri))
+            setChartsat(get_distance(dataSat))
+            setChartsun(get_distance(dataSun))
+            }
+        } 
     }
-    setTimeout(()=>{
-        setIsloading(false)
-    },1000)
     
     useEffect(()=>{   
         setChartValue();
-    },[isloading,status])
+    },[status])
     //hàm tính toán 
     function get_distance(data){
         if(data===[]) return 0;
@@ -125,7 +137,15 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
 
     return(
             <SafeAreaView>
-            <View style={{alignItems:'center'}}>
+            <View style={{
+                alignSelf:'center',
+                alignItems:'center',
+                width:windowWidth*0.905,
+                borderColor:"#4CD964",
+                borderWidth:1,
+                borderRadius:22,
+                marginBottom:5
+                }}>
                         <LineChart
                             data={{
                             labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat","Sun"],
@@ -166,19 +186,19 @@ function ViewShowChart({dataMon, dataTue, dataWed, dataThu, dataFri, dataSat, da
                             }}
                             bezier
                             style={{
-                            marginVertical: 5,
+                            //marginVertical: 5,
                             borderRadius: 20
                             }}
                         />
                     </View>
                 <View 
                 style={{
-                    flexDirection:'row', 
-                    marginHorizontal:15, 
-                    borderWidth:2, 
-                    borderRadius:22, 
-                    borderColor:"#4CD964",
-                    paddingHorizontal:0
+                    width:windowWidth*0.9,
+                    borderWidth:1,
+                    borderColor: "#4CD964",
+                    borderRadius:20,
+                    alignSelf:'center',
+                    padding:1
 
                     }}>
                     <View 
@@ -249,16 +269,16 @@ const styles=StyleSheet.create({
        alignSelf:'center',
        alignItems:'center',
        borderRadius:22,
-       margin:-1
+       height:windowHeight*0.048
     },
     btnChart:{
-        width: windowWidth/4.37,
-        height:windowHeight*0.06,
+        width: windowWidth/4.45,
+        height:windowHeight*0.05,
         flexDirection:'row',
         borderColor:"black",
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:22,
+        borderRadius:25,
         position:"relative"
     },
 })

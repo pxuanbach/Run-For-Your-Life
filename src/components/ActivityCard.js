@@ -122,11 +122,11 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
 
                 <View style={styles.itemRecord}>  
                     <Text style={styles.itemTitle}>
-                        Caloies
+                        Calories
                     </Text>
 
                     <Text style={styles.itemContent}>
-                        {record.calo} Kcal
+                        {(record.calo).toFixed(0)} Kcal
                     </Text>
                 </View>
             </View>

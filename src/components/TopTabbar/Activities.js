@@ -7,14 +7,11 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 function Activities({navigation}) {
-
-    //const [username, setUsername]=useState()
-    //const [userid, setUserid] = useState()
-    const [isLoadingid, setIsLoadingId] = useState(true)
+    //state
     const [isLoading, setIsLoading]=useState(true)
-
     const [datas,setDatas] = useState([])
     var listData=[]
+
     //hàm get user id
     const _getUserIdAndFetchData= async ()=>{
         await AsyncStorage.getItem("authToken")
@@ -25,11 +22,9 @@ function Activities({navigation}) {
             _fetchdata(userid);
         })
         .catch((err)=>console.log(err))
-        .finally(()=>{
-            setIsLoadingId(false)
-        })
-        console.log("đã chạy get user id của tab progress")
+        console.log("đã chạy get user id and fetch data của tab progress")
     }
+
     //hàm fecth data 
     const _fetchdata=(userid)=>{
         fetch("http://my-app-de.herokuapp.com/api/activities/userID/"+userid)
@@ -42,7 +37,9 @@ function Activities({navigation}) {
         })
         .catch((err)=>console.log("load list activities chưa kịp"))
         .finally(()=>setIsLoading(false))
+        console.log("đã chạy fetch data của tab activity")
     }
+
     //useEffect
     useEffect(()=>{
         _getUserIdAndFetchData();
