@@ -73,14 +73,14 @@ function EditScreen({navigation}) {
               )
             return;
         }
-        if (!ValidNumber(height)) {
+        if (!ValidNumber(height) || height === "") {
             Alert.alert(
                 "Oops!",
                 "Height only enter numbers",
               )
             return;
         }
-        if (!ValidNumber(weight)) {
+        if (!ValidNumber(weight) || weight === "") {
             Alert.alert(
                 "Oops!",
                 "Weight only enter numbers",

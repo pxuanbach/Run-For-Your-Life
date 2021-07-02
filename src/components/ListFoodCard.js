@@ -192,7 +192,7 @@ const ListFoodCard = ({data, type}) => {
                     )
                 }}
                 contentContainerStyle={{
-                    paddingBottom: windowHeight/16 + 5
+                    paddingBottom: windowHeight/12 + 4
                 }}>
             </FlatList>
         </SafeAreaView>
