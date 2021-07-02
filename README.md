@@ -18,6 +18,8 @@
 - Đăng nhập
 - Đăng kí
 
+<img src="https://user-images.githubusercontent.com/55500268/124273445-38bf2780-db6a-11eb-95a9-1b423683dd6d.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124273707-90f62980-db6a-11eb-9cbf-27b8e0bf8917.png" width="300"> 
+
 ### Đăng xuất / Đổi mật khẩu
 - Đăng xuất
 - Đổi mật khẩu
