@@ -44,10 +44,12 @@
 - Xem danh sách thức ăn tham khảo
 - Xem chi tiết thức ăn
 
-  <img src="https://user-images.githubusercontent.com/55500268/124276458-06172e00-db6e-11eb-8117-eab8e3d8a9cf.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124277280-0f54ca80-db6f-11eb-9f5d-3b34bff6e2e3.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124277285-1085f780-db6f-11eb-8eff-430bbb137a25.png" width="300"> 
+  <img src="https://user-images.githubusercontent.com/55500268/124276458-06172e00-db6e-11eb-8117-eab8e3d8a9cf.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124277280-0f54ca80-db6f-11eb-9f5d-3b34bff6e2e3.png" width="300"> 
+  
+  <img src="https://user-images.githubusercontent.com/55500268/124277285-1085f780-db6f-11eb-8eff-430bbb137a25.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124276127-a15bd380-db6d-11eb-8ce9-36c9523671f6.png" width="300">   
 
-  <img src="https://user-images.githubusercontent.com/55500268/124276127-a15bd380-db6d-11eb-8ce9-36c9523671f6.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124276139-a3be2d80-db6d-11eb-86a9-e69e72498e3e.png" width="300">
-
+  <img src="https://user-images.githubusercontent.com/55500268/124276139-a3be2d80-db6d-11eb-86a9-e69e72498e3e.png" width="300">
+  
 ### Thông tin người dùng
 - Thống kê số liệu Hoạt động
 - Lịch sử Hoạt động
@@ -80,7 +82,7 @@
 - @react-native-community/datetimepicker - https://github.com/react-native-datetimepicker/datetimepicker
 ## Cơ sở dữ liệu
 
-  <img src="https://user-images.githubusercontent.com/55500268/124296963-bee86780-db84-11eb-8171-efd6c099d3ea.png" width="720">
+  <img src="https://user-images.githubusercontent.com/55500268/124296963-bee86780-db84-11eb-8171-efd6c099d3ea.png" width="750">
 
 ## Tác giả
 - Trần Nguyên Tiến Nam – 19521871@gm.uit.edu.vn
