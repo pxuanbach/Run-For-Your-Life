@@ -82,7 +82,7 @@
 - @react-native-community/datetimepicker - https://github.com/react-native-datetimepicker/datetimepicker
 ## Cơ sở dữ liệu
 
-  <img src="https://user-images.githubusercontent.com/55500268/124296963-bee86780-db84-11eb-8171-efd6c099d3ea.png" width="750">
+  <img src="https://user-images.githubusercontent.com/55500268/124296963-bee86780-db84-11eb-8171-efd6c099d3ea.png" width="800">
 
 ## Tác giả
 - Trần Nguyên Tiến Nam – 19521871@gm.uit.edu.vn
