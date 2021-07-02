@@ -101,7 +101,7 @@ export default class SaveActivityScreen extends React.Component {
 
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
             .then((res) => {
-                if (this.checkNullUndefined(res.data.weight)) {
+                if (this.checkNullUndefined(res.data.weight) && res.data.weight != 0) {
                     this.setState({weight: res.data.weight});
                     this.calcBurnedCalories();
                     this.rounding();
