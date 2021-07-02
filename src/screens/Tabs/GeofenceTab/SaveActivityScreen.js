@@ -148,7 +148,7 @@ export default class SaveActivityScreen extends React.Component {
     }
 
     validNumber = (str) => {
-        return !/[~`!#$%\^&*+=\-\[\]\\'.;,/{}|\\":<>\?]/g.test(str);
+        return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
     }
 
     defaultTitle = () => {
