@@ -18,15 +18,20 @@
 - Đăng nhập
 - Đăng kí
 
-<img src="https://user-images.githubusercontent.com/55500268/124273445-38bf2780-db6a-11eb-95a9-1b423683dd6d.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124273707-90f62980-db6a-11eb-9cbf-27b8e0bf8917.png" width="300"> 
+  <img src="https://user-images.githubusercontent.com/55500268/124274986-1f1edf80-db6c-11eb-9797-95e5455784c3.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124275024-2b0aa180-db6c-11eb-8075-afaed0b9b5da.png" width="300"> 
 
 ### Đăng xuất / Đổi mật khẩu
 - Đăng xuất
 - Đổi mật khẩu
 
+  <img src="https://user-images.githubusercontent.com/55500268/124275144-4e355100-db6c-11eb-8a5e-af9971551fcf.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124275154-51c8d800-db6c-11eb-87c5-88165b428e75.png" width="300"> 
+
 ### Xem các kế hoạch tập luyện
 - Xem danh sách các bài tập luyện (giáo trình có sẵn)
 - Xem danh sách các thông tin bổ sung phụ trợ
+- Xem chi tiết các bài tập luyện
+
+  <img src="https://user-images.githubusercontent.com/55500268/124275534-dfa4c300-db6c-11eb-8653-239d12f00026.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124275393-a66c5300-db6c-11eb-9cfa-052045dee47d.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124275723-22ff3180-db6d-11eb-8343-531fbc98af6b.png" width="300"> 
 
 ### Theo dõi quá trình chạy bộ
 - Theo dõi quá trình chạy bộ
@@ -35,6 +40,11 @@
 ### Tham khảo dinh dưỡng
 - Tính lượng calo tiêu thụ hàng ngày
 - Xem danh sách thức ăn tham khảo
+- Xem chi tiết thức ăn
+
+  <img src="https://user-images.githubusercontent.com/55500268/124276458-06172e00-db6e-11eb-8117-eab8e3d8a9cf.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124277280-0f54ca80-db6f-11eb-9f5d-3b34bff6e2e3.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124277285-1085f780-db6f-11eb-8eff-430bbb137a25.png" width="300"> 
+
+  <img src="https://user-images.githubusercontent.com/55500268/124276127-a15bd380-db6d-11eb-8ce9-36c9523671f6.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124276139-a3be2d80-db6d-11eb-86a9-e69e72498e3e.png" width="300">
 
 ### Thông tin người dùng
 - Thống kê số liệu Hoạt động
