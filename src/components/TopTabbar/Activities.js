@@ -7,62 +7,52 @@ const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
 function Activities({navigation}) {
+    const [isLoading, setIsLoading] = useState(true)
+    const [datas, setDatas] = useState([])
+    var listData = []
 
-    //const [username, setUsername]=useState()
-    //const [userid, setUserid] = useState()
-    const [isLoadingid, setIsLoadingId] = useState(true)
-    const [isLoading, setIsLoading]=useState(true)
-
-    const [datas,setDatas] = useState([])
-    var listData=[]
     //hàm get user id
-    const _getUserIdAndFetchData= async ()=>{
+    const getData = async ()=>{
         await AsyncStorage.getItem("authToken")
-        .then(async(token)=>{
+        .then(async(token) => {
             var vl = await jwt_decode(token)
             var userid =vl._id
-            console.log("user id: "+userid)
-            _fetchdata(userid);
+            console.log("user id: " + userid)
+            fetchData(userid);
         })
-        .catch((err)=>console.log(err))
-        .finally(()=>{
-            setIsLoadingId(false)
-        })
+        .catch((err) => console.log(err))
         console.log("đã chạy get user id của tab progress")
     }
     //hàm fecth data 
-    const _fetchdata=(userid)=>{
+    const fetchData = (userid) => {
         fetch("http://my-app-de.herokuapp.com/api/activities/userID/"+userid)
-        .then((res)=>res.json())
-        .then((json)=>{
-            json.map((data)=>{
+        .then((res) => res.json())
+        .then((json) => {
+            json.map((data) => {
                 listData.push(data)    
             })
             setDatas(listData)
         })
-        .catch((err)=>console.log("load list activities chưa kịp"))
-        .finally(()=>setIsLoading(false))
+        .catch((err) => console.log("load list activities chưa kịp"))
+        .finally(() => setIsLoading(false))
     }
     //useEffect
-    useEffect(()=>{
-        _getUserIdAndFetchData();
+    useEffect(() => {
+        getData();
     },[])
 
     return (
-        <View>
-        {isLoading 
-            // Loading screen
-            ? <View style={{   
-                flex: 1,
-                justifyContent: 'center',
-                paddingTop: windowHeight/3 
-            }}>
-                <ActivityIndicator size="large" color="#4CD964"/>
-            </View>
-            //Show 
-            :
         <SafeAreaView style={{height: '100%', backgroundColor: '#ececec'}}>
-            <FlatList
+        {
+            isLoading ? (
+                <View style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                }}>
+                    <ActivityIndicator size={50} color='green'/>
+                </View>
+            ) : (
+                <FlatList
                 data={datas}
                 keyExtractor={item => item._id}
                 renderItem={({item}) => {
@@ -79,11 +69,10 @@ function Activities({navigation}) {
                 }}
                 contentContainerStyle={{
                     paddingBottom: 20,
-                }}
-            />
+                }}/>
+            )
+        }
         </SafeAreaView>
-    }
-    </View>
     )
 }
 

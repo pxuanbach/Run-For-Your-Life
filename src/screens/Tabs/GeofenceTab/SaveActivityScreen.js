@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, ScrollView, TextInput, StyleSheet, Dimensions, TouchableOpacity, AsyncStorage, ActivityIndicator,} from 'react-native';
+import { View, Text, ScrollView, TextInput, StyleSheet,
+     Dimensions, TouchableOpacity, AsyncStorage, 
+     ActivityIndicator, Alert,} from 'react-native';
 import { MaterialCommunityIcons, MaterialIcons, FontAwesome, } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from "react-native-maps";
@@ -29,6 +31,7 @@ export default class SaveActivityScreen extends React.Component {
 
         this.state = {
             isDataUserLoading: true,
+            isValidWeight: true,
 
             selectedActivity: this.props.navigation.getParam('selectedActivity'),
             time: this.props.navigation.getParam('time'),
@@ -85,9 +88,9 @@ export default class SaveActivityScreen extends React.Component {
         }
         // send post request
         fetch(urlPost, options)
-        .then((res)=>res.json())
-        .then((res)=>console.log(res))
-        .catch((err)=>console.log(err))
+        .then((res) => res.json())
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err))
     }
 
     fetchDataUser = () => {
@@ -97,7 +100,7 @@ export default class SaveActivityScreen extends React.Component {
             this.setState({userID: vl._id})
 
             Axios.get(`https://runapp1108.herokuapp.com/api/users/getInfo/${vl._id}`)
-            .then((res)=>{
+            .then((res) => {
                 if (this.checkNullUndefined(res.data.weight)) {
                     this.setState({weight: res.data.weight});
                     this.calcBurnedCalories();
@@ -105,8 +108,14 @@ export default class SaveActivityScreen extends React.Component {
 
                     this.setState({isDataUserLoading: false});
                 }
+                else {
+                    this.setState({
+                        isValidWeight: false,
+                        // isDataUserLoading: false,
+                    }); 
+                }
             })
-            .catch((error)=>{
+            .catch((error) => {
                 console.log(error)
                 this.setState({isDataUserLoading: false});
             })
@@ -119,13 +128,35 @@ export default class SaveActivityScreen extends React.Component {
         return true;
     }
 
+    onPress_btnEnterWeight = () => {
+        const {weight} = this.state;
+        if (!this.validNumber(weight) || !this.checkNullUndefined(weight) || weight == 0) {
+            Alert.alert(
+                "Oops!",
+                "Height only enter numbers",
+            )
+        }
+        else {
+            this.calcBurnedCalories();
+            this.rounding();
+
+            this.setState({
+                isValidWeight: true,
+                isDataUserLoading: false,
+            })
+        }
+    }
+
+    validNumber = (str) => {
+        return !/[~`!#$%\^&*+=\-\[\]\\'.;,/{}|\\":<>\?]/g.test(str);
+    }
+
     defaultTitle = () => {
         const { title, selectedActivity } = this.state;
         var today = new Date();
         var currentTime = "01/01/2011 " + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
         if (!this.checkNullUndefined(title)) {
-            console.log("set title ne!!!")
             if (Date.parse(currentTime) > Date.parse('01/01/2011 00:00:00') 
             && Date.parse(currentTime) <= Date.parse('01/01/2011 12:00:00')) {
                 return 'Morning ' + selectedActivity;
@@ -162,22 +193,17 @@ export default class SaveActivityScreen extends React.Component {
 
     calcBurnedCalories = () => {
         const { time, weight } = this.state;
-        this.setState({
-            calo: time * this.calcMETs() * 3.5 * weight / 200,
-        }) 
-    }
-
-    rounding = () => {
-        const { calo, distance, time, avgPace } = this.state;
-
-        // Calo
+        const calo = time * this.calcMETs() * 3.5 * weight / 200
         if (calo >= 100) {
             this.setState({calo: parseFloat(calo).toFixed(0)})
         }
         else {
             this.setState({calo: parseFloat(calo).toFixed(2)})
         }
+    }
 
+    rounding = () => {
+        const { distance, time, avgPace } = this.state;
         // Distance
         this.setState({distance: parseFloat(distance).toFixed(2)})
 
@@ -228,14 +254,34 @@ export default class SaveActivityScreen extends React.Component {
     }
 
     render() {        
+        const {isDataUserLoading, isValidWeight} = this.state;
         return (
-            this.state.isDataUserLoading ? (
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'center',
-                }}>
-                    <ActivityIndicator size={50} color='green'/>
-                </View>
+            isDataUserLoading ? (
+                isValidWeight ? (
+                    <View style={{flex: 1, justifyContent: 'center'}}>
+                        <ActivityIndicator size={50} color='green'/>
+                    </View>
+                ) : (
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <TextInput 
+                            style={[styles.txtInput, {width: 200}]} 
+                            textAlign='center'
+                            placeholder={'Please enter your weight'}
+                            onChangeText={(value) => this.setState({weight: value})}
+                            keyboardType='numeric'/>
+
+                        <TouchableOpacity style={[styles.button, 
+                        {
+                            backgroundColor: 'green',
+                            marginVertical: 10,
+                        }]}
+                        onPress={this.onPress_btnEnterWeight}>
+                            <Text style={[styles.buttonTitle, {color: 'white'}]}>
+                                Enter
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )
             ) : (
                 <ScrollView 
                 style={{width: '100%'}}
@@ -245,7 +291,8 @@ export default class SaveActivityScreen extends React.Component {
                             style={styles.txtInput} 
                             placeholder={'Title your run'}
                             onChangeText={(text) => this.setState({title: text})}
-                            multiline={true} />
+                            multiline={true} 
+                            maxLength={50}/>
                     </View>
                     
                     <View style={styles.containerTxtInput}>
@@ -253,7 +300,8 @@ export default class SaveActivityScreen extends React.Component {
                             style={styles.txtInput} 
                             placeholder={'Add a description'}
                             onChangeText={(text) => this.setState({discription: text})}
-                            multiline={true} />
+                            multiline={true}
+                            maxLength={200} />
                     </View>
 
                     <Text style={styles.title}>

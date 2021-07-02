@@ -20,7 +20,7 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
     }
 
     const convertDate = () => {
-        return (moment(date).format('LLLL'))
+        return (moment(date).subtract(7, 'hours').format('LLLL'))
     }
 
     const convertTime = () => {
