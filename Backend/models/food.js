@@ -23,7 +23,6 @@ let food_schema = mongoose.Schema({
     },
     totalWeight: {
         type: Number,
-        require: true
     },
     fat: {
         type: Number
@@ -40,8 +39,28 @@ let food_schema = mongoose.Schema({
 
 })
 
-// Xác thực Unique (username là trường duy nhất)
+
+let foodtype_scheme = mongoose.Schema({
+    type: {
+        type: String,
+        unique: true,
+    },     
+    typeName:{
+        type: String,
+        unique:true,
+    },
+    image:{
+        type:String,
+    }
+
+})
+
+
+
+// Xác thực Unique (là trường duy nhất)
 food_schema.plugin(uniqueValidator)
+foodtype_scheme.plugin(uniqueValidator)
 
 exports.Food = mongoose.model("Food", food_schema);
+exports.foodType = mongoose.model("foodType",foodtype_scheme);
 

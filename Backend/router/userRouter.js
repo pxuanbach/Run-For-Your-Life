@@ -17,7 +17,7 @@ const salt = bcrypt.genSaltSync(saltRounds);
 
 
 router.get('/', verifyToken, (request, response) => {
-  User.find({}).exec(function (err, users) {
+  User.find({}).select("-password").exec(function (err, users) {
       response.send(users);
   });
 });
@@ -39,7 +39,7 @@ router.post("/login", async function(req,res){
         return res.status(422).send("Rất tiếc, mật khẩu của bạn không đúng. Vui lòng kiểm tra lại mật khẩu.")
     }  
 
-    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET, { expiresIn: 60 * 60 * 24 });
+    const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET, { expiresIn: 2*60*60 });
     res.header('auth-token', token).send(token);
     
 })
@@ -60,51 +60,22 @@ User.findOneAndUpdate({username : req.body.username},{password:bcrypt.hashSync(r
     }
   })
 })
-//Info
-router.get('/getInfo', async function(req,res){
-  if (!req.body.UserID) {
+//Info 
+router.get('/getInfo/:id',async function(req,res){
+  if (!req.params.id) {
     return res.status(400).send('Error')
   } 
-  let info = await userInfo.findOne({user: req.body.UserID})
+  let info = await userInfo.findOne({user: req.params.id})
   if (!info) { 
     return res.status(422).send('Info not found')
- }else return res.status(200).send(info._id)
+ }else return res.status(200).send(info)
 
 })
 
 
 
-//Update User info
-router.post("/addInfo",async function(req, res){
-  const user = await User.findById(req.body.UserID)
-  if (!user) {
-    return res.status(400).send("Invalid User");
-  }
-  let info = new userInfo({
-    user: req.body.UserID,
-    phone: req.body.phone,
-    adress: req.body.address,
-    fullname: req.body.fullname,
-    image: req.body.image,
-    gender: req.body.gender,
-    note: req.body.note,
-    height: req.body.height,
-    weight: req.body.weight,
-    description: req.body.description,
-    job: req.body.job,
-  })
 
-  info
-  .save()
-  .then((newInfo) => {
-    return res.status(201).send(newInfo)
-  })
-  .catch((error)=> {
-    return res.status(404).send(error)
-  })
-})
-
-
+//Update lastest version 
 router.post("/Infov2",async function(req, res){
   const user = await User.findById(req.body.UserID)
   if (!user) {
@@ -112,8 +83,9 @@ router.post("/Infov2",async function(req, res){
   }
   let info = new userInfo({
     user: req.body.UserID,
+    mail: req.body.mail,
     phone: req.body.phone,
-    adress: req.body.address,
+    address: req.body.address,
     fullname: req.body.fullname,
     image: req.body.image,
     gender: req.body.gender,
@@ -122,6 +94,7 @@ router.post("/Infov2",async function(req, res){
     weight: req.body.weight,
     description: req.body.description,
     job: req.body.job,
+    birthday: req.body.birthday,
   })
 
   info
@@ -133,8 +106,9 @@ router.post("/Infov2",async function(req, res){
   .catch(()=> {
     userInfo.findOneAndUpdate({user: req.body.UserID},
       {
+      mail: req.body.mail,
       phone: req.body.phone,
-      adress: req.body.address,
+      address: req.body.address,
       fullname: req.body.fullname,
       image: req.body.image,
       gender: req.body.gender,
@@ -143,11 +117,12 @@ router.post("/Infov2",async function(req, res){
       weight: req.body.weight,
       description: req.body.description,
       job: req.body.job,
+      birthday: req.body.birthday,
     }
       
       ,{new: true},(error,data) => {
       if(error){
-        return res.status(422).send(error);
+        return res.status(422).send('Lỗi roài');
       }else{
         return res.status(200).send(data);
       }
@@ -158,63 +133,31 @@ router.post("/Infov2",async function(req, res){
 })
 
 
-
-
-
-
-router.post("/updateInfo",async function(req, res){
-  const user = await User.findById(req.body.UserID)
-  if (!user) {
-    return res.status(400).send("Invalid User");
-  }
-  const info = await userInfo.findOne(req.body.UserID)
-  if (!info) {return res.status(400).send("Chưa có thông tin")}
-  userInfo.findByIdAndUpdate(req.body.id,
-    {
-    phone: req.body.phone,
-    adress: req.body.address,
-    fullname: req.body.fullname,
-    image: req.body.image,
-    gender: req.body.gender,
-    note: req.body.note,
-    height: req.body.height,
-    weight: req.body.weight,
-    description: req.body.description,
-    job: req.body.job,
-  }
-    
-    ,{new: true},(error,data) => {
-    if(error){
-      return res.status(422).send(error);
-    }else{
-      return res.status(200).send(data);
-    }
-  })
-
-
-
-})
-
-
-
-
 //register
 router.post('/register', async function(req,res){
     let user = User({
-        email: req.body.email,
         username: req.body.username,
         password: bcrypt.hashSync(req.body.password, salt),
-        phone: req.body.phone,
-        sex: req.body.sex,
-        address: req.body.address,
-        fullname: req.body.fullname,
-             
       });
       user
         .save()
         .then((createdUser) => {   
-          res.send({username:createdUser.username,password:createdUser.password});
-          console.log("Đăng ký thành công ^^")
+          let info = new userInfo({
+            user: createdUser._id,
+            mail: req.body.mail,
+          })   
+          console.log(info)       
+          info
+          .save()
+          .then((newInfo) => {
+            console.log("Đăng ký thành công ^^",newInfo)
+            return res.status(201).json({User:createdUser,
+            mail: newInfo.mail
+            })
+            
+          }).catch((error)=> {
+            return res.status(404).send(error)
+          })
         })
         .catch((err) => {
           res.status(500).json({

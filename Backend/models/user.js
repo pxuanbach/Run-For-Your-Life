@@ -4,12 +4,6 @@ var uniqueValidator = require("mongoose-unique-validator")
 
 // Schema là lược đồ database
 let user_schema = mongoose.Schema({
-
-    email: {
-        type : String,
-        default: "Chưa có thông tin"
-    },
-
     username: {
         type: String,
         unique: true, 
@@ -29,9 +23,13 @@ let userInfo_schema = mongoose.Schema({
         require: true,
         unique: true
     },
-    phone: {
+    mail: {
         type: String,
         default: ''
+    },
+    phone: {
+        type: String,
+        default: '+00'
     },
     address: {
         type: String,

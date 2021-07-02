@@ -1,6 +1,7 @@
 const express = require("express")
 const  router = express.Router()
-const { Food } = require("../models/food")
+const { Food,foodType } = require("../models/food")
+
 
 router.get('/',async function(req,res){
     var food = await Food.find();
@@ -12,6 +13,33 @@ router.get('/',async function(req,res){
     
     
 })
+
+
+router.get('/foodtype',async function(req,res){
+    var foodtype = await foodType.find();
+   if (foodtype) {
+     res.send(foodtype);
+   } else {
+      res.status(500).send("Bad server");
+   }
+})
+
+
+router.post('/foodtype', async (req, res) => {
+    let newtype = foodType({
+        type: req.body.type,
+        typeName: req.body.typeName,
+        image: req.body.image
+    })
+    newtype.save()
+    .then((newtype)=> {
+        res.status(200).send(newtype)
+    })
+    .catch((err)=>
+    res.status(422).send(err)
+    )
+})
+
 
 router.post('/insert', async function(req,res){
     let food = Food({
