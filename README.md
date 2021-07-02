@@ -51,6 +51,10 @@
 - Lịch sử Hoạt động
 - Thông tin người dùng
 
+  <img src="https://user-images.githubusercontent.com/55500268/124290233-6497d880-db7d-11eb-8aa2-5460d5bafad3.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124290237-65306f00-db7d-11eb-9d0c-297048ff4b58.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124290241-66fa3280-db7d-11eb-8040-4f2c349fbc05.png" width="300">
+
+  <img src="https://user-images.githubusercontent.com/55500268/124290413-9a3cc180-db7d-11eb-943c-6c3484da8e88.png" width="300">   <img src="https://user-images.githubusercontent.com/55500268/124290423-9dd04880-db7d-11eb-9242-15f293362182.png" width="300"> <img src="https://user-images.githubusercontent.com/55500268/124290436-9f9a0c00-db7d-11eb-91a7-052513d7737e.png" width="300">
+
 ## Yêu cầu thiết bị
 - Android:
   -  Taget sdk: 41
@@ -75,9 +79,9 @@
 ## Cơ sở dữ liệu
 
 ## Tác giả
-Trần Nguyên Tiến Nam – 19521871@gm.uit.edu.vn
-Phạm Xuân Bách – 19521233@gm.uit.edu.vn
-Nguyễn Ngọc Thịnh – 19522283@gm.uit.edu.vn
-Võ Quốc Minh – 19521857@gm.uit.edu.vn
+- Trần Nguyên Tiến Nam – 19521871@gm.uit.edu.vn
+- Phạm Xuân Bách – 19521233@gm.uit.edu.vn
+- Nguyễn Ngọc Thịnh – 19522283@gm.uit.edu.vn
+- Võ Quốc Minh – 19521857@gm.uit.edu.vn
 ## Giấy phép
 
