@@ -32,7 +32,6 @@ export default class SaveActivityScreen extends React.Component {
         this.state = {
             isDataUserLoading: true,
             isValidWeight: true,
-
             selectedActivity: this.props.navigation.getParam('selectedActivity'),
             time: this.props.navigation.getParam('time'),
             distance: this.props.navigation.getParam('distance'),
@@ -49,6 +48,7 @@ export default class SaveActivityScreen extends React.Component {
             title: '',
             discription: '',
             region: null,
+            date: Date.now()
         };
     }
 
@@ -64,6 +64,7 @@ export default class SaveActivityScreen extends React.Component {
             userID: this.state.userID,
             title: this.defaultTitle(),
             discription: this.state.discription,
+            date: this.state.date,
             record: {
                 activity: this.state.selectedActivity,
                 level: LEVEL[this.state.level],
