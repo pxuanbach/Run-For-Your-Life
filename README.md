@@ -61,7 +61,7 @@
 
 ## Yêu cầu thiết bị
 - Android:
-  -  Android 6.0 (Marshmallow) SDK or higher
+  -  Android 6.0 (Marshmallow) SDK - Android 9.0 (Pie) SDK
   -  Taget sdk: 41
 - iOS:
   - iOS: 9.0

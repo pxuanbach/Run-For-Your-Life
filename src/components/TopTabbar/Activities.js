@@ -38,7 +38,9 @@ function Activities({navigation}) {
     }
     //useEffect
     useEffect(() => {
+        let isMouted = true;
         getData();
+        return () => { isMounted = false };
     },[])
 
     return (
