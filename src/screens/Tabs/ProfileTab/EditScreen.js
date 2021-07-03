@@ -69,7 +69,7 @@ function EditScreen({navigation}) {
         if (!ValidateEmail(mail)) {
             Alert.alert(
                 "Oops!",
-                "Email không hợp lệ",
+                "Invalid email",
               )
             return;
         }
@@ -84,6 +84,13 @@ function EditScreen({navigation}) {
             Alert.alert(
                 "Oops!",
                 "Weight only enter numbers",
+              )
+            return;
+        }
+        if (date.getFullYear() === new Date().getFullYear()) {
+            Alert.alert(
+                "Oops!",
+                "Invalid date of birth",
               )
             return;
         }

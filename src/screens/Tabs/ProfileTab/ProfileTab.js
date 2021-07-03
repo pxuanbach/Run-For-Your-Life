@@ -52,7 +52,7 @@ function ProfileTab({navigation}) {
     useEffect(() => {
         let isMounted = true;
         _retrieveData();
-        return () => { isMounted = false };
+        return () => { isMounted = false; };
     }, [])
     
     return (
