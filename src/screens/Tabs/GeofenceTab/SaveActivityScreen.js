@@ -48,7 +48,7 @@ export default class SaveActivityScreen extends React.Component {
             title: '',
             discription: '',
             region: null,
-            date: Date.now()
+            date: Date.now() + 25200000
         };
     }
 
