@@ -90,8 +90,10 @@ export default class SaveActivityScreen extends React.Component {
         // send post request
         fetch(urlPost, options)
         .then((res) => res.json())
-        .then((res) => console.log(res))
+        .then((json) => console.log("post success: ", json))
         .catch((err) => console.log(err))
+
+        console.log("cuối hàm handleSaveActivity !")
     }
 
     fetchDataUser = () => {

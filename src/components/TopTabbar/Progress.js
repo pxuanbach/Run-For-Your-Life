@@ -289,7 +289,9 @@ function Progress({navigation}) {
 
     // useeffect 
     useEffect(()=>{
+        let isMounted = true;
         _getUserIdAndFetchData();
+        return () => { isMounted = false };
     },[])
 
     return (
