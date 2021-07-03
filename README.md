@@ -70,6 +70,8 @@
 - FrameWork: react-native 0.64
   - react-native-cli 2.0.1
   - expo-cli 4.4.1
+- Backend: Nodejs 
+  - FrameWork: Express
 - Database: MongoDB
 - react-native - https://github.com/expo/react-native/
 - react-navigation - https://github.com/react-navigation/react-navigation/tree/4.x
