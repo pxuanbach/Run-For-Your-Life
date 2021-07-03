@@ -71,27 +71,25 @@ export default class SaveActivityScreen extends React.Component {
                 calo: this.state.calo,
                 distance: this.state.distance,
                 avgPace: this.state.avgPace,
-                totalTime: this.state.time,
+                totalTime: this.state.time
             },
             map: {
                 routes: this.state.routes,
                 markerOnRoute: this.state.markerOnRoute,
-                region: this.state.region,
+                region: this.state.region
             }
         }
         // request option
-        const options = {
+        const options = new Request (urlPost,{
             method: 'POST',
             body: JSON.stringify(act), 
-            headers:{
-                'Content-Type':'application/json' 
-            }
-        }
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            })
+        })
         // send post request
-        fetch(urlPost, options)
-        .then((res) => res.json())
-        .then((json) => console.log("post success: ", json))
-        .catch((err) => console.log(err))
+        fetch(options)
+        .catch((err) => console.log("dòng 94 saveAct: " + err))
 
         console.log("cuối hàm handleSaveActivity !")
     }
