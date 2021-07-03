@@ -1,5 +1,5 @@
 # Run For Your Life
-Ứng dụng giúp lên kế hoạch tập luyện, theo dõi chạy bộ, tham khảo dinh dưỡng... Giúp bạn có một cuộc sống khỏe mạnh.
+Ứng dụng giúp lên kế hoạch tập luyện, theo dõi chạy bộ, tham khảo dinh dưỡng... Giúp bạn có một lối sống lành mạnh.
 ## Nội dung
 - [Chức năng](#Chức-năng)
   - [Đăng nhập / Đăng kí](#đăng-nhập--đăng-kí)
