@@ -166,11 +166,11 @@ const ActivityCard = ({ title, discription, date, record, map }) => {
                 }
 
                 {
-                    // <Marker 
-                    // coordinate={map.routes[0][0]}
-                    // anchor={{x:0, y:1}}>
-                    //     <FontAwesome name="flag" size={24} color="gold" />
-                    // </Marker>
+                    <Marker 
+                    coordinate={map.routes[0][0]}
+                    anchor={{x:0, y:1}}>
+                        <FontAwesome name="flag" size={24} color="gold" />
+                    </Marker>
                 }
             </MapView>
         </View>
